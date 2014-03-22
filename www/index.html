@@ -50,8 +50,15 @@
         <script src="js/bootstrap.js"></script>
         <!-- <script type="text/javascript" src="phonegap.js"></script> -->
         <script type="text/javascript" src="js/index.js"></script>
+        <script src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
+        
         <script type="text/javascript">
             app.initialize();
+            var TestObject = Parse.Object.extend("TestObject");
+            var testObject = new TestObject();
+            testObject.save({foo: "bar"}).then(function(object) {
+              alert("yay! it worked");
+            });
         </script>
     </body>
 
