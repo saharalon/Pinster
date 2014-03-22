@@ -20,7 +20,6 @@ var app = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
-        Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
     },
     // Bind Event Listeners
     //
@@ -48,3 +47,18 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+
+$(document).ready(function(){
+
+    Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+
+    $("#loginBtn").click(function() {
+        Parse.User.logIn($("#pinUsername").val(), $("#pinPassword").val(), {
+            success: function (user) { console.log(user.attributes); },
+            error: function (user, error) { console.log(user + " | " + error); }
+        });
+    });
+
+
+});
