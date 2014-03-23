@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Pinster": {
+            "applicationId": "4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
+            "masterKey": "DsCJFX7TT2SXb4b9AG5UqzUzFewr9tKBmyUqymA7"
+        }, 
+        "_default": {
+            "link": "Pinster"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.18"
+    }
+}
