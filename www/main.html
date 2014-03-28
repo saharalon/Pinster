@@ -5,7 +5,8 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
-      html, body, #map-canvas {
+      html, body, #map-canvas
+      {
         height: 100%;
         margin: 0px;
         padding: 0px
@@ -13,17 +14,108 @@
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHRo-eztcykGmOp_-WCbQryG9Ao1kR1rI&sensor=true"></script>
     <script>
-      var map;
-      function initialize() {
-        var mapOptions = {
+
+      var initialLocation;
+      var defaultLocation = new google.maps.LatLng(31.8759, 34.734948);
+      var browserSupportFlag =  new Boolean();
+
+      function initialize() 
+      {
+
+        var myOptions = {
           zoom: 12,
-          center: new google.maps.LatLng(31.8759, 34.734948)
+          mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
+
+      var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+      // Should come from the database
+      var locations = [
+        ['Bondi Beach', 31.8859, 34.854948, 4],
+        ['Coogee Beach', 31.9759, 34.934948, 5],
+        ['Cronulla Beach', 31.4759, 34.534948, 3],
+        ['Manly Beach', 31.4759, 34.234948, 2],
+        ['Maroubra Beach', 31.8759, 34.734948, 1]
+      ];
+
+      setMarkers(map, locations);
+
+      // Try W3C Geolocation (Preferred)
+      if(navigator.geolocation) {
+        browserSupportFlag = true;
+        navigator.geolocation.getCurrentPosition(function(position) {
+          initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+          map.setCenter(initialLocation);
+        }, function() {
+            handleNoGeolocation(browserSupportFlag);
+          });
+      }
+      // Browser doesn't support Geolocation
+      else {
+        browserSupportFlag = false;
+        handleNoGeolocation(browserSupportFlag);
       }
 
-      google.maps.event.addDomListener(window, 'load', initialize);
+      function handleNoGeolocation(errorFlag) {
+        if (errorFlag == true) {
+          alert("Geolocation service failed.");
+          initialLocation = defaultLocation;
+        } else {
+            alert("Your browser doesn't support geolocation. We've placed you in a default location.");
+            initialLocation = defaultLocation;
+          }
+          map.setCenter(initialLocation);
+        } 
+    }
+
+    function setMarkers(map, locations) {
+    // Add markers to the map
+
+    var image = { // image url from database ?
+            url: 'img/tamir.png',
+            size: new google.maps.Size(171, 171),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(100, 100)
+            };
+
+    // Shapes define the clickable region of the icon.
+    // The type defines an HTML &lt;area&gt; element 'poly' which
+    // traces out a polygon as a series of X,Y points. The final
+    // coordinate closes the poly by connecting to the first
+    // coordinate.
+    var shape = {
+        coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+        type: 'poly'
+    };
+
+    for (var i = 0; i < locations.length; i++) {
+      var beach = locations[i];
+      var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+      var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          icon: image, 
+          shape: shape,
+          title: beach[0],
+          zIndex: beach[3]
+      });
+
+      // Adds animation to the marker
+      google.maps.event.addListener(marker, 'click', toggleBounce);
+    }
+  }
+
+    function toggleBounce() 
+    {
+      if (marker.getAnimation() != null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
   </head>
