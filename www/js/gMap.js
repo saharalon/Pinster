@@ -33,27 +33,9 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        navigation.geolocation.getCurrentPosition(app.onSuccess, app.onError);
+        init();
     },
 
-    onSuccess: function(position) {
-        var longitude = position.coords.longitude; 
-        var latitude = position.coords.latitude;
-        var latLong = new google.maps.LatLng(latitude, longitude); 
-
-        var myOptions = {
-	      zoom: 12,
-	      mapTypeId: google.maps.MapTypeId.ROADMAP
-	    };
-
-	  	map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
-
-	  	map.setCenter(latLong);
-    },
-
-    onError: function(error) {
-    	alert(error.message);
-    },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
@@ -67,7 +49,7 @@ var app = {
     }
 };
 
-$(document).ready(function(){
+function init(){
 
 	Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
@@ -187,4 +169,4 @@ $(document).ready(function(){
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-});
+}
