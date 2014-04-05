@@ -33,7 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        init();
+        //navigation.geolocation.getCurrentPosition(app.onSuccess, app.onError);
     },
 
     // Update DOM on a Received Event
@@ -49,7 +49,7 @@ var app = {
     }
 };
 
-function init(){
+$(document).ready(function(){
 
 	Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
@@ -169,4 +169,4 @@ function init(){
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-}
+});
