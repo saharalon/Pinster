@@ -96,22 +96,19 @@ $(document).ready(function(){
 		} 
 
 		// Should come from the database
-		var locations = [
+		/*var events = [
 			['marker1', 31.8859, 34.854948, 4],
 			['marker2', 31.9759, 34.934948, 5],
 			['marker3', 31.4759, 34.534948, 3],
 			['marker4', 31.4759, 34.234948, 2],
 			['marker5', 31.8759, 34.734948, 1]
-		];
+		];*/
 
-		// Retreive all relevant markers from the database
-		//var locations = Parse.
-
-		setMarkers(map, locations);
+		setMarkers(map);
 	}
 
 	// Add markers to the map
-	function setMarkers(map, locations) 
+	function setMarkers(map) 
 	{
 		// Image url from database ?
 		var image = { 
@@ -131,24 +128,41 @@ $(document).ready(function(){
 		var infowindow = new google.maps.InfoWindow;
 		var marker;
 
-		for (var i = 0; i < locations.length; i++) {
+		// Retreive events from the database
+		var Event = Parse.Object.extend("Event");
+        var query = new Parse.Query(Event);
+        query.find({
+          success: function(results) {
+          	for (var i = 0; i < results.length; i++)
+          	{
+          		var title = results[i]._serverData.title;
+          		var latitude = results[i]._serverData.location._latitude;
+          		var longitude = results[i]._serverData.location._longitude;
+          		var zIndex = 4;  
 
-			marker = new google.maps.Marker({
-			  position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-			  map: map,
-			  icon: image, 
-			  //shape: shape,
-			  title: locations[i][0],
-			  //zIndex: locations[i][3]
-			});
+          		marker = new google.maps.Marker({
+			  		position: new google.maps.LatLng(latitude, longitude),
+					map: map,
+					icon: image, 
+					//shape: shape,
+					title: title,
+					//zIndex: events[i][3]
+				});
 
-			google.maps.event.addListener(marker, 'click', (function(marker, i) {
-				return function() {
-				  infowindow.setContent(locations[i][0]);
-				  infowindow.open(map, marker);
-				}
-			})(marker, i));
-		}
+				google.maps.event.addListener(marker, 'click', (function(marker, i) {
+					return function() {
+					  infowindow.setContent(results[i]._serverData.description);
+					  infowindow.open(map, marker);
+					}
+				})(marker, i));
+          	}
+          },
+          error: function(object, error) {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and description.
+            alert("Failed to retreive events from the database");
+          }
+        });
 	}
 
 	// Can call this function to add bounce animation to markers
