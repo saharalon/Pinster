@@ -35,12 +35,9 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
 
-        var myOptions = {
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-
-      var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+        var map = new GoogleMap();
+        map.initialize();
+        
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -55,40 +52,53 @@ var app = {
     }
 };
 
+/*$(document).ready(function(){
 
-$(document).ready(function(){
+    var map = new GoogleMap();
+    map.initialize();
+});*/
 
-    Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+function GoogleMap(){
+    
+    this.initialize = function(){
+        var map = showMap();
+        addMarkersToMap(map);
+    }    
+    
+    var addMarkersToMap = function(map){
+        var mapBounds = new google.maps.LatLngBounds();
+    
+        var latitudeAndLongitudeOne = new google.maps.LatLng('-33.890542','151.274856');
 
-    $("#loginBtn").click(function() {
-        Parse.User.logIn($("#pinUsername").val(), $("#pinPassword").val(), {
-            success: function (user) { console.log(user.attributes); },
-            error: function (user, error) { console.log(user + " | " + error); }
+        var markerOne = new google.maps.Marker({
+          position: latitudeAndLongitudeOne,
+          map: map
         });
-});
 
+        var latitudeAndLongitudeTwo = new google.maps.LatLng('57.77828', '14.17200');
 
-});
+        var markerOne = new google.maps.Marker({
+          position: latitudeAndLongitudeTwo,
+          map: map
+        });
 
+        mapBounds.extend(latitudeAndLongitudeOne);
+        mapBounds.extend(latitudeAndLongitudeTwo);
+        
+        map.fitBounds(mapBounds);
+    }
+    
+    
+    
+    var showMap = function(){
+        var mapOptions = {
+           zoom: 4,
+           center: new google.maps.LatLng(-33, 151),
+           mapTypeId: google.maps.MapTypeId.ROADMAP
+       }
 
-
-///Save event on parse object
-      // var Event = Parse.Object.extend("Event");
-      //   var event = new Event();
-         
-      //   event.set("title", "Great street party");
-      //   event.set("description", "Mosh ben ari is here!");
-      //   var point = new Parse.GeoPoint({latitude: 40.0, longitude: -30.0});
-      //   event.set("location", point);
-         
-      //   event.save(null, {
-      //     success: function(event) {
-      //       // Execute any logic that should take place after the object is saved.
-      //       alert('New object created with objectId: ' + event.id);
-      //     },
-      //     error: function(event, error) {
-      //       // Execute any logic that should take place if the save fails.
-      //       // error is a Parse.Error with an error code and description.
-      //       alert('Failed to create new object, with error code: ' + error.description);
-      //     }
-      //   });
+        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        
+        return map;
+    }
+}
