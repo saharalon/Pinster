@@ -1,3 +1,24 @@
+html, body {
+    height: 100%;
+}
+
+.fill {
+    height: 100%;
+}
+
+#mapWrapper {
+    height: 100%;
+    width:100%;
+}
+
+#map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 10px;
+    border: 12px solid black;
+}
+
 .form-control {
 	margin-bottom: 0px !important;
 }
