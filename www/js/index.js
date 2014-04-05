@@ -58,28 +58,7 @@ $(document).ready(function(){
             success: function (user) { console.log(user.attributes); },
             error: function (user, error) { console.log(user + " | " + error); }
         });
-
-        Parse.Cloud.run('hello', {}, {
-    success: function(result) 
-    {
-        alert(result);
-        var Event = Parse.Object.extend("Event");
-        var query = new Parse.Query(Event);
-        query.find({
-          success: function(results) {
-            console.log(results[0]);
-          },
-          error: function(object, error) {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and description.
-          }
-        });
-  
-      },
-      error: function(error) {
-      }
-    });
-    });
+});
 
 
 });
