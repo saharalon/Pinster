@@ -96,16 +96,16 @@ $(document).ready(function(){
 		} 
 
 		// Should come from the database
-		/*var locations = [
+		var locations = [
 			['marker1', 31.8859, 34.854948, 4],
 			['marker2', 31.9759, 34.934948, 5],
 			['marker3', 31.4759, 34.534948, 3],
 			['marker4', 31.4759, 34.234948, 2],
 			['marker5', 31.8759, 34.734948, 1]
-		];*/
+		];
 
 		// Retreive all relevant markers from the database
-		var locations = Parse.
+		//var locations = Parse.
 
 		setMarkers(map, locations);
 	}
