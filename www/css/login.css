@@ -7,6 +7,7 @@ html, body {
 }
 
 #mapWrapper {
+	position: relative;
     height: 100%;
     width:100%;
 }
@@ -27,4 +28,11 @@ html, body {
 	max-width: 330px;
 	padding: 15px;
 	margin: 0 auto;
+}
+
+#loginBtn {
+	position: absolute;
+	bottom: 70px;
+	z-index: 999;
+	left: 30px;
 }

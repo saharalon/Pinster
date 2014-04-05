@@ -15,13 +15,12 @@
     <div class="container fill">
 
 
-      <!-- Button trigger modal -->
-      <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-        Login
-      </button>
-
       <!-- google map -->
       <div id="mapWrapper">
+        <!-- Button trigger modal -->
+        <button id="loginBtn" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+          Login
+        </button>
         <div id="map-canvas"></div>
       </div>
 
@@ -38,7 +37,7 @@
                   <h1>Pinster</h1>
                   <input id="pinUsername" type="text" class="form-control" placeholder="Username" autofocus>
                   <input id="pinPassword" type="password" class="form-control" placeholder="Password">
-                  <a id="loginBtn" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Login</a>
+                  <a id="loginBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Login</a>
               </div>
             </div>
             <!-- <div class="modal-footer">
