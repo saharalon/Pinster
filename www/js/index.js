@@ -58,7 +58,55 @@ $(document).ready(function(){
             success: function (user) { console.log(user.attributes); },
             error: function (user, error) { console.log(user + " | " + error); }
         });
+
+        Parse.Cloud.run('hello', {}, {
+    success: function(result) 
+    {
+        alert(result);
+        var Event = Parse.Object.extend("Event");
+        var query = new Parse.Query(Event);
+        query.get("oIKjYOGFbQ", {
+          success: function(query) {
+            var title = query.get("title");
+            var description = query.get("description");
+            var location = query.get("location");
+
+            console.log("title" + title + " description" + description + location);
+          },
+          error: function(object, error) {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and description.
+          }
+        });
+  
+      },
+      error: function(error) {
+      }
+    });
     });
 
 
 });
+
+
+
+///Save event on parse object
+      // var Event = Parse.Object.extend("Event");
+      //   var event = new Event();
+         
+      //   event.set("title", "Great street party");
+      //   event.set("description", "Mosh ben ari is here!");
+      //   var point = new Parse.GeoPoint({latitude: 40.0, longitude: -30.0});
+      //   event.set("location", point);
+         
+      //   event.save(null, {
+      //     success: function(event) {
+      //       // Execute any logic that should take place after the object is saved.
+      //       alert('New object created with objectId: ' + event.id);
+      //     },
+      //     error: function(event, error) {
+      //       // Execute any logic that should take place if the save fails.
+      //       // error is a Parse.Error with an error code and description.
+      //       alert('Failed to create new object, with error code: ' + error.description);
+      //     }
+      //   });
