@@ -35,8 +35,8 @@ var app = {
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
 
-        var map = new GoogleMap();
-        map.initialize();
+       //var map = new GoogleMap();
+       // map.initialize();
         
     },
     // Update DOM on a Received Event
@@ -52,11 +52,17 @@ var app = {
     }
 };
 
-/*$(document).ready(function(){
+$(document).ready(function(){
 
-    var map = new GoogleMap();
-    map.initialize();
-});*/
+    // Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
+    //   "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+    // var map = new GoogleMap();
+    // map.initialize();
+
+    $(".fancyBtn").click(function(){
+      $("#myModal").modal();
+    });
+});
 
 function GoogleMap(){
     
@@ -66,38 +72,75 @@ function GoogleMap(){
     }    
     
     var addMarkersToMap = function(map){
-        var mapBounds = new google.maps.LatLngBounds();
-    
-        var latitudeAndLongitudeOne = new google.maps.LatLng('-33.890542','151.274856');
+        // Image url for the markers
+    var image = { 
+        url: 'img/pin4.png'
+    };
 
-        var markerOne = new google.maps.Marker({
-          position: latitudeAndLongitudeOne,
-          map: map
+    // Shapes define the clickable region of the icon.
+    // The type defines an HTML &lt;area&gt; element 'poly' which
+    // traces out a polygon as a series of X,Y points. The final
+    // coordinate closes the poly by connecting to the first
+    // coordinate.
+    var shape = {
+    coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+    type: 'poly'
+    };
+
+    var infowindow = new google.maps.InfoWindow;
+    var marker;
+
+    // Retreive events from the database
+    var Event = Parse.Object.extend("Event");
+        var query = new Parse.Query(Event);
+        query.find({
+          success: function(results) {
+            for (var i = 0; i < results.length; i++)
+            {
+              var title = results[i]._serverData.title;
+              var latitude = results[i]._serverData.location._latitude;
+              var longitude = results[i]._serverData.location._longitude;
+              var zIndex = 4;  
+
+              marker = new google.maps.Marker({
+            position: new google.maps.LatLng(latitude, longitude),
+          map: map,
+          icon: image, 
+          //shape: shape,
+          title: title,
+          //zIndex: events[i][3]
         });
 
-        var latitudeAndLongitudeTwo = new google.maps.LatLng('57.77828', '14.17200');
-
-        var markerOne = new google.maps.Marker({
-          position: latitudeAndLongitudeTwo,
-          map: map
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+          return function() {
+            infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
+            infowindow.open(map, marker);
+          }
+        })(marker, i));
+            }
+          },
+          error: function(object, error) {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and description.
+            alert("Failed to retreive events from the database");
+          }
         });
-
-        mapBounds.extend(latitudeAndLongitudeOne);
-        mapBounds.extend(latitudeAndLongitudeTwo);
-        
-        map.fitBounds(mapBounds);
     }
     
     
     
     var showMap = function(){
-        var mapOptions = {
-           zoom: 4,
-           center: new google.maps.LatLng(-33, 151),
-           mapTypeId: google.maps.MapTypeId.ROADMAP
-       }
+
+      var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
+
+      var mapOptions = {
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
 
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+        map.setCenter(initialLocation);
         
         return map;
     }
