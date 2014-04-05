@@ -34,6 +34,7 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         //navigation.geolocation.getCurrentPosition(app.onSuccess, app.onError);
+        init();
     },
 
     // Update DOM on a Received Event
@@ -49,7 +50,7 @@ var app = {
     }
 };
 
-$(document).ready(function(){
+function init() {
 
 	Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
@@ -169,4 +170,4 @@ $(document).ready(function(){
 
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-});
+}
