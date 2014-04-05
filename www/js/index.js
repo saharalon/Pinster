@@ -54,10 +54,10 @@ var app = {
 
 $(document).ready(function(){
 
-    // Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
-    //   "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
-    // var map = new GoogleMap();
-    // map.initialize();
+     Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
+       "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+     var map = new GoogleMap();
+     map.initialize();
 
     $(".fancyBtn").click(function(){
       $("#myModal").modal();
