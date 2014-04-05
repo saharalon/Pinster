@@ -65,13 +65,9 @@ $(document).ready(function(){
         alert(result);
         var Event = Parse.Object.extend("Event");
         var query = new Parse.Query(Event);
-        query.get("oIKjYOGFbQ", {
-          success: function(query) {
-            var title = query.get("title");
-            var description = query.get("description");
-            var location = query.get("location");
-
-            console.log("title" + title + " description" + description + location);
+        query.find({
+          success: function(results) {
+            console.log(results[0]);
           },
           error: function(object, error) {
             // The object was not retrieved successfully.
