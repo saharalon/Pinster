@@ -33,7 +33,26 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+        navigation.geolocation.getCurrentPosition(app.onSuccess, app.onError);
+    },
+
+    onSuccess: function(position) {
+        var longitude = position.coords.longitude; 
+        var latitude = position.coords.latitude;
+        var latLong = new google.maps.LatLng(latitude, longitude); 
+
+        var myOptions = {
+	      zoom: 12,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	    };
+
+	  	map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+
+	  	map.setCenter(latLong);
+    },
+
+    onError: function(error) {
+    	alert(error.message);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -52,19 +71,19 @@ $(document).ready(function(){
 
 	Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
+	var map;
 	var initialLocation;
     var defaultLocation = new google.maps.LatLng(31.8759, 34.734948);
     var browserSupportFlag =  new Boolean();
 
   	function initialize() 
   	{
-
-	    var myOptions = {
+  		var myOptions = {
 	      zoom: 12,
 	      mapTypeId: google.maps.MapTypeId.ROADMAP
 	    };
 
-	  	var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+	  	map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 
 	  	// Try W3C Geolocation (Preferred)
 		if(navigator.geolocation) {
@@ -85,7 +104,7 @@ $(document).ready(function(){
 		function handleNoGeolocation(errorFlag) {
 
 			if (errorFlag == true) {
-			  alert("Geolocation service failed.");
+			  //alert("Geolocation service failed.");
 			  initialLocation = defaultLocation;
 			} else {
 			    alert("Your browser doesn't support geolocation. We've placed you in a default location.");
@@ -95,25 +114,16 @@ $(document).ready(function(){
 			map.setCenter(initialLocation);
 		} 
 
-		// Should come from the database
-		/*var events = [
-			['marker1', 31.8859, 34.854948, 4],
-			['marker2', 31.9759, 34.934948, 5],
-			['marker3', 31.4759, 34.534948, 3],
-			['marker4', 31.4759, 34.234948, 2],
-			['marker5', 31.8759, 34.734948, 1]
-		];*/
-
 		setMarkers(map);
 	}
 
 	// Add markers to the map
 	function setMarkers(map) 
 	{
-		// Image url from database ?
+		// Image url for the markers
 		var image = { 
-		    url: 'img/pin1.png'
-		    };
+		    url: 'img/pin4.png'
+		};
 
 		// Shapes define the clickable region of the icon.
 		// The type defines an HTML &lt;area&gt; element 'poly' which
