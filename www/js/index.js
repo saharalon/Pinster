@@ -34,6 +34,13 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        var myOptions = {
+        zoom: 12,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+
+      var map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
