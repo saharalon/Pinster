@@ -33,6 +33,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
+
         app.receivedEvent('deviceready');
 
        //var map = new GoogleMap();
@@ -54,14 +55,18 @@ var app = {
 
 $(document).ready(function(){
 
-     Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
+    console.log("Document ready...");
+
+    Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
        "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
-     var map = new GoogleMap();
-     map.initialize();
+     
+    var map = new GoogleMap();
+    map.initialize();
 
     $(".fancyBtn").click(function(){
       $("#myModal").modal();
     });
+
 });
 
 function GoogleMap(){
@@ -100,7 +105,7 @@ function GoogleMap(){
               var title = results[i]._serverData.title;
               var latitude = results[i]._serverData.location._latitude;
               var longitude = results[i]._serverData.location._longitude;
-              var zIndex = 4;  
+              var zIndex = 4;
 
               marker = new google.maps.Marker({
             position: new google.maps.LatLng(latitude, longitude),
@@ -127,8 +132,6 @@ function GoogleMap(){
         });
     }
     
-    
-    
     var showMap = function(){
 
       var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
@@ -139,6 +142,11 @@ function GoogleMap(){
       };
 
         var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+        google.maps.event.addListenerOnce(map, 'idle', function(){
+            //loaded fully
+            console.log("Map loaded...");
+            // navigator.splashscreen.hide();
+        });
 
         map.setCenter(initialLocation);
         
