@@ -89,7 +89,14 @@ $(document).ready(function(){
 
 function sliderOutputUpdate(val)
 {
-  document.querySelector('#output').value = "Radius is: " + val + " Kelometers";
+  if (val < 1000)
+  {
+    document.querySelector('#output').value = "Radius is: " + val + " Meters";
+  }
+  else
+  {
+    document.querySelector('#output').value = "Radius is: " + val / 1000 + " Kelometers";
+  }  
 }
 
 function GoogleMap(){
@@ -99,29 +106,30 @@ function GoogleMap(){
         addMarkersToMap(map);
     }    
     
-    var addMarkersToMap = function(map){
-        // Image url for the markers
-    var image = { 
-        url: 'img/pin4.png'
-    };
+    var addMarkersToMap = function(map)
+    {
+      // Image url for the markers
+      var image = { 
+          url: 'img/pin4.png'
+      };
 
-    // Shapes define the clickable region of the icon.
-    // The type defines an HTML &lt;area&gt; element 'poly' which
-    // traces out a polygon as a series of X,Y points. The final
-    // coordinate closes the poly by connecting to the first
-    // coordinate.
-    var shape = {
-    coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-    type: 'poly'
-    };
+      // Shapes define the clickable region of the icon.
+      // The type defines an HTML &lt;area&gt; element 'poly' which
+      // traces out a polygon as a series of X,Y points. The final
+      // coordinate closes the poly by connecting to the first
+      // coordinate.
+      var shape = {
+      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+      type: 'poly'
+      };
 
-    var infowindow = new google.maps.InfoWindow;
-    var marker;
+      var infowindow = new google.maps.InfoWindow;
+      var marker;
 
-    // Retreive events from the database
-    var Event = Parse.Object.extend("Event");
-        var query = new Parse.Query(Event);
-        query.find({
+      // Retreive events from the database
+      var Event = Parse.Object.extend("Event");
+      var query = new Parse.Query(Event);
+      query.find({
           success: function(results) {
             for (var i = 0; i < results.length; i++)
             {
@@ -131,20 +139,20 @@ function GoogleMap(){
               var zIndex = 4;
 
               marker = new google.maps.Marker({
-            position: new google.maps.LatLng(latitude, longitude),
-          map: map,
-          icon: image, 
-          //shape: shape,
-          title: title,
-          //zIndex: events[i][3]
-        });
+                position: new google.maps.LatLng(latitude, longitude),
+                map: map,
+                icon: image, 
+                //shape: shape,
+                title: title,
+                //zIndex: events[i][3]
+              });
 
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-            infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
-            infowindow.open(map, marker);
-          }
-        })(marker, i));
+              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
+                infowindow.open(map, marker);
+              }
+              })(marker, i));
             }
           },
           error: function(object, error) {
@@ -152,10 +160,10 @@ function GoogleMap(){
             // error is a Parse.Error with an error code and description.
             alert("Failed to retreive events from the database");
           }
-        });
+      });
     }
     
-    var showMap = function(){
+    var showMap = function() {
 
       var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
 
@@ -165,15 +173,15 @@ function GoogleMap(){
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
-        var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-        google.maps.event.addListenerOnce(map, 'idle', function(){
+      var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+      google.maps.event.addListenerOnce(map, 'idle', function(){
             //loaded fully
             console.log("Map loaded...");
             // navigator.splashscreen.hide();
-        });
+      });
 
-        map.setCenter(initialLocation);
+      map.setCenter(initialLocation);
         
-        return map;
-    }
+      return map;
+  }
 }
