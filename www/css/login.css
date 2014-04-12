@@ -86,7 +86,7 @@ html, body {
 	transition: all .1s ease;
 }
 
-.fancyBtnDown {
+.fancyBtn:active, .fancyBtnDown {
 	color: rgba(255,255,255,1) !important;
     -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
     -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);

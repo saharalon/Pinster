@@ -64,11 +64,10 @@ $(document).ready(function() {
     var geocoder = new google.maps.Geocoder();
     map.initialize();
 
-    $(".fancyBtn").mousedown(function(){
+    $(".fancyBtn").on("touchstart", function(){
       $(this).addClass('fancyBtnDown');
-      // $("#myModal").modal();
     });
-    $(".fancyBtn").mouseup(function(){
+    $(".fancyBtn").on("touchend", function(){
       $(this).removeClass('fancyBtnDown');
     });
     // Define events
