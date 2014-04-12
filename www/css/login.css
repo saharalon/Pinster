@@ -4,6 +4,8 @@ html, body {
 
 .fill {
     height: 100%;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
 }
 
 #mapWrapper {
@@ -39,15 +41,15 @@ html, body {
 
 .searchBtn {
 	position: absolute;
-	bottom: 230px;
-	left: 50px;
+	bottom: 213px;
+	left: 25px;
 	z-index: 999;
 }
 
 .reportBtn {
 	position: absolute;
 	bottom: 125px;
-	left: 50px;
+	left: 25px;
 	z-index: 999;
 }
 
@@ -62,7 +64,7 @@ html, body {
     background-color: rgba(219,87,5,1);
     font-family: 'Yanone Kaffeesatz';
     font-weight: 700;
-    font-size: 3em;
+    font-size: 2.3em;
     display: block;
     padding: 4px;
     -webkit-border-radius: 8px;
