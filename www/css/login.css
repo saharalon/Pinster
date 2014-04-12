@@ -1,5 +1,6 @@
 html, body {
     height: 100%;
+    background-color: #111;
 }
 
 .fill {
@@ -18,8 +19,8 @@ html, body {
     height: 100%;
     margin: 0px;
     padding: 0px;
-    border-radius: 10px;
-    border: 12px solid black;
+    border-radius: 4px;
+    /*border: 12px solid black;*/
 }
 
 .form-control {
@@ -85,7 +86,7 @@ html, body {
 	transition: all .1s ease;
 }
 
-.fancyBtn:active {
+.fancyBtnDown {
 	color: rgba(255,255,255,1) !important;
     -webkit-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
     -moz-box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);

@@ -63,8 +63,12 @@ $(document).ready(function(){
     var map = new GoogleMap();
     map.initialize();
 
-    $(".fancyBtn").click(function(){
-      $("#myModal").modal();
+    $(".fancyBtn").mousedown(function(){
+      $(this).addClass('fancyBtnDown');
+      // $("#myModal").modal();
+    });
+    $(".fancyBtn").mouseup(function(){
+      $(this).removeClass('fancyBtnDown');
     });
 
 });
