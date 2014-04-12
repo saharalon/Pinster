@@ -159,16 +159,16 @@ function getImageByCategory(category)
 
   switch (category.toLowerCase())
   {
-    case 'sport':
-      return path + 'pin1.png';
     case 'shopping':
+      return path + 'pin1.png';
+    case 'sport':
       return path + 'pin2.png';
     case 'party':
       return path + 'pin3.png';
     case 'other':
       return path + 'pin4.png';
     default:
-      return path + 'pin4.png'; 
+      return path + 'pin5.png'; 
   }
 }
 
