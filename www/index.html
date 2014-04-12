@@ -62,7 +62,13 @@
               <div class="text-center form-signin">
                   <h1>Pinster</h1><br>
                   <input id="address" type="text" class="form-control" placeholder="Adress" autofocus>
-                  <input id="category" type="text" class="form-control" placeholder="Category"><br>
+                  <select id="categories" class="form-control">
+                    <option selected value="base">Please Select category</option>
+                    <option value="beverages">Shopping</option>
+                    <option value="snacks">Parties</option>
+                    <option value="snacks">Hazards</option>
+                  </select>
+                  <br>
                   <input id="radiusSlider" type="range" placeholder="Radius" min ="1" max="1000" step ="1" value ="100" >
                   <div id="radiusText" class="form-control" placeholder="0" ></div><br>
                   <a id="searchBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
