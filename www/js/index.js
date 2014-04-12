@@ -53,7 +53,7 @@ var app = {
     }
 };
 
-$(document).ready(function(){
+$(document).ready(function() {
 
     console.log("Document ready...");
 
@@ -119,8 +119,8 @@ function GoogleMap(){
       // coordinate closes the poly by connecting to the first
       // coordinate.
       var shape = {
-      coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-      type: 'poly'
+        coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+        type: 'poly'
       };
 
       var infowindow = new google.maps.InfoWindow;
@@ -129,6 +129,7 @@ function GoogleMap(){
       // Retreive events from the database
       var Event = Parse.Object.extend("Event");
       var query = new Parse.Query(Event);
+      
       query.find({
           success: function(results) {
             for (var i = 0; i < results.length; i++)
