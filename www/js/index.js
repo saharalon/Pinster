@@ -159,6 +159,8 @@ function GoogleMap(){
               var title = results[i]._serverData.title;
               var latitude = results[i]._serverData.location._latitude;
               var longitude = results[i]._serverData.location._longitude;
+              // TODO: load from database
+              var eventImage = "img/logo.png"; 
               var zIndex = 4;
 
               marker = new google.maps.Marker({
@@ -172,7 +174,10 @@ function GoogleMap(){
 
               google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
                 return function() {
-                  infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
+                  infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + 
+                    results[i]._serverData.description + 
+                      "<br> <img src='" + eventImage + "' alt='image in infowindow'>" );
+
                   infowindow.open(map, marker);
                 }
               })(marker, i));
