@@ -82,7 +82,7 @@ $(document).ready(function(){
     });
 
     $(".dropdown-menu li a").click(function(){
-      $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
+      $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRightt"></span>');
     });
 
 });
