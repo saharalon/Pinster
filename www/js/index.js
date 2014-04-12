@@ -153,7 +153,7 @@ function sliderOutputUpdate(val)
   }
 }
 
-function getImageByCategoryId(category)
+function getImageByCategory(category)
 {
   var path = 'img/';
 
@@ -211,7 +211,7 @@ function GoogleMap(){
 
               // Image for the marker
               var markerImage = { 
-                  url: getImageByCategoryId(results[i]._serverData.category)
+                  url: getImageByCategory(results[i]._serverData.category)
                   //url: getImageByCategoryId(4)
               };
 
