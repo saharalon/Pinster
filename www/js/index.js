@@ -69,6 +69,7 @@ $(document).ready(function(){
     });
     $(".fancyBtn").mouseup(function(){
       $(this).removeClass('fancyBtnDown');
+    });
     // Define events
     $(".reportBtn").click(function(){
       $("#myModal").modal();
