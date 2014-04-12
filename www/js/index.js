@@ -77,13 +77,15 @@ $(document).ready(function(){
 
     $(".searchBtn").click(function(){
       $("#searchModal").modal();
+      // Should replace 100 with user default radius 
+      sliderOutputUpdate(100);
     });
 
 });
 
-function sliderOutputUpdate(vol)
+function sliderOutputUpdate(val)
 {
-  document.querySelector('#output').value = "Radius is: " + vol + " Kelometers";
+  document.querySelector('#output').value = "Radius is: " + val + " Kelometers";
 }
 
 function GoogleMap(){
