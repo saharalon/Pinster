@@ -171,11 +171,17 @@ function GoogleMap(){
                 //zIndex: events[i][3]
               });
 
-              google.maps.event.addListener(marker, 'click', (function(marker, i) {
-              return function() {
-                infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
-                infowindow.open(map, marker);
-              }
+              google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+                return function() {
+                  infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + results[i]._serverData.description);
+                  infowindow.open(map, marker);
+                }
+              })(marker, i));
+
+              google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+                return function() {
+                  infowindow.close();
+                }
               })(marker, i));
             }
           },
