@@ -79,18 +79,11 @@ $(document).ready(function(){
       $("#searchModal").modal();
     });
 
-    $("#radiusSlider").change(function () {
-      updateRadiusValue();
-    });
-
-    updateRadiusValue();
-
 });
 
-function updateRadiusValue()
+function sliderOutputUpdate(vol)
 {
-  var newValue = $('#radiusSlider').val();
-  $("#radiusText").text("Radius: " + newValue + " Kilometers");
+  document.querySelector('#output').value = "Radius is: " + vol + " Kelometers";
 }
 
 function GoogleMap(){

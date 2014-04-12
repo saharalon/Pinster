@@ -66,13 +66,13 @@
                   <select id="categories" class="form-control">
                     <!-- Sould be loaded from database -->
                     <option selected value="base">Please Select category</option>
-                    <option value="beverages">Shopping</option>
-                    <option value="snacks">Parties</option>
-                    <option value="snacks">Hazards</option>
+                    <option value="1">Shopping</option>
+                    <option value="2">Parties</option>
+                    <option value="3">Hazards</option>
                   </select>
                   <br>
-                  <input id="radiusSlider" type="range" placeholder="Radius" min ="1" max="1000" step ="1" value ="100" >
-                  <div id="radiusText" class="form-control" placeholder="0" ></div>
+                  <input type=range min=1 max=1000 value=100 id=slider step=1 oninput="sliderOutputUpdate(value)">
+                  <output for=slider id=output>Radius is: 100 Kelometers</output>
                   <br>
                   <a id="searchBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
               </div>
@@ -88,7 +88,6 @@
 
   </div>
     
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHRo-eztcykGmOp_-WCbQryG9Ao1kR1rI&sensor=false&language=he"></script>
     <script src="js/lib/jquery-1.11.0.min.js"></script>
     <script src="js/lib/bootstrap.js"></script>
