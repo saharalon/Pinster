@@ -153,6 +153,25 @@ function sliderOutputUpdate(val)
   }
 }
 
+function getImageByCategoryId(category)
+{
+  var path = 'img/';
+
+  switch (category.toLowerCase())
+  {
+    case 'sport':
+      return path + 'pin1.png';
+    case 'shopping':
+      return path + 'pin2.png';
+    case 'party':
+      return path + 'pin3.png';
+    case 'other':
+      return path + 'pin4.png';
+    default:
+      return path + 'pin4.png'; 
+  }
+}
+
 function GoogleMap(){
     
     this.initialize = function(){
@@ -162,11 +181,6 @@ function GoogleMap(){
     
     var addMarkersToMap = function(map)
     {
-      // Image url for the markers
-      var image = { 
-          url: 'img/pin4.png'
-      };
-
       // Shapes define the clickable region of the icon.
       // The type defines an HTML &lt;area&gt; element 'poly' which
       // traces out a polygon as a series of X,Y points. The final
@@ -180,7 +194,7 @@ function GoogleMap(){
       var infowindow = new google.maps.InfoWindow;
       var marker;
 
-      // Retreive events from the database
+      // Retreive events from the databas
       var Event = Parse.Object.extend("Event");
       var query = new Parse.Query(Event);
       
@@ -195,10 +209,16 @@ function GoogleMap(){
               var eventImage = "img/yakar.jpg"; 
               var zIndex = 4;
 
+              // Image for the marker
+              var markerImage = { 
+                  url: getImageByCategoryId(results[i]._serverData.category)
+                  //url: getImageByCategoryId(4)
+              };
+
               marker = new google.maps.Marker({
                 position: new google.maps.LatLng(latitude, longitude),
                 map: map,
-                icon: image, 
+                icon: markerImage, 
                 //shape: shape,
                 title: title,
                 //zIndex: events[i][3]
