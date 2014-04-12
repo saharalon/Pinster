@@ -98,3 +98,9 @@ html, body {
 .fancyBtn:hover {
 	color: rgba(255,255,255,1) !important;
 }
+
+.caretRight {
+	position: absolute;
+	right:12px;
+	top: 15px;
+}
