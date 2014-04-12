@@ -16,6 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var METERS = 1000;
+
+
 var app = {
     // Application Constructor
     initialize: function() {
@@ -90,17 +93,25 @@ $(document).ready(function() {
     $('#searchBtnModal').click(function()
     {
 
-      //get address from address element - TODO
-      var address = "dominion ave sunnyvale";
+      //get address from address element
+      var address = $('#address').val();
+      //get radius from radius ele, divide with 1000, to get KM
+      var radius = $('#radiusSlider').val() / METERS;
       geocoder.geocode( { 'address': address}, function(results, status) 
       {
         //address is OK
         if (status == google.maps.GeocoderStatus.OK) 
-        {
-          alert(results[0].geometry.location);
+        {   
+            //get lat/lng from location 
+            var soughtAddressLatitude = results[0].geometry.location.lat();
+            var soughtAddressLongitude = results[0].geometry.location.lng();
+            //get geopoint from lat/lng
+            var point = new Parse.GeoPoint({latitude: soughtAddressLatitude, longitude: soughtAddressLongitude});
+            //get events object from parse
+            getLocationAndCalculateGeoPoint(point, radius);
         } 
 
-        //address is not valid
+        //address is not valid - TODO visualize an alert to user
         else 
         {
           alert("Geocode was not successful for the following reason: " + status);
@@ -110,6 +121,25 @@ $(document).ready(function() {
     });
 
 });
+
+
+function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
+{
+          var events = Parse.Object.extend("Event");
+          //set query for events objectr
+          var query = new Parse.Query(events);
+          //check the events within the specify point to search from
+          query.withinKilometers("location", pointOfEnterdAddress, Kilometers);
+          // Limit what could be a lot of points.
+          query.limit(10);
+          // Final list of objects
+          query.find({
+            success: function(placesObjects) {
+              console.log(placesObjects);
+            }
+          });
+}
+
 
 function sliderOutputUpdate(val)
 {
