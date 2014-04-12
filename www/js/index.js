@@ -160,7 +160,7 @@ function GoogleMap(){
               var latitude = results[i]._serverData.location._latitude;
               var longitude = results[i]._serverData.location._longitude;
               // TODO: load from database
-              var eventImage = "img/logo.png"; 
+              var eventImage = "img/yakar.jpg"; 
               var zIndex = 4;
 
               marker = new google.maps.Marker({
@@ -176,7 +176,7 @@ function GoogleMap(){
                 return function() {
                   infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + 
                     results[i]._serverData.description + 
-                      "<br> <img src='" + eventImage + "' alt='image in infowindow'>" );
+                      "<br><br> <img src='" + eventImage + "' width='200' height='150'>" );
 
                   infowindow.open(map, marker);
                 }
