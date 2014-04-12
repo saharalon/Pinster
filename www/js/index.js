@@ -61,6 +61,7 @@ $(document).ready(function() {
        "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
      
     var map = new GoogleMap();
+    var geocoder = new google.maps.Geocoder();
     map.initialize();
 
     $(".fancyBtn").mousedown(function(){
@@ -83,6 +84,28 @@ $(document).ready(function() {
 
     $(".dropdown-menu li a").click(function(){
       $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
+    });
+        //click -search events
+    $('#searchBtnModal').click(function()
+    {
+
+      //get address from address element - TODO
+      var address = "dominion ave sunnyvale";
+      geocoder.geocode( { 'address': address}, function(results, status) 
+      {
+        //address is OK
+        if (status == google.maps.GeocoderStatus.OK) 
+        {
+          alert(results[0].geometry.location);
+        } 
+
+        //address is not valid
+        else 
+        {
+          alert("Geocode was not successful for the following reason: " + status);
+        }
+     });
+
     });
 
 });
