@@ -61,26 +61,38 @@
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
-                  <h1>Pinster</h1>
-                  <input id="address" type="text" class="form-control" placeholder="Adress" autofocus>
-                  <select id="categories" class="form-control">
-                    <!-- Sould be loaded from database -->
-                    <option selected value="base">Please Select category</option>
-                    <option value="1">Shopping</option>
-                    <option value="2">Parties</option>
-                    <option value="3">Hazards</option>
-                  </select>
+                  <h1>Pinster</h1><br>
+                  <input id="address" type="text" class="form-control" placeholder="Address" autofocus>
+
+                  <div class="dropdown">
+                    <button class="form-control dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                      Please select a category
+                      <span class="caret caretRight"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="width: 100%">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shopping</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Parties</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hazards</a></li>
+                      <li role="presentation" class="divider"></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example1</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example2</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example3</a></li>
+                      <li role="presentation" class="divider"></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example1</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example2</a></li>
+                    </ul>
+                  </div>
+
                   <br>
-                  <input id=slider type=range min=1 max=1000 value=100 step=1 oninput="sliderOutputUpdate(value)">
-                  <output for=slider id=output></output>
-                  <br>
+                  <input id="radiusSlider" type="range" placeholder="Radius" min ="1" max="1000" step ="1" value ="100" >
+                  <div id="radiusText" class="form-control" placeholder="0" ></div><br>
                   <a id="searchBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
               </div>
             </div>
-             <div class="modal-footer">
+            <!-- <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-            </div>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
           </div>
         </div>
       </div>
@@ -88,6 +100,7 @@
 
   </div>
     
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHRo-eztcykGmOp_-WCbQryG9Ao1kR1rI&sensor=false&language=he"></script>
     <script src="js/lib/jquery-1.11.0.min.js"></script>
     <script src="js/lib/bootstrap.js"></script>

@@ -81,6 +81,10 @@ $(document).ready(function(){
       sliderOutputUpdate(100);
     });
 
+    $(".dropdown-menu li a").click(function(){
+      $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
+    });
+
 });
 
 function sliderOutputUpdate(val)
