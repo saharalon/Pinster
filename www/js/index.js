@@ -53,6 +53,8 @@ var app = {
     }
 };
 
+var markers = [];
+
 $(document).ready(function() {
 
     console.log("Document ready...");
@@ -171,6 +173,8 @@ function GoogleMap(){
                 title: title,
                 //zIndex: events[i][3]
               });
+
+              markers.push(marker);
 
               google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
                 return function() {
