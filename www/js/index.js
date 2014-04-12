@@ -80,8 +80,8 @@ $(document).ready(function() {
       $("#loginModal").modal();
     });
 
-    $(".searchBtn").click(function(){
-      $("#searchModal").modal();
+    $(".optionsBtn").click(function(){
+      $("#optionsModal").modal();
       // Should replace 100 with user default radius 
       sliderOutputUpdate(100);
     });
@@ -90,7 +90,7 @@ $(document).ready(function() {
       $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
     });
         //click -search events
-    $('#searchBtnModal').click(function()
+    $('#optionsBtnModal').click(function()
     {
 
       //get address from address element
