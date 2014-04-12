@@ -69,9 +69,28 @@ $(document).ready(function(){
     });
     $(".fancyBtn").mouseup(function(){
       $(this).removeClass('fancyBtnDown');
+    // Define events
+    $(".reportBtn").click(function(){
+      $("#myModal").modal();
     });
 
+    $(".searchBtn").click(function(){
+      $("#searchModal").modal();
+    });
+
+    $("#radiusSlider").change(function () {
+      updateRadiusValue();
+    });
+
+    updateRadiusValue();
+
 });
+
+function updateRadiusValue()
+{
+  var newValue = $('#radiusSlider').val();
+  $("#radiusText").text("Radius: " + newValue + " Kilometers");
+}
 
 function GoogleMap(){
     
@@ -142,6 +161,7 @@ function GoogleMap(){
 
       var mapOptions = {
         zoom: 12,
+        zoomControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
 
