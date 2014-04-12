@@ -125,19 +125,19 @@ $(document).ready(function() {
 
 function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
 {
-          var events = Parse.Object.extend("Event");
-          //set query for events objectr
-          var query = new Parse.Query(events);
-          //check the events within the specify point to search from
-          query.withinKilometers("location", pointOfEnterdAddress, Kilometers);
-          // Limit what could be a lot of points.
-          query.limit(10);
-          // Final list of objects
-          query.find({
-            success: function(placesObjects) {
-              console.log(placesObjects);
-            }
-          });
+  var events = Parse.Object.extend("Event");
+  //set query for events objectr
+  var query = new Parse.Query(events);
+  //check the events within the specify point to search from
+  query.withinKilometers("location", pointOfEnterdAddress, Kilometers);
+  // Limit what could be a lot of points.
+  query.limit(10);
+  // Final list of objects
+  query.find({
+    success: function(placesObjects) {
+      console.log(placesObjects);
+    }
+  });
 }
 
 
@@ -207,12 +207,10 @@ function GoogleMap(){
               var longitude = results[i]._serverData.location._longitude;
               // TODO: load from database
               var eventImage = "img/yakar.jpg"; 
-              var zIndex = 4;
 
               // Image for the marker
               var markerImage = { 
                   url: getImageByCategory(results[i]._serverData.category)
-                  //url: getImageByCategoryId(4)
               };
 
               marker = new google.maps.Marker({
