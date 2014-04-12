@@ -118,8 +118,8 @@ function sliderOutputUpdate(val)
   }
   else
   {
-    document.querySelector('#output').value = "Radius is: " + val / 1000 + " Kelometers";
-  }  
+    document.querySelector('#output').value = "Radius is: " + val / 1000 + " Kilometers";
+  }
 }
 
 function GoogleMap(){
