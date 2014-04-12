@@ -174,9 +174,8 @@ function GoogleMap(){
 
               google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
                 return function() {
-                  infowindow.setContent("<b>" + results[i]._serverData.title + "</b><br>" + 
-                    results[i]._serverData.description + 
-                      "<br><br> <img src='" + eventImage + "' width='200' height='150'>" );
+                  infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' + results[i]._serverData.title + 
+                    '</b></center><img width="240" height="180" src="' + eventImage + '"/></div>');
 
                   infowindow.open(map, marker);
                 }
