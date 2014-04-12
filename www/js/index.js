@@ -187,6 +187,12 @@ function GoogleMap(){
                   infowindow.close();
                 }
               })(marker, i));
+
+              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                  // TODO: Show event information (Foursquare)
+                }
+              })(marker, i));
             }
           },
           error: function(object, error) {
