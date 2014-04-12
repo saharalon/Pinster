@@ -21,9 +21,12 @@
         <!-- <button id="loginBtn" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">
           Login
         </button> -->
-        <span class="searchBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-search amb" ></i></a></span>
-        <span class="reportBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-bullhorn amb"></i></a></span>
         
+        <input id="quickSearch" type="text" class="form-control" placeholder="Enter an address...">
+
+        <span class="optionsBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-th-list amb" ></i></a></span>
+        <span class="reportBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-bullhorn amb"></i></a></span>
+  
         <div id="map-canvas"></div>
       </div>
 
@@ -52,12 +55,12 @@
       </div>
 
       <!-- Search Modal -->
-      <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+      <div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="optionsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <!-- <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="searchModalLabel">Modal title</h4>
+              <h4 class="modal-title" id="optionsModalLabel">Modal title</h4>
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
@@ -87,7 +90,7 @@
                   <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" value="100" 
                     oninput="sliderOutputUpdate(value)">
                   <output for=fader id=output></output><br>
-                  <a id="searchBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
+                  <a id="optionsBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
               </div>
             </div>
             <!-- <div class="modal-footer">
