@@ -72,7 +72,7 @@ $(document).ready(function() {
     });
     // Define events
     $(".reportBtn").click(function(){
-      $("#myModal").modal();
+      $("#loginModal").modal();
     });
 
     $(".searchBtn").click(function(){
