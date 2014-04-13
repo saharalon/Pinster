@@ -89,6 +89,15 @@ $(document).ready(function() {
     $(".dropdown-menu li a").click(function(){
       $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
     });
+
+
+    //click -publish events - TODO: create the UI element
+    $('#publishEventBtnModal').click(function()
+    {
+         navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+
+    });
+
         //click -search events
     $('#optionsBtnModal').click(function()
     {
@@ -105,8 +114,7 @@ $(document).ready(function() {
             //get lat/lng from location 
             var soughtAddressLatitude = results[0].geometry.location.lat();
             var soughtAddressLongitude = results[0].geometry.location.lng();
-            //get geopoint from lat/lng
-            var point = new Parse.GeoPoint({latitude: soughtAddressLatitude, longitude: soughtAddressLongitude});
+            var point = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
             //get events object from parse
             getLocationAndCalculateGeoPoint(point, radius);
         } 
@@ -121,6 +129,24 @@ $(document).ready(function() {
     });
 
 });
+
+
+// Success Geolocation
+function onCurrentLocationSuccess(position)
+{
+      console.log(position.coords.latitude);
+      console.log(position.coords.longitude); 
+      console.log(position.coords.heading); 
+
+      var point = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+
+}
+
+// Error Callback receives a PositionError object
+function onCurrentLocationError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
 
 
 function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
@@ -138,6 +164,15 @@ function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
       console.log(placesObjects);
     }
   });
+}
+
+function convertToGeoPointObject(latitude, longitude)
+{
+
+  //get geopoint from lat/lng
+  var point = new Parse.GeoPoint({latitude: latitude, longitude: longitude});
+
+  return point;
 }
 
 
