@@ -53,6 +53,38 @@ html, body {
     border-radius: 15px;
 }
 
+.TopLeft, .TopRight, .BottomLeft, .BottomRight {
+	position: absolute;
+	z-index: 1000;
+	background-image: url(../img/corners2.png);
+	background-size: 38px;
+	width: 20px;
+	height: 20px;
+}
+
+.TopLeft {
+	left: 0;
+	top: 0;
+}
+
+.TopRight {
+	right: 0;
+	top: 0;
+	background-position: top right;
+}
+
+.BottomLeft {
+	left: 0;
+	bottom: 0;
+	background-position: bottom left;
+}
+
+.BottomRight {
+	right: 0;
+	bottom: 0;
+	background-position: bottom right;
+}
+
 .optionsBtn {
 	position: absolute;
 	bottom: 20px;
