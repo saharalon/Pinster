@@ -94,6 +94,8 @@ $(document).ready(function() {
     //click -publish events - TODO: create the UI element
     $('#publishEventBtnModal').click(function()
     {
+        //get current location of the device
+        //TODO: get the precise location of the device, NOT raw location
          navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
 
     });
