@@ -77,11 +77,11 @@ $(document).ready(function() {
     });
     // Define events
     $(".reportBtn").click(function(){
-      $("#loginModal").modal();
+      $("#reportModal").modal();
     });
 
-    $(".optionsBtn").click(function(){
-      $("#optionsModal").modal();
+    $(".settingsBtn").click(function(){
+      $("#settingsModal").modal();
       // Should replace 100 with user default radius 
       sliderOutputUpdate(100);
     });

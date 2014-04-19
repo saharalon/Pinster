@@ -24,7 +24,7 @@
         
         <input id="quickSearch" type="text" class="form-control" placeholder="Enter an address...">
 
-        <span class="optionsBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-th-list amb" ></i></a></span>
+        <span class="settingsBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-th-list amb" ></i></a></span>
         <span class="reportBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-bullhorn amb"></i></a></span>
   
         <div class="TopLeft"></div>
@@ -61,18 +61,71 @@
         </div>
       </div>
 
-      <!-- Search Modal -->
-      <div class="modal fade" id="optionsModal" tabindex="-1" role="dialog" aria-labelledby="optionsModalLabel" aria-hidden="true">
+      <!-- settings Modal -->
+      <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <!-- <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title" id="optionsModalLabel">Modal title</h4>
+              <h4 class="modal-title" id="settingsModalLabel">Modal title</h4>
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
-                  <h1>Search for event</h1><br>
-                  <input id="address" type="text" class="form-control" placeholder="Address" autofocus>
+                  <h1>Settings</h1><br>
+                  <input id="address" type="text" class="form-control" placeholder="Favorite Address" autofocus>
+
+                  <div class="dropdown">
+                    <button class="form-control dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                      Favorite Category
+                      <span class="caret caretRight"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="width: 100%">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shopping</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Parties</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Hazards</a></li>
+                      <li role="presentation" class="divider"></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example1</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example2</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example3</a></li>
+                      <li role="presentation" class="divider"></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example1</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example2</a></li>
+                    </ul>
+                  </div>
+
+                  <br>
+                  <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" value="100" 
+                    oninput="sliderOutputUpdate(value)">
+                  <output for=fader id=output></output><br>
+                  <a id="settingsBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Save</a>
+              </div>
+            </div>
+            <!-- <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+       <!-- report Modal -->
+      <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="reportModalLabel">Modal title</h4>
+            </div> -->
+            <div class="modal-body">
+              <div class="text-center form-signin">
+                  <h1>Report an event</h1><br>
+                  <div>Address: <span id="myLocationStr"></span></div>
 
                   <div class="dropdown">
                     <button class="form-control dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
@@ -94,10 +147,7 @@
                   </div>
 
                   <br>
-                  <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" value="100" 
-                    oninput="sliderOutputUpdate(value)">
-                  <output for=fader id=output></output><br>
-                  <a id="optionsBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Search</a>
+                  <a id="reportBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Report</a>
               </div>
             </div>
             <!-- <div class="modal-footer">
@@ -106,7 +156,12 @@
             </div> -->
           </div>
         </div>
-      </div>
+      </div> 
+
+
+
+
+
 
 
   </div>
