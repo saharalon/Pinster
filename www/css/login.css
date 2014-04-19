@@ -43,14 +43,29 @@ html, body {
 	left: 30px;
 }
 
-#quickSearch {
+#searchBar {
 	position: absolute; 
     top: 8px; 
-    left: 10%; z-index: 999;
+    left: 10%; 
+    z-index: 999;
     margin: 0 auto;
     text-align: center;
     width: 80%;
     border-radius: 15px;
+}
+
+#quickSearch {
+	position: absolute; 
+    z-index: 999;
+    text-align: center;
+    border-radius: 15px;
+}
+
+#quickSearchBtn {
+	position: absolute;
+	right: 15px;
+	z-index: 1000;
+	top: 10px;
 }
 
 .TopLeft, .TopRight, .BottomLeft, .BottomRight {

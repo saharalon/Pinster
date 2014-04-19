@@ -86,8 +86,12 @@ $(document).ready(function() {
       sliderOutputUpdate(100);
     });
 
-    $(".dropdown-menu li a").click(function(){
+    $("#settingsModal .dropdown-menu li a").click(function(){
       $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
+    });
+
+    $("#reportModal .dropdown-menu li a").click(function(){
+      $("#dropdownMenu2").html($(this).text() + '<span class="caret caretRight"></span>');
     });
 
 
@@ -100,45 +104,34 @@ $(document).ready(function() {
 
     });
 
-        //click -search events
-    $('#optionsBtnModal').click(function()
-    {
-
-      //get address from address element
-      var address = $('#address').val();
-      //get radius from radius ele, divide with 1000, to get KM
-      var radius = $('#radiusSlider').val() / METERS;
-      geocoder.geocode( { 'address': address}, function(results, status) 
-      {
-        //address is OK
-        if (status == google.maps.GeocoderStatus.OK) 
-        {   
-            //get lat/lng from location 
-            var soughtAddressLatitude = results[0].geometry.location.lat();
-            var soughtAddressLongitude = results[0].geometry.location.lng();
-            var point = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
-            //get events object from parse
-            getLocationAndCalculateGeoPoint(point, radius);
-        } 
-
-        //address is not valid - TODO visualize an alert to user
-        else 
-        {
-          alert("Geocode was not successful for the following reason: " + status);
-        }
-     });
-
+    //Enter key - search events
+    $('#quickSearch').keypress(function( event ) {
+      
+      if ( event.which == 13 ) {
+        event.preventDefault();
+        searchEvents();
+      }
     });
 
-});
+    //search button (magnifying glass) - search events
+    $("#quickSearchBtn").click(function(event) {
+        event.preventDefault();
+        searchEvents();
+    });
 
+    //Android search key (magnifying glass) - search events
+    document.addEventListener("searchbutton", searchEvents, false);
+
+  // end of document.ready();
+
+});
 
 // Success Geolocation
 function onCurrentLocationSuccess(position)
 {
       console.log(position.coords.latitude);
-      console.log(position.coords.longitude); 
-      console.log(position.coords.heading); 
+      console.log(position.coords.longitude);
+      console.log(position.coords.heading);
 
       var point = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
@@ -148,6 +141,36 @@ function onCurrentLocationSuccess(position)
 function onCurrentLocationError(error) {
     alert('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');
+}
+
+function searchEvents() {
+
+  //get address from address element
+  var address = $('#quickSearch').val();
+  //get radius from radius ele, divide with 1000, to get KM
+  var radius =  1000; //$('#radiusSlider').val() / METERS;
+  var geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode( { 'address': address }, function(results, status)
+  {
+    //address is OK
+    if (status == google.maps.GeocoderStatus.OK)
+    {
+        //get lat/lng from location 
+        var soughtAddressLatitude = results[0].geometry.location.lat();
+        var soughtAddressLongitude = results[0].geometry.location.lng();
+        var point = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
+        //get events object from parse
+        getLocationAndCalculateGeoPoint(point, radius);
+    }
+
+    //address is not valid - TODO visualize an alert to user
+    else
+    {
+      alert("Geocode was not successful for the following reason: " + status);
+    }
+ });
+
 }
 
 
@@ -164,6 +187,11 @@ function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
   query.find({
     success: function(placesObjects) {
       console.log(placesObjects);
+      var resultsStr = "";
+      placesObjects.forEach(function(item){
+        resultsStr += item.attributes.description + " | ";
+      });
+      alert(resultsStr);
     }
   });
 }
