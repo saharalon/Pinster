@@ -326,7 +326,9 @@ function GoogleMap(){
       var mapOptions = {
         zoom: 12,
         zoomControl: false,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeControl: false,
+        panControl: false
       };
 
       var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
