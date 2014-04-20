@@ -64,6 +64,8 @@ $(document).ready(function() {
 
     Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
        "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+
+    EventObject = Parse.Object.extend("Event");
      
     var map = new GoogleMap();
     var geocoder = new google.maps.Geocoder();
@@ -96,11 +98,39 @@ $(document).ready(function() {
 
 
     //click -publish events - TODO: create the UI element
-    $('#publishEventBtnModal').click(function()
+    $('#reportBtnModal').click(function()
     {
         //get current location of the device
         //TODO: get the precise location of the device, NOT raw location
-         navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+      var location = navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
+      
+      // TODO: handle better
+      if (location == undefined)
+      {
+        var gp = new Parse.GeoPoint({
+                latitude: 31.8959,
+                longitude: 34.734948                  
+            });
+
+        location = gp;
+      }
+
+      var title = $('#eventTitle').val();
+      var description = $('#eventDescription').val();
+      var category = $("#dropdownMenu2").text();
+
+      var eventObject = new EventObject();
+
+      eventObject.save({title:title, description:description, location:location, category:category}, {
+        success:function(object) {
+          console.log("Saved the object!");
+          map.initialize();
+        }, 
+        error:function(object,error) {
+          console.dir(error);
+          alert("Sorry, I couldn't save it.");
+        }
+      });
 
     });
 
@@ -228,7 +258,7 @@ function getImageByCategory(category)
       return path + 'pin1.png';
     case 'sport':
       return path + 'pin2.png';
-    case 'party':
+    case 'parties':
       return path + 'pin3.png';
     case 'other':
       return path + 'pin4.png';
@@ -241,10 +271,10 @@ function GoogleMap(){
     
     this.initialize = function(){
         var map = showMap();
-        addMarkersToMap(map);
+        loadMarkers(map);
     }    
     
-    var addMarkersToMap = function(map)
+    var loadMarkers = function(map)
     {
       // Shapes define the clickable region of the icon.
       // The type defines an HTML &lt;area&gt; element 'poly' which
@@ -325,7 +355,6 @@ function GoogleMap(){
 
       var mapOptions = {
         zoom: 12,
-        zoomControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         mapTypeControl: false,
         panControl: false
