@@ -39,6 +39,17 @@ var app = {
 
         app.receivedEvent('deviceready');
 
+        $(".fancyBtn").on("touchstart", function(){
+          $(this).addClass('fancyBtnDown');
+        });
+        
+        $(".fancyBtn").on("touchend", function(){
+          $(this).removeClass('fancyBtnDown');
+        });
+
+        //Android search key (magnifying glass) - search events
+        document.addEventListener("searchbutton", searchEvents, false);
+
        //var map = new GoogleMap();
        // map.initialize();
         
@@ -69,12 +80,6 @@ $(document).ready(function() {
     var geocoder = new google.maps.Geocoder();
     map.initialize();
 
-    $(".fancyBtn").on("touchstart", function(){
-      $(this).addClass('fancyBtnDown');
-    });
-    $(".fancyBtn").on("touchend", function(){
-      $(this).removeClass('fancyBtnDown');
-    });
     // Define events
     $(".reportBtn").click(function(){
       $("#reportModal").modal();
@@ -118,9 +123,6 @@ $(document).ready(function() {
         event.preventDefault();
         searchEvents();
     });
-
-    //Android search key (magnifying glass) - search events
-    document.addEventListener("searchbutton", searchEvents, false);
 
   // end of document.ready();
 
