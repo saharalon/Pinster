@@ -64,8 +64,6 @@ $(document).ready(function() {
 
     Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db", 
        "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
-
-    EventObject = Parse.Object.extend("Event");
      
     var map = new GoogleMap();
     var geocoder = new google.maps.Geocoder();
@@ -99,38 +97,10 @@ $(document).ready(function() {
 
     //click -publish events - TODO: create the UI element
     $('#reportBtnModal').click(function()
-    {
+    {     
         //get current location of the device
         //TODO: get the precise location of the device, NOT raw location
-      var location = navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError);
-      
-      // TODO: handle better
-      if (location == undefined)
-      {
-        var gp = new Parse.GeoPoint({
-                latitude: 31.8959,
-                longitude: 34.734948                  
-            });
-
-        location = gp;
-      }
-
-      var title = $('#eventTitle').val();
-      var description = $('#eventDescription').val();
-      var category = $("#dropdownMenu2").text();
-
-      var eventObject = new EventObject();
-
-      eventObject.save({title:title, description:description, location:location, category:category}, {
-        success:function(object) {
-          console.log("Saved the object!");
-          map.initialize();
-        }, 
-        error:function(object,error) {
-          console.dir(error);
-          alert("Sorry, I couldn't save it.");
-        }
-      });
+       navigator.geolocation.getCurrentPosition(onCurrentLocationSuccess, onCurrentLocationError,  {enableAccuracy: true});
 
     });
 
@@ -159,11 +129,32 @@ $(document).ready(function() {
 // Success Geolocation
 function onCurrentLocationSuccess(position)
 {
-      console.log(position.coords.latitude);
-      console.log(position.coords.longitude);
-      console.log(position.coords.heading);
 
-      var point = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+
+  
+  console.log(position.coords.latitude);
+  console.log(position.coords.heading);
+  console.log(position.coords.longitude);
+
+  var currentLocation = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+
+      var title = $('#eventTitle').val();
+      var description = $('#eventDescription').val();
+      var category = $("#dropdownMenu2").text();
+
+      var EventObject = Parse.Object.extend("Event");
+      var eventObject = new EventObject();
+
+      eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
+        success:function(object) {
+          console.log("Saved the object!");
+          map.initialize();
+        }, 
+        error:function(object,error) {
+          console.log(error);
+          alert("Sorry, I couldn't save it.");
+        }
+      });
 
 }
 
@@ -178,7 +169,7 @@ function searchEvents() {
   //get address from address element
   var address = $('#quickSearch').val();
   //get radius from radius ele, divide with 1000, to get KM
-  var radius =  1000; //$('#radiusSlider').val() / METERS;
+  var radius = $('#radiusSlider').val() / METERS;
   var geocoder = new google.maps.Geocoder();
 
   geocoder.geocode( { 'address': address }, function(results, status)
@@ -228,11 +219,8 @@ function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
 
 function convertToGeoPointObject(latitude, longitude)
 {
-
   //get geopoint from lat/lng
-  var point = new Parse.GeoPoint({latitude: latitude, longitude: longitude});
-
-  return point;
+  return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
 }
 
 
