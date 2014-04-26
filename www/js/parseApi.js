@@ -6,12 +6,12 @@ function User() {
 	// Events
 	//------------
 
-	obj.addEvent = function (adderss, title, desc, category, img) 
+	obj.addEvent = function (location, title, desc, category, img) 
 	{
-		  var EventObject = Parse.Object.extend("Event");
+	  var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
-      eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
+      eventObject.save({title:title, description:desc, location:location, category:category}, {
         success:function(object) {
           alert("Event added!");       
         },
@@ -24,7 +24,7 @@ function User() {
 
 	// function removeEvent() ??
 
-	obj.searchEvent = function (address, radius) 
+	obj.searchEvents = function (address, radius) 
 	{
 	  var events = Parse.Object.extend("Event");
 	  //set query for events objectr
