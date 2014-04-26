@@ -95,6 +95,8 @@ $(document).ready(function() {
       map.initialize();
     }
 
+    var user = new User();
+
     // Define events
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
@@ -191,7 +193,7 @@ function onCurrentLocationSuccess(position)
 
       eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
         success:function(object) {
-          console.log("Saved the object!");
+          alert("Event added!");
           map.initialize();
         },
         error:function(object,error) {
@@ -332,17 +334,16 @@ function GoogleMap(){
       
       query.find({
           success: function(results) {
-            for (var i = 0; i < results.length; i++)
-            {
-              var title = results[i]._serverData.title;
-              var latitude = results[i]._serverData.location._latitude;
-              var longitude = results[i]._serverData.location._longitude;
+            results.forEach(function(item, index) {
+              var title = item._serverData.title;
+              var latitude = item._serverData.location._latitude;
+              var longitude = item._serverData.location._longitude;
               // TODO: load from database
               var eventImage = "img/yakar.jpg";
 
               // Image for the marker
               var markerImage = {
-                  url: getImageByCategory(results[i]._serverData.category)
+                  url: getImageByCategory(item._serverData.category)
               };
 
               marker = new google.maps.Marker({
@@ -356,27 +357,28 @@ function GoogleMap(){
 
               markers.push(marker);
 
-              google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+              google.maps.event.addListener(marker, 'mouseover', (function(marker, index) {
                 return function() {
-                  infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' + results[i]._serverData.title +
+                  infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' + results[index]._serverData.title +
                     '</b></center><img width="240" height="180" src="' + eventImage + '"/></div>');
 
                   infowindow.open(map, marker);
                 };
-              })(marker, i));
+              })(marker, index));
 
-              google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+              google.maps.event.addListener(marker, 'mouseout', (function(marker, index) {
                 return function() {
                   infowindow.close();
                 };
-              })(marker, i));
+              })(marker, index));
 
-              google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              google.maps.event.addListener(marker, 'click', (function(marker, index) {
                 return function() {
                   // TODO: Show event information (Foursquare)
                 };
-              })(marker, i));
-            }
+              })(marker, index));
+            });
+
           },
           error: function(object, error) {
             // The object was not retrieved successfully.
