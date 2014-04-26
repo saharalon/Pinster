@@ -113,8 +113,6 @@ $(document).ready(function() {
       $(".settingsBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
         $("#settingsModal").modal();
-        // Should replace 100 with user default radius 
-        sliderOutputUpdate(100);
       });
 
       $(".reportBtn").on("touchend", function(){
@@ -130,8 +128,6 @@ $(document).ready(function() {
 
       $(".settingsBtn").click(function(){
         $("#settingsModal").modal();
-        // Should replace 100 with user default radius 
-        sliderOutputUpdate(100);
       });
 
       $(".reportBtn").click(function(){
@@ -147,9 +143,12 @@ $(document).ready(function() {
       $("#dropdownMenu2").html($(this).text() + '<span class="caret caretRight"></span>');
     });
 
-    $("#settingsBtnModal").click(function() {
+    $("#settingsSaveBtn").click(function() {
 
-      // TODO: Save settings to local storage
+      user.settings.setAddress($("#settingsModal #address").val());
+      user.settings.setCategory($("#dropdownMenu1").text());
+      user.settings.setRadius($('#radiusSlider').val());
+
     });
 
     //click -publish events - TODO: create the UI element
@@ -242,10 +241,68 @@ $(document).ready(function() {
 
 });
 
-
 function test() {
   console.log("stress");
   alert("stress");
+}
+
+function searchEvents() {
+
+  //get address from address element
+  var address = $('#quickSearch').val();
+  //get radius from radius ele, divide with 1000, to get KM
+  var radius = user.settings.radius / METERS;
+  var geocoder = new google.maps.Geocoder();
+
+  geocoder.geocode( { 'address': address }, function(results, status)
+  {
+    //address is OK
+    if (status == google.maps.GeocoderStatus.OK)
+    {
+        //get lat/lng from location 
+        var soughtAddressLatitude = results[0].geometry.location.lat();
+        var soughtAddressLongitude = results[0].geometry.location.lng();
+        var point = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
+        //get events object from parse
+        getLocationAndCalculateGeoPoint(point, radius);
+    }
+
+    //address is not valid - TODO visualize an alert to user
+    else
+    {
+      alert("Geocode was not successful for the following reason: " + status);
+    }
+ });
+
+}
+
+
+function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
+{
+  var events = Parse.Object.extend("Event");
+  //set query for events objectr
+  var query = new Parse.Query(events);
+  //check the events within the specify point to search from
+  query.withinKilometers("location", pointOfEnterdAddress, Kilometers);
+  // Limit what could be a lot of points.
+  query.limit(10);
+  // Final list of objects
+  query.find({
+    success: function(placesObjects) {
+      console.log(placesObjects);
+      var resultsStr = "";
+      placesObjects.forEach(function(item){
+        resultsStr += item.attributes.title + " | ";
+      });
+      alert(resultsStr);
+    }
+  });
+}
+
+function convertToGeoPointObject(latitude, longitude)
+{
+  //get geopoint from lat/lng
+  return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
 }
 
 function sliderOutputUpdate(val)

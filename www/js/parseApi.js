@@ -104,8 +104,8 @@ function User() {
 
 		    if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
 		    	localStorage.setItem("pinsterSettings", JSON.stringify({
-					address: "",
-					category: "",
+					address: "Favorite Address",
+					category: "Favorite Category",
 					radius: 1000
 				}));
 		    }
@@ -114,6 +114,10 @@ function User() {
 		    	that.address = tmpObj.address;
 		    	that.category = tmpObj.category;
 		    	that.radius = tmpObj.radius;
+		    	$("#settingsModal #address").val(that.address);
+      			$("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
+      			$('#radiusSlider').val(that.radius);
+      			sliderOutputUpdate(that.radius);
 		    }
 		}
 
