@@ -259,7 +259,7 @@ function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
       console.log(placesObjects);
       var resultsStr = "";
       placesObjects.forEach(function(item){
-        resultsStr += item.attributes.description + " | ";
+        resultsStr += item.attributes.title + " | ";
       });
       alert(resultsStr);
     }
