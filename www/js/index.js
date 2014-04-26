@@ -17,6 +17,8 @@
  * under the License.
  */
 var METERS = 1000;
+googleMapCalled = false;
+parseCalled = false; 
 
 
 var app = {
@@ -39,7 +41,18 @@ var app = {
 
         app.receivedEvent('deviceready');
 
-        FastClick.attach(document.body);
+        if (!parseCalled) {
+          parseCalled = true;
+          Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db",
+            "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+        }
+
+        if (!googleMapCalled) {
+          googleMapCalled = true;
+          var map = new GoogleMap();
+          var geocoder = new google.maps.Geocoder();
+          map.initialize();
+        }
 
         //Android search key (magnifying glass) - search events
         document.addEventListener("searchbutton", searchEvents, false);
@@ -67,12 +80,20 @@ $(document).ready(function() {
 
     console.log("Document ready...");
 
-    Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db",
-       "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
-     
-    var map = new GoogleMap();
-    var geocoder = new google.maps.Geocoder();
-    map.initialize();
+    FastClick.attach(document.body);
+
+    if (!parseCalled) {
+      parseCalled = true;
+      Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db",
+        "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
+    }
+
+    if (!googleMapCalled) {
+      googleMapCalled = true;
+      var map = new GoogleMap();
+      var geocoder = new google.maps.Geocoder();
+      map.initialize();
+    }
 
     // Define events
     $(".reportBtn").click(function(){
