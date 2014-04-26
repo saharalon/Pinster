@@ -281,13 +281,13 @@ function convertToGeoPointObject(latitude, longitude)
 
 function sliderOutputUpdate(val)
 {
-  if (val < 1000)
+  if (val < METERS)
   {
     document.querySelector('#output').value = "Radius is: " + val + " Meters";
   }
   else
   {
-    document.querySelector('#output').value = "Radius is: " + val / 1000 + " Kilometers";
+    document.querySelector('#output').value = "Radius is: " + val / METERS + " Kilometers";
   }
 }
 
