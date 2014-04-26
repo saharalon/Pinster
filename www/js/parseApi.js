@@ -6,15 +6,72 @@ function User() {
 	// Events
 	//------------
 
-	obj.addEvent = function (adderss, title, desc, category, img) {
-		// todo
+	obj.addEvent = function (adderss, title, desc, category, img) 
+	{
+		  var EventObject = Parse.Object.extend("Event");
+      var eventObject = new EventObject();
+
+      eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
+        success:function(object) {
+          alert("Event added!");       
+        },
+        error:function(object,error) {
+          console.log(error);
+          alert("Sorry, I couldn't save it.");
+        }
+      });
 	};
 
 	// function removeEvent() ??
 
-	obj.searchEvent = function (address, radius) {
-		// todo
+	obj.searchEvent = function (address, radius) 
+	{
+	  var events = Parse.Object.extend("Event");
+	  //set query for events objectr
+	  var query = new Parse.Query(events);
+	  //check the events within the specify point to search from
+	  query.withinKilometers("location", address, radius);
+	  // Limit what could be a lot of points.
+	  query.limit(10);
+	  // Final list of objects
+	 
+	  query.find({
+		    success: function(placesObjects) {
+		      console.log(placesObjects);
+		      var resultsStr = "";
+		      placesObjects.forEach(function(item){
+		        resultsStr += item.attributes.title + " | ";
+		      });
+		      alert(resultsStr);
+		    }
+		  });
 	};
+
+
+	//------------
+	// User states
+	//------------
+
+
+	obj.userLogin = function(username, password)
+	{
+		Parse.User.logIn(username, password, {
+		
+		  success: function(user) {
+		    // Do stuff after successful login.
+		  },
+		  error: function(user, error) {
+		    // The login failed. Check error to see why.
+		  }
+		});
+	};
+
+	obj.userLogout = function(currentUser)
+	{
+		//need to check
+		currentUser.logOut();
+	};
+
 
 	//------------
 	// Settings
