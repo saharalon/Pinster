@@ -147,9 +147,12 @@ $(document).ready(function() {
       $("#dropdownMenu2").html($(this).text() + '<span class="caret caretRight"></span>');
     });
 
-    $("#settingsBtnModal").click(function() {
+    $("#settingsSaveBtn").click(function() {
 
-      // TODO: Save settings to local storage
+      user.settings.setAddress($("#settingsModal #address").val());
+      user.settings.setCategory($("#dropdownMenu1").text());
+      user.settings.setRadius($('#radiusSlider').val());
+
     });
 
     //click -publish events - TODO: create the UI element
@@ -215,17 +218,12 @@ function onCurrentLocationError(error) {
           'message: ' + error.message + '\n');
 }
 
-function test() {
-  console.log("stress");
-  alert("stress");
-}
-
 function searchEvents() {
 
   //get address from address element
   var address = $('#quickSearch').val();
   //get radius from radius ele, divide with 1000, to get KM
-  var radius = $('#radiusSlider').val() / METERS;
+  var radius = user.settings.radius / METERS;
   var geocoder = new google.maps.Geocoder();
 
   geocoder.geocode( { 'address': address }, function(results, status)
