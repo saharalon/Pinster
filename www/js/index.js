@@ -146,6 +146,25 @@ $(document).ready(function() {
       $("#dropdownMenu2").html($(this).text() + '<span class="caret caretRight"></span>');
     });
 
+    $("#settingsBtnModal").click(function() {
+
+      var address  = $("#address").val();
+      var category = $("#dropdownMenu1").text();
+      var radius   = $('#radiusSlider').val() / METERS
+
+      var user = Parse.User.current();
+
+      if (user)
+      {
+        user.set("category", category);
+        user.set("radius_km", radius);
+      }
+      else
+      {
+        $("#loginModal").modal();
+      }
+    });
+
 
     //click -publish events - TODO: create the UI element
     $('#reportBtnModal').click(function()
@@ -184,13 +203,25 @@ function onCurrentLocationSuccess(position)
 
   var currentLocation = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
-      var title = $('#eventTitle').val();
-      var description = $('#eventDescription').val();
-      var category = $("#dropdownMenu2").text();
+  var title = $('#eventTitle').val();
+  var description = $('#eventDescription').val();
+  var category = $("#dropdownMenu2").text();
 
-      var EventObject = Parse.Object.extend("Event");
-      var eventObject = new EventObject();
+  var EventObject = Parse.Object.extend("Event");
+  var eventObject = new EventObject();
 
+<<<<<<< HEAD
+  eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
+    success:function(object) {
+      console.log("Saved the object!");
+      map.initialize();
+    },
+    error:function(object,error) {
+      console.log(error);
+      alert("Sorry, I couldn't save it.");
+    }
+  });
+=======
       eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
         success:function(object) {
           alert("Event added!");
@@ -201,6 +232,7 @@ function onCurrentLocationSuccess(position)
           alert("Sorry, I couldn't save it.");
         }
       });
+>>>>>>> eb0c03a57c92558aae029d9a4d22ac190f0d4228
 
 }
 
