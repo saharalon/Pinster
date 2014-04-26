@@ -94,7 +94,7 @@ $(document).ready(function() {
       var geocoder = new google.maps.Geocoder();
       map.initialize();
     }
-
+    
     var user = new User();
     user.settings.init();
 
@@ -160,6 +160,68 @@ $(document).ready(function() {
 
     });
 
+   // Success Geolocation
+    function onCurrentLocationSuccess(position)
+    {
+      console.log(position.coords.latitude);
+      console.log(position.coords.heading);
+      console.log(position.coords.longitude);
+
+      var currentLocation = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+
+      var title = $('#eventTitle').val();
+      var description = $('#eventDescription').val();
+      var category = $("#dropdownMenu2").text();
+
+      user.addEvent(currentLocation,title,description,category,null);
+
+    }
+
+    // Error Callback receives a PositionError object
+    function onCurrentLocationError(error) {
+        alert('code: '    + error.code    + '\n' +
+              'message: ' + error.message + '\n');
+    }
+
+    function searchEvents()
+     {
+
+        //get address from address element
+        var address = $('#quickSearch').val();
+        //get radius from radius ele, divide with 1000, to get KM
+        var radius = $('#radiusSlider').val() / METERS;
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode( { 'address': address }, function(results, status)
+        {
+          //address is OK
+          if (status == google.maps.GeocoderStatus.OK)
+          {
+              //get lat/lng from location 
+              var soughtAddressLatitude = results[0].geometry.location.lat();
+              var soughtAddressLongitude = results[0].geometry.location.lng();
+              var geoPoint = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
+              //get events object from parse
+              user.searchEvents(geoPoint,radius);
+          }
+
+          //address is not valid - TODO visualize an alert to user
+          else
+          {
+            alert("Geocode was not successful for the following reason: " + status);
+          }
+       });
+
+    }
+
+
+    function convertToGeoPointObject(latitude, longitude)
+    {
+      //get geopoint from lat/lng
+      return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
+    }
+
+
     //Enter key - search events
     $('#quickSearch').keypress(function( event ) {
       
@@ -179,100 +241,10 @@ $(document).ready(function() {
 
 });
 
-// Success Geolocation
-function onCurrentLocationSuccess(position)
-{
-  console.log(position.coords.latitude);
-  console.log(position.coords.heading);
-  console.log(position.coords.longitude);
-
-  var currentLocation = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
-
-  var title = $('#eventTitle').val();
-  var description = $('#eventDescription').val();
-  var category = $("#dropdownMenu2").text();
-
-  var EventObject = Parse.Object.extend("Event");
-  var eventObject = new EventObject();
-
-  eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
-    success:function(object) {
-      console.log("Saved the object!");
-      map.initialize();
-    },
-    error:function(object,error) {
-      console.log(error);
-      alert("Sorry, I couldn't save it.");
-    }
-  });
-
+function test() {
+  console.log("stress");
+  alert("stress");
 }
-
-// Error Callback receives a PositionError object
-function onCurrentLocationError(error) {
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
-}
-
-function searchEvents() {
-
-  //get address from address element
-  var address = $('#quickSearch').val();
-  //get radius from radius ele, divide with 1000, to get KM
-  var radius = user.settings.radius / METERS;
-  var geocoder = new google.maps.Geocoder();
-
-  geocoder.geocode( { 'address': address }, function(results, status)
-  {
-    //address is OK
-    if (status == google.maps.GeocoderStatus.OK)
-    {
-        //get lat/lng from location 
-        var soughtAddressLatitude = results[0].geometry.location.lat();
-        var soughtAddressLongitude = results[0].geometry.location.lng();
-        var point = convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
-        //get events object from parse
-        getLocationAndCalculateGeoPoint(point, radius);
-    }
-
-    //address is not valid - TODO visualize an alert to user
-    else
-    {
-      alert("Geocode was not successful for the following reason: " + status);
-    }
- });
-
-}
-
-
-function getLocationAndCalculateGeoPoint(pointOfEnterdAddress, Kilometers)
-{
-  var events = Parse.Object.extend("Event");
-  //set query for events objectr
-  var query = new Parse.Query(events);
-  //check the events within the specify point to search from
-  query.withinKilometers("location", pointOfEnterdAddress, Kilometers);
-  // Limit what could be a lot of points.
-  query.limit(10);
-  // Final list of objects
-  query.find({
-    success: function(placesObjects) {
-      console.log(placesObjects);
-      var resultsStr = "";
-      placesObjects.forEach(function(item){
-        resultsStr += item.attributes.title + " | ";
-      });
-      alert(resultsStr);
-    }
-  });
-}
-
-function convertToGeoPointObject(latitude, longitude)
-{
-  //get geopoint from lat/lng
-  return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
-}
-
 
 function sliderOutputUpdate(val)
 {
