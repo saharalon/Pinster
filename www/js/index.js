@@ -113,8 +113,6 @@ $(document).ready(function() {
       $(".settingsBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
         $("#settingsModal").modal();
-        // Should replace 100 with user default radius 
-        sliderOutputUpdate(100);
       });
 
       $(".reportBtn").on("touchend", function(){
@@ -130,8 +128,6 @@ $(document).ready(function() {
 
       $(".settingsBtn").click(function(){
         $("#settingsModal").modal();
-        // Should replace 100 with user default radius 
-        sliderOutputUpdate(100);
       });
 
       $(".reportBtn").click(function(){
