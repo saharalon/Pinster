@@ -148,23 +148,8 @@ $(document).ready(function() {
 
     $("#settingsBtnModal").click(function() {
 
-      var address  = $("#address").val();
-      var category = $("#dropdownMenu1").text();
-      var radius   = $('#radiusSlider').val() / METERS
-
-      var user = Parse.User.current();
-
-      if (user)
-      {
-        user.set("category", category);
-        user.set("radius_km", radius);
-      }
-      else
-      {
-        $("#loginModal").modal();
-      }
+      // TODO: Save settings to local storage
     });
-
 
     //click -publish events - TODO: create the UI element
     $('#reportBtnModal').click(function()
