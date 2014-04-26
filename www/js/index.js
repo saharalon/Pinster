@@ -39,13 +39,7 @@ var app = {
 
         app.receivedEvent('deviceready');
 
-        $(".fancyBtn").on("touchstart", function(){
-          $(this).addClass('fancyBtnDown');
-        });
-        
-        $(".fancyBtn").on("touchend", function(){
-          $(this).removeClass('fancyBtnDown');
-        });
+        FastClick.attach(document.body);
 
         //Android search key (magnifying glass) - search events
         document.addEventListener("searchbutton", searchEvents, false);
@@ -89,6 +83,14 @@ $(document).ready(function() {
       $("#settingsModal").modal();
       // Should replace 100 with user default radius 
       sliderOutputUpdate(100);
+    });
+
+    $(".fancyBtn").on("touchstart", function(){
+      $(this).addClass('fancyBtnDown');
+    });
+    
+    $(".fancyBtn").on("touchend", function(){
+      $(this).removeClass('fancyBtnDown');
     });
 
     $("#settingsModal .dropdown-menu li a").click(function(){
@@ -164,6 +166,11 @@ function onCurrentLocationSuccess(position)
 function onCurrentLocationError(error) {
     alert('code: '    + error.code    + '\n' +
           'message: ' + error.message + '\n');
+}
+
+function test() {
+  console.log("stress");
+  alert("stress");
 }
 
 function searchEvents() {
