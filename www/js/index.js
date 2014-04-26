@@ -210,7 +210,6 @@ function onCurrentLocationSuccess(position)
   var EventObject = Parse.Object.extend("Event");
   var eventObject = new EventObject();
 
-<<<<<<< HEAD
   eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
     success:function(object) {
       console.log("Saved the object!");
@@ -221,18 +220,6 @@ function onCurrentLocationSuccess(position)
       alert("Sorry, I couldn't save it.");
     }
   });
-=======
-      eventObject.save({title:title, description:description, location:currentLocation, category:category}, {
-        success:function(object) {
-          alert("Event added!");
-          map.initialize();
-        },
-        error:function(object,error) {
-          console.log(error);
-          alert("Sorry, I couldn't save it.");
-        }
-      });
->>>>>>> eb0c03a57c92558aae029d9a4d22ac190f0d4228
 
 }
 
