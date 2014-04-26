@@ -104,10 +104,14 @@ function User() {
 
 		    if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
 		    	localStorage.setItem("pinsterSettings", JSON.stringify({
-					address: "Favorite Address",
-					category: "Favorite Category",
+					address: "",
+					category: "",
 					radius: 1000
 				}));
+				$("#settingsModal #address").val("Favorite Address");
+      			$("#dropdownMenu1").html('Favorite Category<span class="caret caretRight"></span>');
+      			$('#radiusSlider').val(1000);
+				sliderOutputUpdate(1000);
 		    }
 		    else {
 		    	var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
