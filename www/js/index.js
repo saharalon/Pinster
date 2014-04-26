@@ -96,22 +96,26 @@ $(document).ready(function() {
     }
 
     // Define events
-    $(".reportBtn").click(function(){
-      $("#reportModal").modal();
-    });
 
-    $(".settingsBtn").click(function(){
-      $("#settingsModal").modal();
-      // Should replace 100 with user default radius 
-      sliderOutputUpdate(100);
-    });
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+     alert("Smartphone");
+    }
+    else { alert("Smartphone"); }
 
     $(".fancyBtn").on("touchstart", function(){
       $(this).addClass('fancyBtnDown');
     });
     
-    $(".fancyBtn").on("touchend", function(){
+    $(".settingsBtn").on("touchend", function(){
       $(this).removeClass('fancyBtnDown');
+      $("#settingsModal").modal();
+      // Should replace 100 with user default radius 
+      sliderOutputUpdate(100);
+    });
+
+    $(".reportBtn").on("touchend", function(){
+      $(this).removeClass('fancyBtnDown');
+      $("#reportModal").modal();
     });
 
     $("#settingsModal .dropdown-menu li a").click(function(){
