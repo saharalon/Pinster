@@ -96,6 +96,7 @@ $(document).ready(function() {
     }
 
     var user = new User();
+    user.settings.init();
 
     // Define events
 
