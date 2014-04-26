@@ -98,25 +98,43 @@ $(document).ready(function() {
     // Define events
 
     if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+     
+      // Smartphone special Events
+
      alert("Smartphone");
+
+      $(".fancyBtn").on("touchstart", function(){
+        $(this).addClass('fancyBtnDown');
+      });
+      
+      $(".settingsBtn").on("touchend", function(){
+        $(".fancyBtn").removeClass('fancyBtnDown');
+        $("#settingsModal").modal();
+        // Should replace 100 with user default radius 
+        sliderOutputUpdate(100);
+      });
+
+      $(".reportBtn").on("touchend", function(){
+        $(".fancyBtn").removeClass('fancyBtnDown');
+        $("#reportModal").modal();
+      });
     }
-    else { alert("Smartphone"); }
+    else {
 
-    $(".fancyBtn").on("touchstart", function(){
-      $(this).addClass('fancyBtnDown');
-    });
-    
-    $(".settingsBtn").on("touchend", function(){
-      $(this).removeClass('fancyBtnDown');
-      $("#settingsModal").modal();
-      // Should replace 100 with user default radius 
-      sliderOutputUpdate(100);
-    });
+        // Browser events (not working well with smartphones)
 
-    $(".reportBtn").on("touchend", function(){
-      $(this).removeClass('fancyBtnDown');
-      $("#reportModal").modal();
-    });
+      alert("Browser");
+
+      $(".settingsBtn").click(function(){
+        $("#settingsModal").modal();
+        // Should replace 100 with user default radius 
+        sliderOutputUpdate(100);
+      });
+
+      $(".reportBtn").click(function(){
+        $("#reportModal").modal();
+      });
+    }
 
     $("#settingsModal .dropdown-menu li a").click(function(){
       $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
