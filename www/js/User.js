@@ -8,12 +8,33 @@ PinsterApp.User = function() {
 
   obj.addEvent = function (location, title, desc, category, img)
   {
-    var EventObject = Parse.Object.extend("Event");
+      var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
       eventObject.save({title:title, description:desc, location:location, category:category}, {
-        success:function(object) {
+        success:function(object) 
+        {
+          if(img != null)
+          {
+             var parseFile = new Parse.File(object.id, img);
+            
+              parseFile.save().then(function()
+              {
+                 object.set("imageURL",parseFile.url());
+                 object.save();
+                 alert("image saved");
+              },
+
+              function(error)
+              {
+                  console.log(error);
+                  alert("error saving image");
+              });
+          }
+
+
           alert("Event added!");
+
         },
         error:function(object,error) {
           console.log(error);

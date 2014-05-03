@@ -12,7 +12,7 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      imageDate: {},
+      imageData: null,
 
     },
 
@@ -164,7 +164,7 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      user.addEvent(currentLocation,title,description,category,null);
+      user.addEvent(currentLocation,title,description,category,imageData);
 
     },
 
@@ -470,8 +470,7 @@ var PinsterApp = {
       //
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
-        alert(imageData);
-
+        var that = this;
         // Get image handle
         //
         // var smallImage = document.getElementById('smallImage');
@@ -484,10 +483,7 @@ var PinsterApp = {
         // The in-line CSS rules are used to resize the image
         //
         // smallImage.src = "data:image/jpeg;base64," + imageData;
-        var parseFile = new Parse.File(, imageData);
-
-
-
+        that.fields.imageData = imageData;
       },
 
       onFail : function(message) {
