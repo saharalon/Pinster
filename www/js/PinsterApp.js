@@ -451,8 +451,6 @@ var PinsterApp = {
       };
 
     },  // END of GoogleMap()
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     camera : {
 
@@ -497,12 +495,7 @@ var PinsterApp = {
       }
 
     },
-        
-=======
     
-=======
->>>>>>> cbb2fdcdefe4ebb6f176bc64ffb1536401c611ef
-
     utilities : {
 
         jsonAJAXCall : function(URL)
