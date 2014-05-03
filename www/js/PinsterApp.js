@@ -364,7 +364,7 @@ var PinsterApp = {
 
                   $("#eventModalLabel").text(results[index]._serverData.title);
                   $("#eventDesc").text(results[index]._serverData.description);
-                  $("#eventImg").src(results[index]._serverData.imageURL);
+                  //$("#eventImg").src(results[index]._serverData.imageURL);
                   $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
                     results[index]._serverData.location.longitude);
                   $("#eventModal").modal();
