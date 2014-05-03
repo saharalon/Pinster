@@ -137,7 +137,12 @@ var PinsterApp = {
           that.searchEvents();
       });
 
-      $("#captureImage").click(function(){
+      $("#captureImage .glyphicon").on("touchstart", function(){
+        $(this).addClass("captureImgDown");
+      });
+
+      $("#captureImage .glyphicon").on("touchend", function(){
+        $(this).removeClass("captureImgDown");
         that.camera.capturePhoto();
       });
 
@@ -428,29 +433,30 @@ var PinsterApp = {
 
         jsonAJAXCall : function(URL)
         {
-            var response = "";
+          var response;
+            
+          $.ajax({
+
+              url: URL,
+              type: "GET",
+              dataType: "json",
+              async:false,
+
+              //success of fetching json
+              success: function (json)
+              {
+                  response = json;
+              },
               
-               $.ajax({
-                      url: URL,
-                      type: "GET",
-                      dataType: "json",
-                      async:false,
+              //failure of fetching json
+              error: function ()
+              {
+                  console.log("error: Foursquare API");
+              }
 
-                      //success of fetching json
-                      success: function (json) 
-                      {
-                          response = json;
-                      },
-                      
-                      //failure of fetching json
-                      error: function () 
-                      {
-                          console.log("error: Foursquare API")
-                      }
+            });
 
-                  });
-
-             return response;
+           return response;
         }
 
     },
