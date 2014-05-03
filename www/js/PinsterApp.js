@@ -451,8 +451,6 @@ var PinsterApp = {
       };
 
     },  // END of GoogleMap()
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     camera : {
 
@@ -486,7 +484,6 @@ var PinsterApp = {
         // The in-line CSS rules are used to resize the image
         //
         // smallImage.src = "data:image/jpeg;base64," + imageData;
-        var parseFile = new Parse.File(, imageData);
 
 
 
@@ -498,11 +495,6 @@ var PinsterApp = {
 
     },
         
-=======
-    
-=======
->>>>>>> cbb2fdcdefe4ebb6f176bc64ffb1536401c611ef
-
     utilities : {
 
         jsonAJAXCall : function(URL)
