@@ -364,9 +364,13 @@ var PinsterApp = {
 
                   $("#eventModalLabel").text(results[index]._serverData.title);
                   $("#eventDesc").text(results[index]._serverData.description);
-                  //$("#eventImg").src(results[index]._serverData.imageURL);
                   $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
                     results[index]._serverData.location.longitude);
+
+                  if (results[index]._serverData.imageURL)
+                  {
+                    $("#eventImg").attr("src", results[index]._serverData.imageURL);
+                  }
                   $("#eventModal").modal();
 
                 };
