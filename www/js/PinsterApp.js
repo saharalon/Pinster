@@ -170,7 +170,7 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      that.fields.user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
+      that.fields.user.addEvent(currentLocation,title,description,category,that.fields.dataImage);
 
     },
 
