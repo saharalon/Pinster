@@ -261,10 +261,10 @@ var PinsterApp = {
       infowindow.close();
 
       PinsterApp.currentPosition = "יבנה, ישראל";
-      this.writeAddressName(PinsterApp.destination);
 
       var start = PinsterApp.currentPosition;
-      var end = PinsterApp.destination;
+      //var end = this.writeAddressName(PinsterApp.destination);
+      var end = "רחובות, ישראל";
       
       //alert(start + "\n" + end);
 
@@ -289,7 +289,7 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          PinsterApp.destination = results[0].formatted_address;
+          return results[0].formatted_address;
         }
         return null;
       });
