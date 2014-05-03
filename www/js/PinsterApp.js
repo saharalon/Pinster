@@ -12,7 +12,7 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      imageData: null,
+      dataImage: null,
 
     },
 
@@ -158,17 +158,19 @@ var PinsterApp = {
     // Success Geolocation
     onCurrentLocationSuccess : function (position) {
 
+      var that = this;
+
       console.log(position.coords.latitude);
       console.log(position.coords.heading);
       console.log(position.coords.longitude);
 
-      var currentLocation = convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+      var currentLocation = that.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
       var title = $('#eventTitle').val();
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      user.addEvent(currentLocation,title,description,category,PinsterApp.fields.imageData);
+      user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
 
     },
 
@@ -261,7 +263,7 @@ var PinsterApp = {
 
     calcRoute : function() {
 
-      infowindow.close();
+      $("#eventModal").modal("hide");
 
       PinsterApp.currentPosition = "יבנה, ישראל";
 
@@ -345,65 +347,38 @@ var PinsterApp = {
                   //shape: shape,
                   title: title,
                   //zIndex: events[i][3]
-                  isClicked: false,
                 });
 
                 PinsterApp.fields.markers.push(marker);
 
                 google.maps.event.addListener(marker, 'mouseover', (function(marker, index) {
                 return function() {
-                  // Don't show hover popup when it is 
-                  // already open from clicking the marker
-                  if (!infowindow.isOpen)
-                  {
                     infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' +
                       results[index]._serverData.title + '</b></center></div>');
-
-                    infowindow.isOpen = true;
-                    infowindow.open(map, marker);
-                  }
                 };
               })(marker, index));
 
               google.maps.event.addListener(marker, 'mouseout', (function(marker, index) {
                 return function() {
-                  // Don't close the popup on hover out
-                  // if the marker was mouse clicked
-                  if (marker.isClicked)
-                    marker.isClicked = false;
-                  else
-                  {
                     infowindow.close();
-                    infowindow.isOpen = false;
-                  }
-                  
-                  $("#searchBar").show();
                 };
               })(marker, index));
 
               google.maps.event.addListener(marker, 'click', (function(marker, index) {
                 return function() {
                   // TODO: Show event information (Foursquare)
-                  marker.isClicked = true;
+
+                  $("#eventModalLabel").text(results[index]._serverData.title);
+                  $("#eventDesc").text(results[index]._serverData.description);
+                  //$("#eventImg").src(results[index]._serverData.imageURL);
+                  $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
+                    results[index]._serverData.location.longitude);
+                  $("#eventModal").modal();
 
                   // Get event location as our destination
                   PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
                     results[index]._serverData.location.longitude);
 
-                  infowindow.setContent("<html><head> <meta charset='utf-8'/></head><body>" +
-                  "<div id='parent' style='float: left; clear: none;'>" +
-                  "<div style='float: left; text-align: center; font-size:14px; border:2px solid; width:300px; height:400px;'>" +
-                  "<div style='border:2px solid; height:85px;'><center><b><h4>" + 
-                  results[index]._serverData.title + "</h4></b></center></div>" +
-                  "<div style='border:2px solid;'><center><img width='293' height='180' src='img/yakar.jpg'/></center>" +
-                  "</div><div style='border:2px solid; height:127px;'><center><h5>"
-                  + results[index]._serverData.description + "</h5></center></div></div>" +
-                  "<div style='float: left; text-align: center; font-size:14px; border:2px solid; width:300px; height:400px;'>" +
-                  "<center><h4><b><u>FOURSQUARE</u></b></h4></center><button onclick='PinsterApp.calcRoute();'>Take me there</button></div></div></body></html>");
-
-                  $("#searchBar").hide();
-                  infowindow.isOpen = true;
-                  infowindow.open(map, marker);
                 };
                 })(marker, index));
               });
