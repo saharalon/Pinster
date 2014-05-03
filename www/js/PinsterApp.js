@@ -268,15 +268,6 @@ var PinsterApp = {
       PinsterApp.currentPosition = "יבנה, ישראל";
 
       this.geoPointToAddress(PinsterApp.destination);
-
-      //var start = PinsterApp.currentPosition;
-      //var end = this.writeAddressName(PinsterApp.destination);
-      //var end = "רחובות, ישראל";
-      
-      //alert(start + "\n" + end);
-
-      
-
     },
 
     geoPointToAddress : function(latLng) {
@@ -345,7 +336,7 @@ var PinsterApp = {
                   map: map,
                   icon: markerImage,
                   //shape: shape,
-                  title: title,
+                  title: title
                   //zIndex: events[i][3]
                 });
 
@@ -367,6 +358,11 @@ var PinsterApp = {
               google.maps.event.addListener(marker, 'click', (function(marker, index) {
                 return function() {
                   // TODO: Show event information (Foursquare)
+                  
+                  // Set event location as our destination
+                  // in case we want to drive there
+                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
+                    results[index]._serverData.location.longitude);
 
                   $("#eventModalLabel").text(results[index]._serverData.title);
                   $("#eventDesc").text(results[index]._serverData.description);
@@ -374,10 +370,6 @@ var PinsterApp = {
                   $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
                     results[index]._serverData.location.longitude);
                   $("#eventModal").modal();
-
-                  // Get event location as our destination
-                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
-                    results[index]._serverData.location.longitude);
 
                 };
                 })(marker, index));
