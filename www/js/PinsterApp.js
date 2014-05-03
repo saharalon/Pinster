@@ -6,6 +6,9 @@ var PinsterApp = {
       user : {},
       map : {},
       geocoder : {},
+      directionsDisplay: {},
+      destination: {},
+      infowindow : {},
 
     },
 
@@ -232,6 +235,44 @@ var PinsterApp = {
 
     },
 
+    calcRoute : function() {
+
+      //var start = document.getElementById('start').value;
+      //var end = document.getElementById('end').value;
+      infowindow.close();
+
+      var start = "יבנה, ישראל";
+      this.writeAddressName(destination);
+      var end = destination;
+
+      var request = {
+        origin: start,
+        destination: end,
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+      var directionsService = new google.maps.DirectionsService();
+      directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        }
+      });
+
+    },
+
+    writeAddressName : function(latLng) {
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({
+        "location": latLng
+      },
+      function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+          destination = results[0].formatted_address;
+        }
+        return null;
+      });
+    },
+
     GoogleMap : function() {
 
       var that = this;
@@ -253,7 +294,6 @@ var PinsterApp = {
           type: 'poly'
         };
 
-        var infowindow = new google.maps.InfoWindow();
         var marker;
 
         // Retreive events from the databas
@@ -281,29 +321,66 @@ var PinsterApp = {
                   //shape: shape,
                   title: title,
                   //zIndex: events[i][3]
+                  isClicked: false,
                 });
 
                 PinsterApp.fields.markers.push(marker);
 
                 google.maps.event.addListener(marker, 'mouseover', (function(marker, index) {
-                  return function() {
-                    infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' + results[index]._serverData.title +
-                      '</b></center><img width="240" height="180" src="' + eventImage + '"/></div>');
+                return function() {
+                  // Don't show hover popup when it is 
+                  // already open from clicking the marker
+                  if (!infowindow.isOpen)
+                  {
+                    infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' +
+                      results[index]._serverData.title + '</b></center></div>');
 
+                    infowindow.isOpen = true;
                     infowindow.open(map, marker);
-                  };
-                })(marker, index));
+                  }
+                };
+              })(marker, index));
 
-                google.maps.event.addListener(marker, 'mouseout', (function(marker, index) {
-                  return function() {
+              google.maps.event.addListener(marker, 'mouseout', (function(marker, index) {
+                return function() {
+                  // Don't close the popup on hover out
+                  // if the marker was mouse clicked
+                  if (marker.isClicked)
+                    marker.isClicked = false;
+                  else
+                  {
                     infowindow.close();
-                  };
-                })(marker, index));
+                    infowindow.isOpen = false;
+                  }
+                  
+                  $("#searchBar").show();
+                };
+              })(marker, index));
 
-                google.maps.event.addListener(marker, 'click', (function(marker, index) {
-                  return function() {
-                    // TODO: Show event information (Foursquare)
-                  };
+              google.maps.event.addListener(marker, 'click', (function(marker, index) {
+                return function() {
+                  // TODO: Show event information (Foursquare)
+                  marker.isClicked = true;
+
+                  // Get event location as our destination
+                  destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
+                    results[index]._serverData.location.longitude);
+
+                  infowindow.setContent("<html><head> <meta charset='utf-8'/></head><body>" +
+                  "<div id='parent' style='float: left; clear: none;'>" +
+                  "<div style='float: left; text-align: center; font-size:14px; border:2px solid; width:300px; height:400px;'>" +
+                  "<div style='border:2px solid; height:85px;'><center><b><h4>" + 
+                  results[index]._serverData.title + "</h4></b></center></div>" +
+                  "<div style='border:2px solid;'><center><img width='293' height='180' src='img/yakar.jpg'/></center>" +
+                  "</div><div style='border:2px solid; height:127px;'><center><h5>"
+                  + results[index]._serverData.description + "</h5></center></div></div>" +
+                  "<div style='float: left; text-align: center; font-size:14px; border:2px solid; width:300px; height:400px;'>" +
+                  "<center><h4><b><u>FOURSQUARE</u></b></h4></center><button onclick='PinsterApp.calcRoute();'>Take me there</button></div></div></body></html>");
+
+                  $("#searchBar").hide();
+                  infowindow.isOpen = true;
+                  infowindow.open(map, marker);
+                };
                 })(marker, index));
               });
 
@@ -318,6 +395,8 @@ var PinsterApp = {
       
       var showMap = function() {
 
+        directionsDisplay = new google.maps.DirectionsRenderer();
+        infowindow = new google.maps.InfoWindow();
         var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
 
         var mapOptions = {
@@ -336,7 +415,7 @@ var PinsterApp = {
           });
 
         map.setCenter(initialLocation);
-          
+                
         return map;
       };
 
