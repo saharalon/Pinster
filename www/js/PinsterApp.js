@@ -256,28 +256,19 @@ var PinsterApp = {
 
     calcRoute : function() {
 
-      //var start = document.getElementById('start').value;
-      //var end = document.getElementById('end').value;
       infowindow.close();
 
       PinsterApp.currentPosition = "יבנה, ישראל";
 
-      var start = PinsterApp.currentPosition;
+      this.writeAddressName(PinsterApp.destination);
+
+      //var start = PinsterApp.currentPosition;
       //var end = this.writeAddressName(PinsterApp.destination);
-      var end = "רחובות, ישראל";
+      //var end = "רחובות, ישראל";
       
       //alert(start + "\n" + end);
 
-      var request = {
-        origin: start,
-        destination: end,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
-      directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
-        }
-      });
+      
 
     },
 
@@ -289,9 +280,23 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          return results[0].formatted_address;
+          //return results[0].formatted_address;
+
+          var request = {
+            origin: PinsterApp.currentPosition,
+            destination: results[0].formatted_address,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(response);
+            }
+          });
         }
-        return null;
+        else
+        {
+         return null;
+        }
       });
     },
 
@@ -438,6 +443,8 @@ var PinsterApp = {
           });
 
         map.setCenter(initialLocation);
+
+        directionsDisplay.setMap(map);
                 
         return map;
       };
