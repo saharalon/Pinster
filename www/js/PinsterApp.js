@@ -9,6 +9,7 @@ var PinsterApp = {
       directionsDisplay: {},
       destination: {},
       infowindow : {},
+      imageData : {},
 
     },
 
@@ -457,6 +458,10 @@ var PinsterApp = {
         // The in-line CSS rules are used to resize the image
         //
         // smallImage.src = "data:image/jpeg;base64," + imageData;
+        var parseFile = new Parse.File(, imageData);
+
+
+
       },
 
       onFail : function(message) {
