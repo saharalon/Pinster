@@ -21,7 +21,7 @@ PinsterApp.User = function() {
           alert("save object");
           if(img != null)
           {
-             var parseFile = new Parse.File(object.id, img);
+             var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
             
               parseFile.save().then(function()
               {

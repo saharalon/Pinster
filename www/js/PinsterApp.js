@@ -158,19 +158,17 @@ var PinsterApp = {
     // Success Geolocation
     onCurrentLocationSuccess : function (position) {
 
-      var that = this;
-
       console.log(position.coords.latitude);
       console.log(position.coords.heading);
       console.log(position.coords.longitude);
 
-      var currentLocation = that.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+      var currentLocation = PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
       var title = $('#eventTitle').val();
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      that.fields.user.addEvent(currentLocation,title,description,category,that.fields.dataImage);
+      PinsterApp.fields.user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
 
     },
 
