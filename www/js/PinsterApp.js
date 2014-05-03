@@ -7,8 +7,11 @@ var PinsterApp = {
       map : {},
       geocoder : {},
       directionsDisplay: {},
+      directionsService: {},
       destination: {},
       infowindow : {},
+      watchID: null,
+      currentPosition: {},
 
     },
 
@@ -34,6 +37,9 @@ var PinsterApp = {
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
+
+      var options = { frequency: 3000 };
+      watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
 
     },
 
@@ -198,6 +204,16 @@ var PinsterApp = {
 
     },
 
+    onPositionSuccess : function(position)
+    {
+        currentPosition = position;
+    },
+
+    onPositionError : function(error)
+    {
+        console.log(error.code + "  " + error.message);
+    },
+
     convertToGeoPointObject : function(latitude, longitude) {
       //get geopoint from lat/lng
       return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
@@ -244,16 +260,19 @@ var PinsterApp = {
       //var end = document.getElementById('end').value;
       infowindow.close();
 
-      var start = "יבנה, ישראל";
-      this.writeAddressName(destination);
-      var end = destination;
+      PinsterApp.currentPosition = "יבנה, ישראל";
+      this.writeAddressName(PinsterApp.destination);
+
+      var start = PinsterApp.currentPosition;
+      var end = PinsterApp.destination;
+      
+      //alert(start + "\n" + end);
 
       var request = {
         origin: start,
         destination: end,
         travelMode: google.maps.TravelMode.DRIVING
       };
-      var directionsService = new google.maps.DirectionsService();
       directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
           directionsDisplay.setDirections(response);
@@ -270,7 +289,7 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          destination = results[0].formatted_address;
+          PinsterApp.destination = results[0].formatted_address;
         }
         return null;
       });
@@ -366,7 +385,7 @@ var PinsterApp = {
                   marker.isClicked = true;
 
                   // Get event location as our destination
-                  destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
+                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
                     results[index]._serverData.location.longitude);
 
                   infowindow.setContent("<html><head> <meta charset='utf-8'/></head><body>" +
@@ -398,6 +417,7 @@ var PinsterApp = {
       
       var showMap = function() {
 
+        directionsService = new google.maps.DirectionsService();
         directionsDisplay = new google.maps.DirectionsRenderer();
         infowindow = new google.maps.InfoWindow();
         var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
