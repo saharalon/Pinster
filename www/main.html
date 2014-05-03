@@ -61,6 +61,9 @@
         </div>
       </div>
 
+
+
+
       <!-- settings Modal -->
       <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -95,7 +98,7 @@
 
                   <br>
                   <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" 
-                    oninput="sliderOutputUpdate(value)">
+                    oninput="PinsterApp.sliderOutputUpdate(value)">
                   <output for=fader id="output"></output><br>
                   <a id="settingsSaveBtn" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Save</a>
               </div>
@@ -146,6 +149,8 @@
                   <input id="eventDescription" type="text" class="form-control" placeholder="Event Description">
 
                   <br>
+                    <div id="captureImage"><i class="glyphicon glyphicon-camera" style="font-size: 60px;"></i></div>
+                  <br>
                   <a id="reportBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Report</a>
               </div>
             </div>
@@ -168,11 +173,13 @@
     <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
     <script type="application/javascript" src="js/lib/fastclick.js"></script>
-    <script type="text/javascript" src="js/parseApi.js"></script>
+    <script type="text/javascript" src="js/PinsterApp.js"></script>
+    <script type="text/javascript" src="js/User.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    
     <script type="text/javascript">
-        app.initialize();
+        PinsterApp.initialize();
     </script>
+
+    
   </body>
 </html>
