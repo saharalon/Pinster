@@ -165,3 +165,8 @@ html, body {
 	right:12px;
 	top: 15px;
 }
+
+#captureImage .glyphicon:active .captureImgDown {
+	color : #BEBCBC;
+    transition: 0.3s; 
+}

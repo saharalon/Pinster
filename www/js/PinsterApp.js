@@ -144,7 +144,12 @@ var PinsterApp = {
           that.searchEvents();
       });
 
-      $("#captureImage").click(function(){
+      $("#captureImage .glyphicon").on("touchstart", function(){
+        $(this).addClass("captureImgDown");
+      });
+
+      $("#captureImage .glyphicon").on("touchend", function(){
+        $(this).removeClass("captureImgDown");
         that.camera.capturePhoto();
       });
 
@@ -261,7 +266,7 @@ var PinsterApp = {
 
       PinsterApp.currentPosition = "יבנה, ישראל";
 
-      this.writeAddressName(PinsterApp.destination);
+      this.geoPointToAddress(PinsterApp.destination);
 
       //var start = PinsterApp.currentPosition;
       //var end = this.writeAddressName(PinsterApp.destination);
@@ -273,7 +278,7 @@ var PinsterApp = {
 
     },
 
-    writeAddressName : function(latLng) {
+    geoPointToAddress : function(latLng) {
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         "location": latLng
@@ -281,23 +286,25 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          //return results[0].formatted_address;
+          var destination = results[0].formatted_address;
+          PinsterApp.getRoute(PinsterApp.currentPosition, destination);
+        }
+        else
+         return null;
+      });
+    },
 
-          var request = {
-            origin: PinsterApp.currentPosition,
-            destination: results[0].formatted_address,
+    getRoute : function(start, end) {
+
+      var request = {
+            origin: start,
+            destination: end,
             travelMode: google.maps.TravelMode.DRIVING
           };
           directionsService.route(request, function(response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
               directionsDisplay.setDirections(response);
             }
-          });
-        }
-        else
-        {
-         return null;
-        }
       });
     },
 
@@ -312,16 +319,6 @@ var PinsterApp = {
       
       var loadMarkers = function(map)
       {
-        // Shapes define the clickable region of the icon.
-        // The type defines an HTML &lt;area&gt; element 'poly' which
-        // traces out a polygon as a series of X,Y points. The final
-        // coordinate closes the poly by connecting to the first
-        // coordinate.
-        var shape = {
-          coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-          type: 'poly'
-        };
-
         var marker;
 
         // Retreive events from the databas
@@ -471,6 +468,9 @@ var PinsterApp = {
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
         var that = this;
+        //console.log(imageData);
+        console.log("image success");
+        
         // Get image handle
         //
         // var smallImage = document.getElementById('smallImage');
@@ -482,7 +482,7 @@ var PinsterApp = {
         // Show the captured photo
         // The in-line CSS rules are used to resize the image
         //
-        // smallImage.src = "data:image/jpeg;base64," + imageData;
+        // smallImage.src = "data:image/jpeg;base64," + imageData; HEAD
         that.fields.imageData = imageData;
       },
 
@@ -496,29 +496,30 @@ var PinsterApp = {
 
         jsonAJAXCall : function(URL)
         {
-            var response = "";
+          var response;
+            
+          $.ajax({
+
+              url: URL,
+              type: "GET",
+              dataType: "json",
+              async:false,
+
+              //success of fetching json
+              success: function (json)
+              {
+                  response = json;
+              },
               
-               $.ajax({
-                      url: URL,
-                      type: "GET",
-                      dataType: "json",
-                      async:false,
+              //failure of fetching json
+              error: function ()
+              {
+                  console.log("error: Foursquare API");
+              }
 
-                      //success of fetching json
-                      success: function (json) 
-                      {
-                          response = json;
-                      },
-                      
-                      //failure of fetching json
-                      error: function () 
-                      {
-                          console.log("error: Foursquare API")
-                      }
+            });
 
-                  });
-
-             return response;
+           return response;
         }
 
     },
