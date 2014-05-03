@@ -266,7 +266,7 @@ var PinsterApp = {
 
       PinsterApp.currentPosition = "יבנה, ישראל";
 
-      this.writeAddressName(PinsterApp.destination);
+      this.geoPointToAddress(PinsterApp.destination);
 
       //var start = PinsterApp.currentPosition;
       //var end = this.writeAddressName(PinsterApp.destination);
@@ -278,7 +278,7 @@ var PinsterApp = {
 
     },
 
-    writeAddressName : function(latLng) {
+    geoPointToAddress : function(latLng) {
       var geocoder = new google.maps.Geocoder();
       geocoder.geocode({
         "location": latLng
@@ -319,16 +319,6 @@ var PinsterApp = {
       
       var loadMarkers = function(map)
       {
-        // Shapes define the clickable region of the icon.
-        // The type defines an HTML &lt;area&gt; element 'poly' which
-        // traces out a polygon as a series of X,Y points. The final
-        // coordinate closes the poly by connecting to the first
-        // coordinate.
-        var shape = {
-          coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-          type: 'poly'
-        };
-
         var marker;
 
         // Retreive events from the databas
