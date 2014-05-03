@@ -12,7 +12,7 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      imageData: null,
+      dataImage: null,
 
     },
 
@@ -168,7 +168,7 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      user.addEvent(currentLocation,title,description,category,PinsterApp.fields.imageData);
+      user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
 
     },
 
