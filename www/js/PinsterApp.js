@@ -7,8 +7,12 @@ var PinsterApp = {
       map : {},
       geocoder : {},
       directionsDisplay: {},
+      directionsService: {},
       destination: {},
       infowindow : {},
+      watchID: null,
+      currentPosition: {},
+      imageDate: {},
 
     },
 
@@ -34,6 +38,9 @@ var PinsterApp = {
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
+
+      var options = { frequency: 3000 };
+      watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
 
     },
 
@@ -203,6 +210,16 @@ var PinsterApp = {
 
     },
 
+    onPositionSuccess : function(position)
+    {
+        currentPosition = position;
+    },
+
+    onPositionError : function(error)
+    {
+        console.log(error.code + "  " + error.message);
+    },
+
     convertToGeoPointObject : function(latitude, longitude) {
       //get geopoint from lat/lng
       return new Parse.GeoPoint({latitude: latitude, longitude: longitude});
@@ -245,25 +262,19 @@ var PinsterApp = {
 
     calcRoute : function() {
 
-      //var start = document.getElementById('start').value;
-      //var end = document.getElementById('end').value;
       infowindow.close();
 
-      var start = "יבנה, ישראל";
-      this.writeAddressName(destination);
-      var end = destination;
+      PinsterApp.currentPosition = "יבנה, ישראל";
 
-      var request = {
-        origin: start,
-        destination: end,
-        travelMode: google.maps.TravelMode.DRIVING
-      };
-      var directionsService = new google.maps.DirectionsService();
-      directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          directionsDisplay.setDirections(response);
-        }
-      });
+      this.writeAddressName(PinsterApp.destination);
+
+      //var start = PinsterApp.currentPosition;
+      //var end = this.writeAddressName(PinsterApp.destination);
+      //var end = "רחובות, ישראל";
+      
+      //alert(start + "\n" + end);
+
+      
 
     },
 
@@ -275,9 +286,25 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          destination = results[0].formatted_address;
+          var destination = results[0].formatted_address;
+          PinsterApp.getRoute(PinsterApp.currentPosition, destination);
         }
-        return null;
+        else
+         return null;
+      });
+    },
+
+    getRoute : function(start, end) {
+
+      var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+              directionsDisplay.setDirections(response);
+            }
       });
     },
 
@@ -371,7 +398,7 @@ var PinsterApp = {
                   marker.isClicked = true;
 
                   // Get event location as our destination
-                  destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
+                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
                     results[index]._serverData.location.longitude);
 
                   infowindow.setContent("<html><head> <meta charset='utf-8'/></head><body>" +
@@ -403,6 +430,7 @@ var PinsterApp = {
       
       var showMap = function() {
 
+        directionsService = new google.maps.DirectionsService();
         directionsDisplay = new google.maps.DirectionsRenderer();
         infowindow = new google.maps.InfoWindow();
         var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
@@ -423,12 +451,57 @@ var PinsterApp = {
           });
 
         map.setCenter(initialLocation);
+
+        directionsDisplay.setMap(map);
                 
         return map;
       };
 
     },  // END of GoogleMap()
 
+    camera : {
+
+      destinationType : null, // sets the format of returned value
+
+      capturePhoto : function() {
+
+        var that = this;
+        that.destinationType = navigator.camera.DestinationType;
+        
+        // Take picture using device camera and retrieve image as base64-encoded string
+        navigator.camera.getPicture(PinsterApp.camera.onPhotoDataSuccess, PinsterApp.camera.onFail, { quality: 50,
+          destinationType: that.destinationType.DATA_URL });
+      },
+
+      // Called when a photo is successfully retrieved
+      //
+      onPhotoDataSuccess : function(imageData) {
+        // Uncomment to view the base64-encoded image data
+        alert(imageData);
+
+        // Get image handle
+        //
+        // var smallImage = document.getElementById('smallImage');
+
+        // Unhide image elements
+        //
+        // smallImage.style.display = 'block';
+
+        // Show the captured photo
+        // The in-line CSS rules are used to resize the image
+        //
+        // smallImage.src = "data:image/jpeg;base64," + imageData;
+
+
+
+      },
+
+      onFail : function(message) {
+        alert('Failed because: ' + message);
+      }
+
+    },
+    
     utilities : {
 
         jsonAJAXCall : function(URL)
