@@ -423,50 +423,6 @@ var PinsterApp = {
       };
 
     },  // END of GoogleMap()
-<<<<<<< HEAD
-
-    camera : {
-
-      destinationType : null, // sets the format of returned value
-
-      capturePhoto : function() {
-
-        var that = this;
-        that.destinationType = navigator.camera.DestinationType;
-        
-        // Take picture using device camera and retrieve image as base64-encoded string
-        navigator.camera.getPicture(PinsterApp.camera.onPhotoDataSuccess, PinsterApp.camera.onFail, { quality: 50,
-          destinationType: that.destinationType.DATA_URL });
-      },
-
-      // Called when a photo is successfully retrieved
-      //
-      onPhotoDataSuccess : function(imageData) {
-        // Uncomment to view the base64-encoded image data
-        alert(imageData);
-
-        // Get image handle
-        //
-        // var smallImage = document.getElementById('smallImage');
-
-        // Unhide image elements
-        //
-        // smallImage.style.display = 'block';
-
-        // Show the captured photo
-        // The in-line CSS rules are used to resize the image
-        //
-        // smallImage.src = "data:image/jpeg;base64," + imageData;
-      },
-
-      onFail : function(message) {
-        alert('Failed because: ' + message);
-      }
-
-    },
-        
-=======
-    
 
     utilities : {
 
@@ -515,5 +471,44 @@ var PinsterApp = {
         }
 
     },
->>>>>>> FETCH_HEAD
+
+    camera : {
+
+      destinationType : null, // sets the format of returned value
+
+      capturePhoto : function() {
+
+        var that = this;
+        that.destinationType = navigator.camera.DestinationType;
+        
+        // Take picture using device camera and retrieve image as base64-encoded string
+        navigator.camera.getPicture(PinsterApp.camera.onPhotoDataSuccess, PinsterApp.camera.onFail, { quality: 50,
+          destinationType: that.destinationType.DATA_URL });
+      },
+
+      // Called when a photo is successfully retrieved
+      //
+      onPhotoDataSuccess : function(imageData) {
+        // Uncomment to view the base64-encoded image data
+        alert(imageData);
+
+        // Get image handle
+        //
+        // var smallImage = document.getElementById('smallImage');
+
+        // Unhide image elements
+        //
+        // smallImage.style.display = 'block';
+
+        // Show the captured photo
+        // The in-line CSS rules are used to resize the image
+        //
+        // smallImage.src = "data:image/jpeg;base64," + imageData;
+      },
+
+      onFail : function(message) {
+        alert('Failed because: ' + message);
+      }
+
+    },
 };
