@@ -467,8 +467,9 @@ var PinsterApp = {
       //
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
-        alert(imageData);
-
+        //console.log(imageData);
+        console.log("image success");
+        
         // Get image handle
         //
         // var smallImage = document.getElementById('smallImage');
