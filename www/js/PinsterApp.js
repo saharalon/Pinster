@@ -150,10 +150,9 @@ var PinsterApp = {
 
       $("#captureImage .glyphicon").on("touchend", function(){
         $(this).removeClass("captureImgDown");
+
         that.camera.capturePhoto();
       });
-
-
     },  // END of registerEvents()
 
     // Success Geolocation
@@ -169,7 +168,7 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      user.addEvent(currentLocation,title,description,category,imageData);
+      user.addEvent(currentLocation,title,description,category,PinsterApp.fields.imageData);
 
     },
 
@@ -467,7 +466,6 @@ var PinsterApp = {
       //
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
-        var that = this;
         //console.log(imageData);
         console.log("image success");
         
@@ -483,7 +481,7 @@ var PinsterApp = {
         // The in-line CSS rules are used to resize the image
         //
         // smallImage.src = "data:image/jpeg;base64," + imageData; HEAD
-        that.fields.imageData = imageData;
+        PinsterApp.fields.dataImage = imageData;
       },
 
       onFail : function(message) {
@@ -541,43 +539,4 @@ var PinsterApp = {
 
     },
 
-    camera : {
-
-      destinationType : null, // sets the format of returned value
-
-      capturePhoto : function() {
-
-        var that = this;
-        that.destinationType = navigator.camera.DestinationType;
-        
-        // Take picture using device camera and retrieve image as base64-encoded string
-        navigator.camera.getPicture(PinsterApp.camera.onPhotoDataSuccess, PinsterApp.camera.onFail, { quality: 50,
-          destinationType: that.destinationType.DATA_URL });
-      },
-
-      // Called when a photo is successfully retrieved
-      //
-      onPhotoDataSuccess : function(imageData) {
-        // Uncomment to view the base64-encoded image data
-        alert(imageData);
-
-        // Get image handle
-        //
-        // var smallImage = document.getElementById('smallImage');
-
-        // Unhide image elements
-        //
-        // smallImage.style.display = 'block';
-
-        // Show the captured photo
-        // The in-line CSS rules are used to resize the image
-        //
-        // smallImage.src = "data:image/jpeg;base64," + imageData;
-      },
-
-      onFail : function(message) {
-        alert('Failed because: ' + message);
-      }
-
-    },
 };

@@ -11,7 +11,7 @@ PinsterApp.User = function() {
       var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
-      eventObject.save({title:title, description:desc, location:location, category:category}, {
+      eventObject.save({title:title, description:desc, location:location, category:category, imageURL:null}, {
         success:function(object) 
         {
           if(img != null)
