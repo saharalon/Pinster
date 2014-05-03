@@ -281,23 +281,25 @@ var PinsterApp = {
       function(results, status) {
         if (status == google.maps.GeocoderStatus.OK)
         {
-          //return results[0].formatted_address;
+          var destination = results[0].formatted_address;
+          PinsterApp.getRoute(PinsterApp.currentPosition, destination);
+        }
+        else
+         return null;
+      });
+    },
 
-          var request = {
-            origin: PinsterApp.currentPosition,
-            destination: results[0].formatted_address,
+    getRoute : function(start, end) {
+
+      var request = {
+            origin: start,
+            destination: end,
             travelMode: google.maps.TravelMode.DRIVING
           };
           directionsService.route(request, function(response, status) {
             if (status == google.maps.DirectionsStatus.OK) {
               directionsDisplay.setDirections(response);
             }
-          });
-        }
-        else
-        {
-         return null;
-        }
       });
     },
 
@@ -484,7 +486,6 @@ var PinsterApp = {
         // The in-line CSS rules are used to resize the image
         //
         // smallImage.src = "data:image/jpeg;base64," + imageData;
-        var parseFile = new Parse.File(, imageData);
 
 
 
