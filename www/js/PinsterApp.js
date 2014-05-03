@@ -12,7 +12,8 @@ var PinsterApp = {
     CONSTANTS : {
 
       METERS : 1000,
-
+      CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
+      CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
     },
 
     initialize : function () {
@@ -340,5 +341,53 @@ var PinsterApp = {
       };
 
     },  // END of GoogleMap()
-        
+    
+
+    utilities : {
+
+        jsonAJAXCall : function(URL)
+        {
+            var response = "";
+              
+               $.ajax({
+                      url: URL,
+                      type: "GET",
+                      dataType: "json",
+                      async:false,
+
+                      //success of fetching json
+                      success: function (json) 
+                      {
+                          response = json;
+                      },
+                      
+                      //failure of fetching json
+                      error: function () 
+                      {
+                          console.log("error: Foursquare API")
+                      }
+
+                  });
+
+             return response;
+        }
+
+    },
+
+    foursquare : {
+      
+        getFourSquareNearPlaces : function(lat, lng)
+        {
+            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
+            console.log(json);
+        },
+
+
+        getFourSquarePlacePhotos : function(venueID)
+        {
+           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
+           console.log(json);
+        }
+
+    },
 };
