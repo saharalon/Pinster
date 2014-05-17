@@ -565,13 +565,12 @@ var PinsterApp = {
               {
                 json.response.venues.forEach(function(venue) 
                 {
-                       foursquareFields.venueID = venue.id;
-                       foursquareFields.name = venue.name;
-                       foursquareFields.tips = PinsterApp.foursquare.getFoursquareTips(venue.id);
-                       console.log(venue);
+                   foursquareFields.venueID = venue.id;
+                   foursquareFields.name = venue.name;
+                   foursquareFields.tips = PinsterApp.foursquare.getFoursquareTips(venue.id);
+                   console.log(foursquareFields);
                 });
 
-                   $('#FSNearPlacesTitles').text(foursquareFields.name);
               },
               
               //failure of fetching json
@@ -586,24 +585,21 @@ var PinsterApp = {
 
         getFoursquareTips : function(venueID)
         {
-
+           var venueTips = [];
          $.ajax({
 
               url: 'https://api.foursquare.com/v2/venues/'+ venueID +'/tips?sort=popular&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
               dataType: "json",
-              async:true,
+              async:false,
 
               //success of fetching json
               success: function (json)
               {
-                 var venueTips = [];
                  var tips = json.response.tips.items;
+                 for(var i = 0; i < tips.length; i ++)
+                      venueTips = tips[i].text;
 
-                 for(var i = 0; i < 5; i++)
-                    venueTips = tips[i].text;
-
-                 console.log(venueTips);
                },
               
               //failure of fetching json
@@ -613,6 +609,8 @@ var PinsterApp = {
               }
 
             });
+
+           return venueTips;
         },
     },
  };
