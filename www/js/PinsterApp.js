@@ -15,15 +15,6 @@ var PinsterApp = {
       dataImage: null
     },
 
-    foursquareFields : {
-      venueID : null,
-      name : null,
-      address : null,
-     // distance : null,
-     // category : null,
-      imagesURL : [5],
-    },
-
     CONSTANTS : {
 
       METERS : 1000,
@@ -199,8 +190,20 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      PinsterApp.fields.user.addEvent(
-        currentLocation, title, description, category, PinsterApp.fields.dataImage);
+      var geocoder = new google.maps.Geocoder();
+      // Convert the event position to actual address
+      geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
+        var eventAddress = "";
+
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+          eventAddress = results[0].formatted_address;
+        }
+
+        PinsterApp.fields.user.addEvent(
+            currentLocation, title, description, category,
+              PinsterApp.fields.dataImage, eventAddress);
+      });
     },
 
     onCurrentLocationForRouteSuccess : function(position) {
@@ -243,7 +246,6 @@ var PinsterApp = {
             //get events object from parse
             that.fields.user.searchEvents(geoPoint,radius);
         }
-
         //address is not valid - TODO visualize an alert to user
         else
         {
@@ -305,7 +307,7 @@ var PinsterApp = {
 
     calcRoute : function(currentLocation) {
 
-      $("#eventModal").modal("hide");
+      $("#eventModal").hide();
 
       PinsterApp.currentPosition = currentLocation;
       // Convert the coordinates to addresses
@@ -398,13 +400,15 @@ var PinsterApp = {
 
                 PinsterApp.fields.markers.push(marker);
 
+                // Show event title tooltip on mouse over
                 google.maps.event.addListener(marker, 'mouseover', (function(marker, index) {
-                return function() {
+                  return function() {
                     infowindow.setContent('<div style="text-align: center; font-size:14px;"><center><b>' +
                       results[index]._serverData.title + '</b></center></div>');
                 };
               })(marker, index));
 
+              // Close popup
               google.maps.event.addListener(marker, 'mouseout', (function(marker, index) {
                 return function() {
                     infowindow.close();
@@ -413,28 +417,27 @@ var PinsterApp = {
 
               google.maps.event.addListener(marker, 'click', (function(marker, index) {
                 return function() {
-                  // TODO: Show event information (Foursquare)
-                  
+
+                  var userEvent = results[index]._serverData;
                   // Set event location as our destination
-                  // in case we want to drive there
-                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
-                    results[index]._serverData.location.longitude);
+                  // in case the user will want to drive there
+                  PinsterApp.destination = new google.maps.LatLng(
+                    userEvent.location.latitude, userEvent.location.longitude);
 
-                  $("#eventModalLabel").text(results[index]._serverData.title);
-                  $("#eventDesc").text(results[index]._serverData.description);
-                  $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
-                    results[index]._serverData.location.longitude);
+                  $("#eventModalLabel").text(userEvent.title);
+                  $("#eventDesc").text(userEvent.description);
 
-                  if (results[index]._serverData.imageURL)
+                  if (userEvent.imageURL)
                   {
-                    $("#eventImg").attr("src", results[index]._serverData.imageURL);
+                    $("#eventImg").attr("src", userEvent.imageURL);
                   }
-                  $("#eventModal").show();
 
                   //foursquare tests
-                   PinsterApp.foursquare.getFoursquareNearPlaces(results[index]._serverData.location.latitude,results[index]._serverData.location.longitude);
-                   $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
-                };
+                  PinsterApp.foursquare.getFoursquareNearPlaces(
+                    userEvent.location.latitude, userEvent.location.longitude);
+                                
+                  $("#eventModal").show();
+                }
                 })(marker, index));
               });
 
@@ -493,7 +496,6 @@ var PinsterApp = {
       },
 
       // Called when a photo is successfully retrieved
-      //
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
         //console.log(imageData);
@@ -520,23 +522,30 @@ var PinsterApp = {
 
     },
     
-    utilities : {
-
-        jsonAJAXCall : function(URL)
+    foursquare : {
+      
+        getFoursquareNearPlaces : function(lat, lng)
         {
-          var response;
-            
+            var foursquareFields = new Object();  
+          
           $.ajax({
 
-              url: URL,
+              url: 'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=2000&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
               dataType: "json",
-              async:false,
+              async:true,
 
               //success of fetching json
               success: function (json)
               {
-                  response = json;
+                json.response.venues.forEach(function(venue) 
+                {
+                       foursquareFields.venueID = venue.id;
+                       foursquareFields.name = venue.name;
+                       foursquareFields.imagesURL = PinsterApp.foursquare.getFoursquarePhotos(venue.id);
+                });
+
+                   $('#FSNearPlacesTitles').text(foursquareFields.name);
               },
               
               //failure of fetching json
@@ -547,39 +556,43 @@ var PinsterApp = {
 
             });
 
-           return response;
-        }
-
-    },
-
-    foursquare : {
-      
-        getFoursquareNearPlaces : function(lat, lng)
-        {
-            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
-            
-            json.response.venues.forEach(function(venue) 
-            {
-                 PinsterApp.foursquareFields.venueID = venue.id;
-                 PinsterApp.foursquareFields.name = venue.name;
-                 PinsterApp.foursquareFields.address = venue.location.address;
-                 PinsterApp.foursquare.getFoursquarePlacePhotos(venue.id);
-          });
         },
 
-
-        getFoursquarePlacePhotos : function(venueID)
+        getFoursquarePhotos : function(venueID)
         {
-           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
-           json.response.photos.items.forEach(function(photo)
-            { 
 
-                 PinsterApp.foursquare.imagesURL = photo.prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photo.suffix;
-                 console.log(PinsterApp.foursquare.imagesURL);
+         $.ajax({
 
-           });
-        }
+              url: 'https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
+              type: "GET",
+              dataType: "json",
+              async:true,
 
+              //success of fetching json
+              success: function (json)
+              {
+                    var imagesURL = [];
+                    var photosCount = json.response.photos.count;
+
+                   if(photosCount != 0)
+                   {
+                       var photos = json.response.photos.items;
+                    
+                        for(var i = 0; i < photosCount; i++)
+                            imagesURL = photos[i].prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photos[i].suffix;    
+                   }
+
+                 $('#FSNearPlacesImages').text(imagesURL);
+                 console.log(imagesURL);
+              },
+              
+              //failure of fetching json
+              error: function ()
+              {
+                  console.log("error: Foursquare API");
+              }
+
+            });
+        },
     },
-
-};
+ };

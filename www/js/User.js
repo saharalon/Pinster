@@ -6,19 +6,15 @@ PinsterApp.User = function() {
   // Events
   //------------
 
-  obj.addEvent = function (location, title, desc, category, img)
+  obj.addEvent = function (location, title, desc, category, img, address)
   {
       var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
-          alert("about to save");
-
-
-      eventObject.save({title:title, description:desc, location:location, category:category, imageURL:""}, {
+      eventObject.save({title:title, description:desc, location:location,
+       address:address, category:category, imageURL:""}, {
         success:function(object) 
         {
-
-          alert("save object");
           if(img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
@@ -36,10 +32,6 @@ PinsterApp.User = function() {
                   alert("error saving image");
               });
           }
-
-
-          alert("Event added!");
-
         },
         error:function(object,error) {
           console.log(error);
