@@ -115,10 +115,15 @@ var PinsterApp = {
       $("#settingsSaveBtn").click(function() {
 
         var user = that.fields.user;
+        var map = that.fields.map;
+
+        var category = $("#dropdownMenu1").text();
 
         user.settings.setAddress($("#settingsModal #address").val());
-        user.settings.setCategory($("#dropdownMenu1").text());
+        user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
+
+        map.filterMarkers(category.toLowerCase());
 
       });
 
@@ -395,7 +400,8 @@ var PinsterApp = {
                   map: map,
                   icon: markerImage,
                   //shape: shape,
-                  title: title
+                  title: title,
+                  category: item._serverData.category 
                   //zIndex: events[i][3]
                 });
 
@@ -433,6 +439,8 @@ var PinsterApp = {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
 
+                  $("#eventLocationStr").text(userEvent.address);
+                  
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
@@ -478,6 +486,22 @@ var PinsterApp = {
         directionsDisplay.setMap(map);
                 
         return map;
+      };
+
+      this.filterMarkers = function(filter) {
+
+        for (var i = 0; i < PinsterApp.fields.markers.length; i++) {
+
+          if (filter != "all" && PinsterApp.fields.markers[i].category != filter)  
+          {
+            PinsterApp.fields.markers[i].setVisible(false);
+          }
+          else
+          {
+            PinsterApp.fields.markers[i].setVisible(true);
+          }
+        }
+
       };
 
     },  // END of GoogleMap()
