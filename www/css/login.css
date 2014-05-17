@@ -257,3 +257,23 @@ html, body {
 		opacity: 1;
 	}
 }
+
+#eventModalClose {
+	cursor: pointer;
+	position: absolute;
+	top: 13px;
+	right: 19px;
+	font-size: 3em;
+}
+
+#fourSquareBar {
+	border-top: 1px solid rgb(69, 168, 247);
+	border-bottom: 1px solid rgb(69, 168, 247);
+	background-color: rgba(139, 205, 231, 0.5);
+	position: absolute;
+	text-align: center;
+	vertical-align: middle;
+	width: 100%;
+	left: 0px;
+	height: 40px;
+}

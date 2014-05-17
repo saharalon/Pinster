@@ -1,1 +1,4 @@
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<feature name="App">
+    <param name="android-package" value="org.apache.cordova.App" />
+</feature>

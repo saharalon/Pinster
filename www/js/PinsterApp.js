@@ -43,7 +43,8 @@ var PinsterApp = {
 
     onDeviceReady : function() {
 
-      this.receivedEvent('deviceready');
+      var that = this;
+      that.receivedEvent('deviceready');
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
@@ -177,6 +178,11 @@ var PinsterApp = {
 
         that.camera.capturePhoto();
       });
+
+      $("#eventModalClose").click(function(){
+        $("#eventModal").hide();
+      });
+
     },  // END of registerEvents()
 
     // Success Geolocation
