@@ -47,6 +47,7 @@ var PinsterApp = {
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
+      document.addEventListener("backbutton", that.hideEventModal, false);
 
       var options = { frequency: 3000 };
       watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
@@ -220,6 +221,11 @@ var PinsterApp = {
     onCurrentLocationError : function(error) {
       alert('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
+    },
+
+    hideEventModal : function() {
+      console.log("hidden!");
+      $("#eventModal").hide();
     },
 
     searchEvents : function() {
@@ -426,6 +432,8 @@ var PinsterApp = {
                   {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
+
+                  $("#eventModal").show();
 
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(
