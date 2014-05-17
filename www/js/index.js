@@ -35,5 +35,5 @@ $(document).ready(function() {
     
     PinsterApp.onDocumentReady();
     PinsterApp.foursquare.getFourSquareNearPlaces(32.063832,34.773624);
-    PinsterApp.foursquare.getFourSquarePlacePhotos('4b27885af964a5202b8724e3');
+    //PinsterApp.foursquare.getFourSquarePlacePhotos('4b27885af964a5202b8724e3');
 });

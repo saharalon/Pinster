@@ -13,7 +13,15 @@ var PinsterApp = {
       watchID: null,
       currentPosition: {},
       dataImage: null,
+    },
 
+    foursquareFields : {
+      venueID : null,
+      name : null,
+      address : null,
+      distance : null,
+      category : null,
+      imagesURL : [5],
     },
 
     CONSTANTS : {
@@ -21,6 +29,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
+      foursquareDefaultImageSize : "640x400",
     },
 
     initialize : function () {
@@ -493,15 +502,30 @@ var PinsterApp = {
       
         getFourSquareNearPlaces : function(lat, lng)
         {
-            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
-            console.log(json);
+            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=1&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
+            
+            json.response.venues.forEach(function(venue) 
+            {
+                 PinsterApp.foursquareFields.venueID = venue.id;
+                 PinsterApp.foursquareFields.name = venue.name;
+                 PinsterApp.foursquareFields.address = venue.location.address;
+                 PinsterApp.foursquareFields.distance = venue.location.distance;
+                 PinsterApp.foursquareFields.category = venue.categories[0].shortName;
+                 PinsterApp.foursquare.getFoursquarePlacePhotos(venue.id);
+          });
         },
 
 
-        getFourSquarePlacePhotos : function(venueID)
+        getFoursquarePlacePhotos : function(venueID)
         {
-           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
-           console.log(json);
+           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
+           json.response.photos.items.forEach(function(photo)
+            { 
+
+                 PinsterApp.foursquare.imagesURL = photo.prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photo.suffix;
+
+
+           });
         }
 
     },
