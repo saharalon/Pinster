@@ -199,8 +199,8 @@ var PinsterApp = {
     onCurrentLocationForRouteSuccess : function(position) {
 
       var currentLocation = 
-        PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
-
+        new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        
       PinsterApp.calcRoute(currentLocation);
     },
 
@@ -321,7 +321,7 @@ var PinsterApp = {
             if (status == google.maps.GeocoderStatus.OK)
             {
               destinationAddress = results[0].formatted_address;
-              
+
               // Calculate the route between the addresses
               PinsterApp.getRoute(currentAddress, destinationAddress);
             }
