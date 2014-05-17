@@ -439,6 +439,8 @@ var PinsterApp = {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
 
+                  $("#eventLocationStr").text(userEvent.address);
+                  
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
