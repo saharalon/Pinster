@@ -19,8 +19,8 @@ var PinsterApp = {
       venueID : null,
       name : null,
       address : null,
-      distance : null,
-      category : null,
+     // distance : null,
+     // category : null,
       imagesURL : [5],
     },
 
@@ -419,6 +419,9 @@ var PinsterApp = {
                   }
                   $("#eventModal").modal();
 
+                  //foursquare tests
+                   PinsterApp.foursquare.getFoursquareNearPlaces(results[index]._serverData.location.latitude,results[index]._serverData.location.longitude);
+                   $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
                 };
                 })(marker, index));
               });
@@ -539,17 +542,15 @@ var PinsterApp = {
 
     foursquare : {
       
-        getFourSquareNearPlaces : function(lat, lng)
+        getFoursquareNearPlaces : function(lat, lng)
         {
-            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=1&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
+            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
             
             json.response.venues.forEach(function(venue) 
             {
                  PinsterApp.foursquareFields.venueID = venue.id;
                  PinsterApp.foursquareFields.name = venue.name;
                  PinsterApp.foursquareFields.address = venue.location.address;
-                 PinsterApp.foursquareFields.distance = venue.location.distance;
-                 PinsterApp.foursquareFields.category = venue.categories[0].shortName;
                  PinsterApp.foursquare.getFoursquarePlacePhotos(venue.id);
           });
         },
@@ -562,7 +563,7 @@ var PinsterApp = {
             { 
 
                  PinsterApp.foursquare.imagesURL = photo.prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photo.suffix;
-
+                 console.log(PinsterApp.foursquare.imagesURL);
 
            });
         }
