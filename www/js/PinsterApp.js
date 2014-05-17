@@ -492,7 +492,7 @@ var PinsterApp = {
 
         for (var i = 0; i < PinsterApp.fields.markers.length; i++) {
 
-          if (filter != "all" && PinsterApp.fields.markers[i].category != filter)  
+          if (filter != "all" && PinsterApp.fields.markers[i].category.toLowerCase() != filter)  
           {
             PinsterApp.fields.markers[i].setVisible(false);
           }
