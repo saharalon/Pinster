@@ -172,6 +172,7 @@ var PinsterApp = {
 
       $("#eventModalClose").click(function(){
         $("#eventModal").hide();
+        $("#eventImg").attr("src","img/no-image.png");
       });
 
     },  // END of registerEvents()
