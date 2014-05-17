@@ -192,8 +192,20 @@ var PinsterApp = {
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      PinsterApp.fields.user.addEvent(
-        currentLocation, title, description, category, PinsterApp.fields.dataImage);
+      var geocoder = new google.maps.Geocoder();
+      // Convert the event position to actual address
+      geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
+        var eventAddress = "";
+
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+          eventAddress = results[0].formatted_address;
+        }
+
+        PinsterApp.fields.user.addEvent(
+            currentLocation, title, description, category,
+              PinsterApp.fields.dataImage, eventAddress);
+      });
     },
 
     onCurrentLocationForRouteSuccess : function(position) {
@@ -231,7 +243,6 @@ var PinsterApp = {
             //get events object from parse
             that.fields.user.searchEvents(geoPoint,radius);
         }
-
         //address is not valid - TODO visualize an alert to user
         else
         {
@@ -401,28 +412,30 @@ var PinsterApp = {
 
               google.maps.event.addListener(marker, 'click', (function(marker, index) {
                 return function() {
-                  // TODO: Show event information (Foursquare)
-                  
+
+                  var userEvent = results[index]._serverData;
                   // Set event location as our destination
-                  // in case we want to drive there
-                  PinsterApp.destination = new google.maps.LatLng(results[index]._serverData.location.latitude, 
-                    results[index]._serverData.location.longitude);
+                  // in case the user will want to drive there
+                  PinsterApp.destination = new google.maps.LatLng(
+                    userEvent.location.latitude, userEvent.location.longitude);
 
-                  $("#eventModalLabel").text(results[index]._serverData.title);
-                  $("#eventDesc").text(results[index]._serverData.description);
-                  $("#eventLocationStr").text(results[index]._serverData.location.latitude + " " +
-                    results[index]._serverData.location.longitude);
+                  $("#eventModalLabel").text(userEvent.title);
+                  $("#eventDesc").text(userEvent.description);
 
-                  if (results[index]._serverData.imageURL)
+                  if (userEvent.imageURL)
                   {
-                    $("#eventImg").attr("src", results[index]._serverData.imageURL);
+                    $("#eventImg").attr("src", userEvent.imageURL);
                   }
-                  $("#eventModal").modal();
 
                   //foursquare tests
-                   PinsterApp.foursquare.getFoursquareNearPlaces(results[index]._serverData.location.latitude,results[index]._serverData.location.longitude);
-                   $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
-                };
+                  PinsterApp.foursquare.getFoursquareNearPlaces(
+                    userEvent.location.latitude, userEvent.location.longitude);
+                  
+                  $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
+                  $("#eventLocationStr").text(userEvent.address);
+                  
+                  $("#eventModal").modal();
+                }
                 })(marker, index));
               });
 
@@ -481,7 +494,6 @@ var PinsterApp = {
       },
 
       // Called when a photo is successfully retrieved
-      //
       onPhotoDataSuccess : function(imageData) {
         // Uncomment to view the base64-encoded image data
         //console.log(imageData);
