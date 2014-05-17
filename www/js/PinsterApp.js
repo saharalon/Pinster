@@ -12,8 +12,7 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      dataImage: null,
-      isReportingEvent: false
+      dataImage: null
     },
 
     foursquareFields : {
@@ -131,25 +130,25 @@ var PinsterApp = {
       });
 
       //click -publish events - TODO: create the UI element
-      $('#reportBtnModal').click(function()
-      {
-        that.fields.isReportingEvent = true;
+      $('#reportBtnModal').click(function() {
+
           //get current location of the device
           //TODO: get the precise location of the device, NOT raw location
-         navigator.geolocation.getCurrentPosition(that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+         navigator.geolocation.getCurrentPosition(
+          that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
 
       });
 
-      $('#takeMeThereBtn').click(function()
-      {
+      $('#takeMeThereBtn').click(function() {
+
         if (isPhone)
-        {
-          calcRoute(PinsterApp.currentPosition)
+        { 
+          calcRoute(PinsterApp.currentPosition);
         }
         else
         {
-          that.fields.isReportingEvent = false;
-          navigator.geolocation.getCurrentPosition(that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+          navigator.geolocation.getCurrentPosition(
+            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
         }
       });
 
@@ -189,20 +188,20 @@ var PinsterApp = {
       var currentLocation = 
         PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
-      if (PinsterApp.fields.isReportingEvent)
-      {
-        var title = $('#eventTitle').val();
-        var description = $('#eventDescription').val();
-        var category = $("#dropdownMenu2").text();
+      var title = $('#eventTitle').val();
+      var description = $('#eventDescription').val();
+      var category = $("#dropdownMenu2").text();
 
-        PinsterApp.fields.user.addEvent(
-          currentLocation, title, description, category, PinsterApp.fields.dataImage);
-      }
-      else // Position requested for route calculation
-      {
-        PinsterApp.calcRoute(currentLocation);
-      }
+      PinsterApp.fields.user.addEvent(
+        currentLocation, title, description, category, PinsterApp.fields.dataImage);
+    },
 
+    onCurrentLocationForRouteSuccess : function(position) {
+
+      var currentLocation = 
+        PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+
+      PinsterApp.calcRoute(currentLocation);
     },
 
     // Error Callback receives a PositionError object
@@ -297,20 +296,36 @@ var PinsterApp = {
       $("#eventModal").modal("hide");
 
       PinsterApp.currentPosition = currentLocation;
-
-      this.geoPointToAddress(PinsterApp.destination);
+      // Convert the coordinates to addresses
+      this.geoPointToAddress(PinsterApp.currentPosition, PinsterApp.destination);
     },
 
-    geoPointToAddress : function(latLng) {
+    geoPointToAddress : function(currentPosition, destination) {
+      
+      var currentAddress;
+      var destinationAddress;
+
+      // Geocoder converts coordinates to addresses
       var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({
-        "location": latLng
-      },
-      function(results, status) {
+
+      // Convert the current position to actual address
+      geocoder.geocode({ "location": currentPosition }, function(results, status) {
+        
         if (status == google.maps.GeocoderStatus.OK)
         {
-          var destination = results[0].formatted_address;
-          PinsterApp.getRoute(PinsterApp.currentPosition, destination);
+          currentAddress = results[0].formatted_address;
+
+          // Convert the destination position to actual address
+          geocoder.geocode({ "location": destination }, function(results, status) {
+
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+              destinationAddress = results[0].formatted_address;
+              
+              // Calculate the route between the addresses
+              PinsterApp.getRoute(currentAddress, destinationAddress);
+            }
+          });
         }
       });
     },
