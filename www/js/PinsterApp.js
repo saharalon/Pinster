@@ -15,15 +15,6 @@ var PinsterApp = {
       dataImage: null
     },
 
-    foursquareFields : {
-      venueID : null,
-      name : null,
-      address : null,
-     // distance : null,
-     // category : null,
-      imagesURL : [5],
-    },
-
     CONSTANTS : {
 
       METERS : 1000,
@@ -440,10 +431,7 @@ var PinsterApp = {
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
-                  
-                  $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
-                  $("#eventLocationStr").text(userEvent.address);
-                  
+                                
                   $("#eventModal").modal();
                 }
                 })(marker, index));
