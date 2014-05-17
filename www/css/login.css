@@ -229,7 +229,7 @@ html, body {
 
 @-webkit-keyframes animation {
 	from {
-		-webkit-transform: scale(2.0);
+		-webkit-transform: scale(0);
 		opacity: 0;
 	}
 	to {
@@ -239,7 +239,7 @@ html, body {
 }
 @-moz-keyframes animation {
 	from {
-		-moz-transform: scale(2.0);
+		-moz-transform: scale(0);
 		opacity: 0;
 	}
 	to {
@@ -249,7 +249,7 @@ html, body {
 }
 @keyframes animation {
 	from {
-		transform: scale(2.0);
+		transform: scale(0);
 		opacity: 0;
 	}
 	to {
@@ -276,4 +276,15 @@ html, body {
 	width: 100%;
 	left: 0px;
 	height: 40px;
+}
+
+#searchResults {
+	border: 1px solid rgba(128, 128, 128, 0.219608);
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.933333);
+	transition: 0.7s;
+	-webkit-transition: 0.7s;
+	display: block;
+	border-radius: 13px;
+	max-height: 500px;
 }
