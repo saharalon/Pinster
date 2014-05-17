@@ -13,6 +13,7 @@ var PinsterApp = {
       watchID: null,
       currentPosition: {},
       dataImage: null,
+      isReportingEvent: false
     },
 
     foursquareFields : {
@@ -132,10 +133,24 @@ var PinsterApp = {
       //click -publish events - TODO: create the UI element
       $('#reportBtnModal').click(function()
       {
+        that.fields.isReportingEvent = true;
           //get current location of the device
           //TODO: get the precise location of the device, NOT raw location
          navigator.geolocation.getCurrentPosition(that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
 
+      });
+
+      $('#takeMeThereBtn').click(function()
+      {
+        if (isPhone)
+        {
+          calcRoute(PinsterApp.currentPosition)
+        }
+        else
+        {
+          that.fields.isReportingEvent = false;
+          navigator.geolocation.getCurrentPosition(that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+        }
       });
 
       //Enter key - search events
@@ -171,13 +186,22 @@ var PinsterApp = {
       console.log(position.coords.heading);
       console.log(position.coords.longitude);
 
-      var currentLocation = PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+      var currentLocation = 
+        PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
-      var title = $('#eventTitle').val();
-      var description = $('#eventDescription').val();
-      var category = $("#dropdownMenu2").text();
+      if (PinsterApp.fields.isReportingEvent)
+      {
+        var title = $('#eventTitle').val();
+        var description = $('#eventDescription').val();
+        var category = $("#dropdownMenu2").text();
 
-      PinsterApp.fields.user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
+        PinsterApp.fields.user.addEvent(
+          currentLocation, title, description, category, PinsterApp.fields.dataImage);
+      }
+      else // Position requested for route calculation
+      {
+        PinsterApp.calcRoute(currentLocation);
+      }
 
     },
 
@@ -268,11 +292,11 @@ var PinsterApp = {
 
     },
 
-    calcRoute : function() {
+    calcRoute : function(currentLocation) {
 
       $("#eventModal").modal("hide");
 
-      PinsterApp.currentPosition = "יבנה, ישראל";
+      PinsterApp.currentPosition = currentLocation;
 
       this.geoPointToAddress(PinsterApp.destination);
     },
