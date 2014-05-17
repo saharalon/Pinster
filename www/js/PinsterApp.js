@@ -12,8 +12,16 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      dataImage: null,
+      dataImage: null
+    },
 
+    foursquareFields : {
+      venueID : null,
+      name : null,
+      address : null,
+     // distance : null,
+     // category : null,
+      imagesURL : [5],
     },
 
     CONSTANTS : {
@@ -21,6 +29,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
+      foursquareDefaultImageSize : "640x400",
     },
 
     initialize : function () {
@@ -121,12 +130,26 @@ var PinsterApp = {
       });
 
       //click -publish events - TODO: create the UI element
-      $('#reportBtnModal').click(function()
-      {
+      $('#reportBtnModal').click(function() {
+
           //get current location of the device
           //TODO: get the precise location of the device, NOT raw location
-         navigator.geolocation.getCurrentPosition(that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+         navigator.geolocation.getCurrentPosition(
+          that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
 
+      });
+
+      $('#takeMeThereBtn').click(function() {
+
+        if (isPhone)
+        { 
+          calcRoute(PinsterApp.currentPosition);
+        }
+        else
+        {
+          navigator.geolocation.getCurrentPosition(
+            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+        }
       });
 
       //Enter key - search events
@@ -162,14 +185,23 @@ var PinsterApp = {
       console.log(position.coords.heading);
       console.log(position.coords.longitude);
 
-      var currentLocation = PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
+      var currentLocation = 
+        PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
       var title = $('#eventTitle').val();
       var description = $('#eventDescription').val();
       var category = $("#dropdownMenu2").text();
 
-      PinsterApp.fields.user.addEvent(currentLocation,title,description,category,PinsterApp.fields.dataImage);
+      PinsterApp.fields.user.addEvent(
+        currentLocation, title, description, category, PinsterApp.fields.dataImage);
+    },
 
+    onCurrentLocationForRouteSuccess : function(position) {
+
+      var currentLocation = 
+        new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        
+      PinsterApp.calcRoute(currentLocation);
     },
 
     // Error Callback receives a PositionError object
@@ -259,25 +291,41 @@ var PinsterApp = {
 
     },
 
-    calcRoute : function() {
+    calcRoute : function(currentLocation) {
 
       $("#eventModal").modal("hide");
 
-      PinsterApp.currentPosition = "יבנה, ישראל";
-
-      this.geoPointToAddress(PinsterApp.destination);
+      PinsterApp.currentPosition = currentLocation;
+      // Convert the coordinates to addresses
+      this.geoPointToAddress(PinsterApp.currentPosition, PinsterApp.destination);
     },
 
-    geoPointToAddress : function(latLng) {
+    geoPointToAddress : function(currentPosition, destination) {
+      
+      var currentAddress;
+      var destinationAddress;
+
+      // Geocoder converts coordinates to addresses
       var geocoder = new google.maps.Geocoder();
-      geocoder.geocode({
-        "location": latLng
-      },
-      function(results, status) {
+
+      // Convert the current position to actual address
+      geocoder.geocode({ "location": currentPosition }, function(results, status) {
+        
         if (status == google.maps.GeocoderStatus.OK)
         {
-          var destination = results[0].formatted_address;
-          PinsterApp.getRoute(PinsterApp.currentPosition, destination);
+          currentAddress = results[0].formatted_address;
+
+          // Convert the destination position to actual address
+          geocoder.geocode({ "location": destination }, function(results, status) {
+
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+              destinationAddress = results[0].formatted_address;
+
+              // Calculate the route between the addresses
+              PinsterApp.getRoute(currentAddress, destinationAddress);
+            }
+          });
         }
       });
     },
@@ -371,6 +419,9 @@ var PinsterApp = {
                   }
                   $("#eventModal").modal();
 
+                  //foursquare tests
+                   PinsterApp.foursquare.getFoursquareNearPlaces(results[index]._serverData.location.latitude,results[index]._serverData.location.longitude);
+                   $('#FSNearPlacesTitles').text(PinsterApp.foursquareFields.name);
                 };
                 })(marker, index));
               });
@@ -491,17 +542,30 @@ var PinsterApp = {
 
     foursquare : {
       
-        getFourSquareNearPlaces : function(lat, lng)
+        getFoursquareNearPlaces : function(lat, lng)
         {
-            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
-            console.log(json);
+            var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=20&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
+            
+            json.response.venues.forEach(function(venue) 
+            {
+                 PinsterApp.foursquareFields.venueID = venue.id;
+                 PinsterApp.foursquareFields.name = venue.name;
+                 PinsterApp.foursquareFields.address = venue.location.address;
+                 PinsterApp.foursquare.getFoursquarePlacePhotos(venue.id);
+          });
         },
 
 
-        getFourSquarePlacePhotos : function(venueID)
+        getFoursquarePlacePhotos : function(venueID)
         {
-           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=2');
-           console.log(json);
+           var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
+           json.response.photos.items.forEach(function(photo)
+            { 
+
+                 PinsterApp.foursquare.imagesURL = photo.prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photo.suffix;
+                 console.log(PinsterApp.foursquare.imagesURL);
+
+           });
         }
 
     },
