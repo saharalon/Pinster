@@ -530,23 +530,30 @@ var PinsterApp = {
 
     },
     
-    utilities : {
-
-        jsonAJAXCall : function(URL)
+    foursquare : {
+      
+        getFoursquareNearPlaces : function(lat, lng)
         {
-          var response;
-            
+            var foursquareFields = new Object();  
+          
           $.ajax({
 
-              url: URL,
+              url: 'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=2000&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
               dataType: "json",
-              async:false,
+              async:true,
 
               //success of fetching json
               success: function (json)
               {
-                  response = json;
+                json.response.venues.forEach(function(venue) 
+                {
+                       foursquareFields.venueID = venue.id;
+                       foursquareFields.name = venue.name;
+                       foursquareFields.imagesURL = PinsterApp.foursquare.getFoursquarePhotos(venue.id);
+                });
+
+                   $('#FSNearPlacesTitles').text(foursquareFields.name);
               },
               
               //failure of fetching json
@@ -557,46 +564,43 @@ var PinsterApp = {
 
             });
 
-           return response;
-        }
-
-    },
-
-    foursquare : {
-      
-        getFoursquareNearPlaces : function(lat, lng)
-        {
-            var json = PinsterApp.utilities.jsonAJAXCall(
-              'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +
-                '&intent=browse&radius=20&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare +
-                  '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
-            
-            json.response.venues.forEach(function(venue) 
-            {
-                 PinsterApp.foursquareFields.venueID = venue.id;
-                 PinsterApp.foursquareFields.name = venue.name;
-                 PinsterApp.foursquareFields.address = venue.location.address;
-                 PinsterApp.foursquare.getFoursquarePlacePhotos(venue.id);
-          });
         },
 
-        getFoursquarePlacePhotos : function(venueID)
+        getFoursquarePhotos : function(venueID)
         {
 
-          var json = PinsterApp.utilities.jsonAJAXCall('https://api.foursquare.com/v2/venues/' + 
-            venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare +
-              '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503');
-          
-          json.response.photos.items.forEach(function(photo)
-          { 
-            PinsterApp.foursquare.imagesURL = 
-              photo.prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photo.suffix;
+         $.ajax({
 
-            console.log(PinsterApp.foursquare.imagesURL);
-          });
+              url: 'https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
+              type: "GET",
+              dataType: "json",
+              async:true,
 
-        }
+              //success of fetching json
+              success: function (json)
+              {
+                    var imagesURL = [];
+                    var photosCount = json.response.photos.count;
 
+                   if(photosCount != 0)
+                   {
+                       var photos = json.response.photos.items;
+                    
+                        for(var i = 0; i < photosCount; i++)
+                            imagesURL = photos[i].prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photos[i].suffix;    
+                   }
+
+                 $('#FSNearPlacesImages').text(imagesURL);
+                 console.log(imagesURL);
+              },
+              
+              //failure of fetching json
+              error: function ()
+              {
+                  console.log("error: Foursquare API");
+              }
+
+            });
+        },
     },
-
-};
+ };
