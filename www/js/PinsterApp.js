@@ -547,7 +547,7 @@ var PinsterApp = {
 
     },
     
-    foursquare : {
+        foursquare : {
       
         getFoursquareNearPlaces : function(lat, lng)
         {
@@ -555,7 +555,7 @@ var PinsterApp = {
           
           $.ajax({
 
-              url: 'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=2000&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
+              url: 'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=30&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
               dataType: "json",
               async:true,
@@ -567,7 +567,8 @@ var PinsterApp = {
                 {
                        foursquareFields.venueID = venue.id;
                        foursquareFields.name = venue.name;
-                       foursquareFields.imagesURL = PinsterApp.foursquare.getFoursquarePhotos(venue.id);
+                       foursquareFields.tips = PinsterApp.foursquare.getFoursquareTips(venue.id);
+                       console.log(venue);
                 });
 
                    $('#FSNearPlacesTitles').text(foursquareFields.name);
@@ -583,12 +584,12 @@ var PinsterApp = {
 
         },
 
-        getFoursquarePhotos : function(venueID)
+        getFoursquareTips : function(venueID)
         {
 
          $.ajax({
 
-              url: 'https://api.foursquare.com/v2/venues/' + venueID + '/photos?&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
+              url: 'https://api.foursquare.com/v2/venues/'+ venueID +'/tips?sort=popular&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
               dataType: "json",
               async:true,
@@ -596,20 +597,14 @@ var PinsterApp = {
               //success of fetching json
               success: function (json)
               {
-                    var imagesURL = [];
-                    var photosCount = json.response.photos.count;
+                 var venueTips = [];
+                 var tips = json.response.tips.items;
 
-                   if(photosCount != 0)
-                   {
-                       var photos = json.response.photos.items;
-                    
-                        for(var i = 0; i < photosCount; i++)
-                            imagesURL = photos[i].prefix + PinsterApp.CONSTANTS.foursquareDefaultImageSize + photos[i].suffix;    
-                   }
+                 for(var i = 0; i < 5; i++)
+                    venueTips = tips[i].text;
 
-                 $('#FSNearPlacesImages').text(imagesURL);
-                 console.log(imagesURL);
-              },
+                 console.log(venueTips);
+               },
               
               //failure of fetching json
               error: function ()
