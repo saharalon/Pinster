@@ -207,6 +207,8 @@ html, body {
     height: 14%;
     padding-top: 12px;
     background-color: #FFFFFF;
+    text-overflow: ellipsis;
+	overflow-y: hidden;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#FFFFFF), to(#E9E9E9)); /* Saf4+, Chrome */
     background-image: -webkit-linear-gradient(top, #FFFFFF, #E9E9E9); /* Chrome 10+, Saf5.1+, iOS 5+ */
     background-image: -moz-linear-gradient(top, #FFFFFF, #E9E9E9); /* FF3.6 */
@@ -270,12 +272,18 @@ html, body {
 	border-top: 1px solid rgb(69, 168, 247);
 	border-bottom: 1px solid rgb(69, 168, 247);
 	background-color: rgba(139, 205, 231, 0.5);
-	position: absolute;
+	position: relative;
 	text-align: center;
 	vertical-align: middle;
 	width: 100%;
 	left: 0px;
 	height: 40px;
+}
+
+#takeMeThereBtn {
+	position: absolute;
+	bottom: 25px;
+	left: 43%;
 }
 
 #searchResults {
