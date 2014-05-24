@@ -571,6 +571,7 @@ var PinsterApp = {
       
         getFoursquareNearPlaces : function(lat, lng)
         {
+            var foursquareBarStrArr = [];
             var foursquareFields = [];
             var foursquareField = {};
             $("#fourSquareBar").text("");
@@ -598,7 +599,27 @@ var PinsterApp = {
 
                 console.log(foursquareFields);
                 //add to UI ele
-               $("#fourSquareBar").text(foursquareFields);
+
+               foursquareFields.forEach(function(item){              
+
+                   item.tips.forEach(function(tip, index){
+                      foursquareBarStrArr.push("<b> " + item.name + " :</b> " + tip + "");                      
+                   });
+               });
+
+                var k = 0;
+               var foursquareInterval =  setInterval(function()
+                {
+                  $("#fourSquareBar").html(""); 
+                  $("#fourSquareBar").html(foursquareBarStrArr[k]); 
+                  k++;
+
+                  if(k == foursquareBarStrArr.length)
+                  {
+                    clearInterval(foursquareInterval);
+                  }
+                }, 3000);
+               // $("#fourSquareBar").text(foursquareFields);
 
               },
               
@@ -630,8 +651,9 @@ var PinsterApp = {
                  var tips = json.response.tips.items;
                  
                  for(var i = 0; i < tips.length; i++)
+                 {
                       temp[i] = tips[i].text;
-
+                 }
                  venueTips = temp;
                },
               
