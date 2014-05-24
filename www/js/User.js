@@ -24,6 +24,7 @@ PinsterApp.User = function() {
                  object.set("imageURL",parseFile.url());
                  object.save();
                  alert("image saved");
+                 PinsterApp.onDocumentReady();  // redraw map with new data
               },
 
               function(error)
@@ -32,6 +33,10 @@ PinsterApp.User = function() {
                   alert("error saving image");
               });
           }
+          else {
+            PinsterApp.onDocumentReady(); // redraw map with new data
+          }
+
         },
         error:function(object,error) {
           console.log(error);
