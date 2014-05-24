@@ -56,11 +56,18 @@ PinsterApp.User = function() {
     query.find({
         success: function(placesObjects) {
           console.log(placesObjects);
-          var resultsStr = "";
+          // var resultsStr = "";
+          $("#eventsResults").html('');
+          $(".eventResRow").unbind();
           placesObjects.forEach(function(item){
-            resultsStr += item.attributes.title + " | ";
+            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "</div>");
+            // resultsStr += item.attributes.title + " | ";
           });
-          alert(resultsStr);
+          $(".eventResRow").click(function() {
+            google.maps.event.trigger(PinsterApp.fields.eventsHasMap[$(this).attr("eventId")], 'click');
+          });
+          $("#eventsResults").show();
+          // alert(resultsStr);
         }
       });
   };

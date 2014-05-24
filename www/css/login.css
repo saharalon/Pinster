@@ -286,7 +286,7 @@ html, body {
 	left: 43%;
 }
 
-#searchResults {
+#searchResultsContainer {
 	border: 1px solid rgba(128, 128, 128, 0.219608);
 	width: 100%;
 	background-color: rgba(255, 255, 255, 0.933333);
@@ -295,4 +295,17 @@ html, body {
 	display: block;
 	border-radius: 13px;
 	max-height: 500px;
+}
+
+#eventsResults {
+	display: none;
+	margin-top: 40px;
+	max-height: 100%;
+	transition: 0.7s;
+	-webkit-transition: 0.7s;
+}
+
+.eventResRow { 
+	height: 8%;
+	cursor: pointer;
 }

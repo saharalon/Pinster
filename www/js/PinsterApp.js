@@ -3,6 +3,7 @@ var PinsterApp = {
     fields : {
 
       markers : [],
+      eventsHasMap : {},
       user : {},
       map : {},
       geocoder : {},
@@ -80,6 +81,13 @@ var PinsterApp = {
       var that = this;
 
       FastClick.attach(document.body);
+
+      // When clicking outside the events search results -> hide it
+      $("body").click(function(e){
+        if (e.target.id != "quickSearch" && e.target.className != "eventResRow" && e.target.id != "eventModalClose") {
+          $("#eventsResults").hide();
+        }
+      });
 
       $(".fancyBtn").on("touchstart", function(){
         $(this).addClass('fancyBtnDown');
@@ -179,6 +187,10 @@ var PinsterApp = {
         $("#eventImg").attr("src","img/no-image.png");
       });
 
+      // $(".eventResRow").click(function() {
+      //   google.maps.event.trigger(PinsterApp.fields.eventsHasMap[$(this).attr("eventId")], 'click');
+      // });
+
     },  // END of registerEvents()
 
     // Success Geolocation
@@ -254,7 +266,9 @@ var PinsterApp = {
         //address is not valid - TODO visualize an alert to user
         else
         {
-          alert("Geocode was not successful for the following reason: " + status);
+          $("#eventsResults").html('');
+          $("#eventsResults").append("<div class='eventResRow'>No results were found... (" + status + ")</div>");
+          $("#eventsResults").show();
         }
       });
 
@@ -387,7 +401,7 @@ var PinsterApp = {
                 var latitude = item._serverData.location._latitude;
                 var longitude = item._serverData.location._longitude;
                 // TODO: load from database
-                var eventImage = "img/yakar.jpg";
+                var eventImage = "img/no-image.png";
 
                 // Image for the marker
                 var markerImage = {
@@ -404,6 +418,7 @@ var PinsterApp = {
                   //zIndex: events[i][3]
                 });
 
+                PinsterApp.fields.eventsHasMap[item.id] = marker;
                 PinsterApp.fields.markers.push(marker);
 
                 // Show event title tooltip on mouse over
