@@ -20,7 +20,6 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
-      foursquareDefaultImageSize : "640x400",
     },
 
     initialize : function () {
@@ -556,7 +555,9 @@ var PinsterApp = {
       
         getFoursquareNearPlaces : function(lat, lng)
         {
-            var foursquareFields = new Object();  
+            var foursquareFields = [];
+            var foursquareField = {};
+            var index = 0;
           
           $.ajax({
 
@@ -568,13 +569,17 @@ var PinsterApp = {
               //success of fetching json
               success: function (json)
               {
-                json.response.venues.forEach(function(venue) 
-                {
-                   foursquareFields.venueID = venue.id;
-                   foursquareFields.name = venue.name;
-                   foursquareFields.tips = PinsterApp.foursquare.getFoursquareTips(venue.id);
-                   console.log(foursquareFields);
-                });
+                 var venues = json.response.venues;
+          
+                for(var i = 0; i < venues.length; i++)
+                {  
+                     foursquareField.venueID = venues[i].id;
+                     foursquareField.name = venues[i].name;
+                     foursquareField.tips = PinsterApp.foursquare.getFoursquareTips(venues[i].id);
+                     foursquareFields[i] = foursquareField;
+                }
+
+                console.log(foursquareFields);
 
               },
               
@@ -603,7 +608,7 @@ var PinsterApp = {
               {
                  var tips = json.response.tips.items;
                  for(var i = 0; i < tips.length; i ++)
-                      venueTips = tips[i].text;
+                      venueTips[i] = tips[i].text;
 
                },
               
