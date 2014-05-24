@@ -21,6 +21,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
+      GPS_SETTINGS :  {enableHighAccuracy: true, maximumAge:3000, timeout: 8000},
     },
 
     initialize : function () {
@@ -140,7 +141,7 @@ var PinsterApp = {
           //get current location of the device
           //TODO: get the precise location of the device, NOT raw location
          navigator.geolocation.getCurrentPosition(
-          that.onCurrentLocationSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+          that.onCurrentLocationSuccess, that.onCurrentLocationError,  PinsterApp.CONSTANTS.GPS_SETTINGS);
 
       });
 
@@ -153,7 +154,7 @@ var PinsterApp = {
         else
         {
           navigator.geolocation.getCurrentPosition(
-            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError,  {enableAccuracy: true});
+            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError, PinsterApp.CONSTANTS.GPS_SETTINGS);
         }
       });
 
@@ -281,7 +282,7 @@ var PinsterApp = {
 
     onPositionError : function(error)
     {
-        console.log(error.code + "  " + error.message);
+        console.log(error.code + "  " + error.message + "Open your GPS settings and enable GPS");
     },
 
     convertToGeoPointObject : function(latitude, longitude) {
@@ -572,7 +573,7 @@ var PinsterApp = {
         {
             var foursquareFields = [];
             var foursquareField = {};
-           
+            $("#fourSquareBar").text("");
           
           $.ajax({
 
@@ -588,6 +589,7 @@ var PinsterApp = {
           
                 for(var i = 0; i < venues.length; i++)
                 {  
+                     foursquareField = {};
                      foursquareField.venueID = venues[i].id;
                      foursquareField.name = venues[i].name;
                      foursquareField.tips = PinsterApp.foursquare.getFoursquareTips(venues[i].id);
@@ -595,6 +597,8 @@ var PinsterApp = {
                 }
 
                 console.log(foursquareFields);
+                //add to UI ele
+               $("#fourSquareBar").text(foursquareFields);
 
               },
               
@@ -621,10 +625,14 @@ var PinsterApp = {
 
               //success of fetching json
               success: function (json)
-              {
+              { 
+                 var temp  = [];
                  var tips = json.response.tips.items;
+                 
                  for(var i = 0; i < tips.length; i++)
-                      venueTips[i] = tips[i].text;
+                      temp[i] = tips[i].text;
+
+                 venueTips = temp;
                },
               
               //failure of fetching json
