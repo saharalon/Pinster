@@ -282,7 +282,7 @@ var PinsterApp = {
 
     onPositionError : function(error)
     {
-        console.log(error.code + "  " + error.message + "Open your GPS settings and enable GPS");
+        console.log(error.code + "  " + error.message);
     },
 
     convertToGeoPointObject : function(latitude, longitude) {
