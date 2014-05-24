@@ -557,7 +557,7 @@ var PinsterApp = {
         {
             var foursquareFields = [];
             var foursquareField = {};
-            var index = 0;
+           
           
           $.ajax({
 
@@ -586,7 +586,7 @@ var PinsterApp = {
               //failure of fetching json
               error: function ()
               {
-                  console.log("error: Foursquare API");
+                  console.log("error: Foursquare API - Places info fetching");
               }
 
             });
@@ -596,6 +596,7 @@ var PinsterApp = {
         getFoursquareTips : function(venueID)
         {
            var venueTips = [];
+       
          $.ajax({
 
               url: 'https://api.foursquare.com/v2/venues/'+ venueID +'/tips?sort=popular&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
@@ -607,20 +608,19 @@ var PinsterApp = {
               success: function (json)
               {
                  var tips = json.response.tips.items;
-                 for(var i = 0; i < tips.length; i ++)
+                 for(var i = 0; i < tips.length; i++)
                       venueTips[i] = tips[i].text;
-
                },
               
               //failure of fetching json
               error: function ()
               {
-                  console.log("error: Foursquare API");
+                  console.log("error: Foursquare API  -Tips fetching");
               }
 
             });
 
-           return venueTips;
-        },
+              return venueTips;
+         },
     },
  };
