@@ -1,0 +1,16 @@
+
+1) Foursquare
+
+2) Pins with matching pictures
+
+3) Event popup design
+
+4) Search results design
+
+5) Back button event
+
+6) Collect search data on users
+
+7) Random user matching event
+
+8) Users login
