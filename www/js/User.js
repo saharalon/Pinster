@@ -73,8 +73,8 @@ PinsterApp.User = function() {
 
             image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
             if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
-            
-            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + "lat=" + item.attributes.location._latitude + " long=" + item.attributes.location._longitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
+
+            $("#eventsResults").append("<div class='eventResRow' eventId='" + item.id + "' lat=" + item.attributes.location._latitude + " long=" + item.attributes.location._longitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
           });
 
           $(".eventResRow").click(function() {
