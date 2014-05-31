@@ -13,7 +13,7 @@
 
 7) Random smart user event recommendation
 
-8) Users login
+8) Users login (via facebook)
 
 9) Rating system for users and events
 
