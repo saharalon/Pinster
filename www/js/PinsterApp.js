@@ -374,27 +374,6 @@ var PinsterApp = {
 
     },
 
-    getImageByCategory : function(category) {
-      
-      var path = 'img/';
-
-      switch (category.toLowerCase())
-      {
-        case 'sport':
-          return path + 'sportsPin.png';
-
-        case 'parties':
-          return path + 'partiesPin.png';
-
-        case 'hazards':
-          return path + 'hazardsPin.png';
-
-        default:
-          return path + 'pin6.png';
-      }
-
-    },
-
     calcRoute : function(currentLocation) {
 
       $("#eventModal").hide();
@@ -483,7 +462,7 @@ var PinsterApp = {
 
                 // Image for the marker
                 var markerImage = {
-                    url: PinsterApp.getImageByCategory(item._serverData.category)
+                    url: "img/" + PinsterApp.CONSTANTS.pinImgs[item._serverData.category]
                 };
 
                 marker = new google.maps.Marker({
