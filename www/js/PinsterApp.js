@@ -42,7 +42,7 @@ var PinsterApp = {
       document.addEventListener("searchbutton", that.searchEvents, false);
       document.addEventListener("backbutton", that.hideEventModal, false);
 
-      var options = { frequency: 3000 };
+      var options = { enableHighAccuracy: true, timeout: 1000, frequency: 3000 };
       watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
 
     },
@@ -108,6 +108,7 @@ var PinsterApp = {
 
       $(".settingsBtn").click(function(){
         $("#settingsModal").modal();
+
       });
 
       $(".reportBtn").click(function(){
@@ -293,6 +294,7 @@ var PinsterApp = {
 
     onPositionError : function(error)
     {
+        alert("this App works great with GPS on, Please turn on GPS");
         console.log(error.code + "  " + error.message);
     },
 

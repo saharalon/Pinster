@@ -202,7 +202,43 @@
     <script type="text/javascript">
         PinsterApp.initialize();
     </script>
+ <div id="fb-root"></div> 
+    <script>
+       window.fbAsyncInit = function() {
+        Parse.FacebookUtils.init({
+           appId      : '1401154480155719',
+           channelUrl : 'http://pinster.parseapp.com/www/main.html',
+           cookie     : true, 
+           xfbml      : true
+        });
+  
 
+  Parse.FacebookUtils.logIn(null, {
+  success: function(user) {
+    if (!user.existed()) {
+      alert("User signed up and logged in through Facebook!");
+    } else {
+      alert("User logged in through Facebook!");
+    }
+  },
+  error: function(user, error) {
+    alert("User cancelled the Facebook login or did not fully authorize.");
+    console.log(user);
+    console.log(error);
+  }
+});
+
+      };
+
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "http://connect.facebook.net/es_LA/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+     </script>
     
   </body>
 </html>
