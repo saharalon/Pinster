@@ -273,7 +273,7 @@ var PinsterApp = {
 
     setAppLanguage : function(language) {
 
-      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "הקלד כתובת...");
+      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "הקלד כתובת לחיפוש...");
       $("#takeMeThereBtn").text((language == "English") ? "Take me there" : "קח אותי לשם");
       
       // Login
@@ -284,10 +284,10 @@ var PinsterApp = {
 
       // Settings
       $("#settingsHedline").text((language == "English") ? "Settings" : "הגדרות");
-      //$("#languageDropdownMenu").text((language == "English") ? "Favourite Language" : "שפה מועדפת");
+
       if ($("#address").attr("placeholder") == undefined)
         $("#address").attr("placeholder", (language == "English") ? "Favourite Address" : "כתובת מועדפת");
-      //$("#dropdownMenu1").text((language == "English") ? "Favourite Category" : "קטגוריה מועדפת");
+      
       $("#settingsSaveBtn").text((language == "English") ? "Save" : "שמור");
       
       // Report
