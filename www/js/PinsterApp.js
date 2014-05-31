@@ -72,7 +72,7 @@ var PinsterApp = {
       that.fields.user = new that.User();
       that.fields.user.settings.init();
 
-      that.setAppLanguage($("#languageDropdownMenu").text());
+      that.setAppLanguage(that.fields.currentLanguage);
 
     },  // END of onDocumentReady()
 
@@ -464,7 +464,14 @@ var PinsterApp = {
         // Retreive events from the databas
         var Event = Parse.Object.extend("Event");
         var query = new Parse.Query(Event);
-        
+
+        var currentTime = new Date();
+        // Subtract one day from today's time to search
+        // only events that had been updated at the last 24 hours
+        currentTime.setDate(currentTime.getDate() - 1);
+        var time = new Date(currentTime.getTime()); 
+        query.greaterThanOrEqualTo('updatedAt', time); 
+
         query.find({
             success: function(results) {
               results.forEach(function(item, index) {
@@ -635,7 +642,7 @@ var PinsterApp = {
 
     },
     
-        foursquare : {
+    foursquare : {
       
         getFoursquareNearPlaces : function(lat, lng)
         {

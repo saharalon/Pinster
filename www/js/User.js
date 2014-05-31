@@ -56,6 +56,12 @@ PinsterApp.User = function() {
     var query = new Parse.Query(events);
     //check the events within the specify point to search from
     query.withinKilometers("location", address, radius);
+    var currentTime = new Date();
+    // Subtract one day from today's time to search
+    // only events that had been updated at the last 24 hours
+    currentTime.setDate(currentTime.getDate() - 1);
+    var time = new Date(currentTime.getTime()); 
+    query.greaterThanOrEqualTo('updatedAt', time); 
     // Limit what could be a lot of points.
     query.limit(10);
     // Final list of objects
@@ -184,6 +190,7 @@ PinsterApp.User = function() {
       }
       else {
         var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
+        PinsterApp.fields.currentLanguage = tmpObj.language;
         that.language = tmpObj.language; 
         that.address = tmpObj.address;
         that.category = tmpObj.category;
@@ -226,7 +233,7 @@ PinsterApp.User = function() {
 
     },
 
-    getSearchData : function() {
+    getSmartRandomEvent : function() {
 
       var currentUserId = Parse.User.current().get("userId");
 
