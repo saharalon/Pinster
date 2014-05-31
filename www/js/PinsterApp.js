@@ -63,7 +63,7 @@ var PinsterApp = {
       that.fields.user = new that.User();
       that.fields.user.settings.init();
 
-    },  // END of onDeviceReady()
+    },  // END of onDocumentReady()
 
     // Update DOM on a Received Event
     receivedEvent : function (id) {
@@ -619,7 +619,7 @@ var PinsterApp = {
                var foursquareInterval =  setInterval(function()
                 {
                   $("#fourSquareBar").html(""); 
-                  $("#fourSquareBar").html(foursquareBarStrArr[k]); 
+                  $("#fourSquareBar").html(foursquareBarStrArr[k]);
                   k++;
 
                   if(k == foursquareBarStrArr.length)
