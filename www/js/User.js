@@ -70,7 +70,7 @@ PinsterApp.User = function() {
           placesObjects.forEach(function(item){
             image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
             if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
-            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "<img class='eventResRowPin' src='img/" + image + "' /></div>");
+            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
             // resultsStr += item.attributes.title + " | ";
           });
           $(".eventResRow").click(function() {

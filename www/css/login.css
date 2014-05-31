@@ -306,10 +306,33 @@ html, body {
 }
 
 .eventResRow { 
-	height: 8%;
+	height: 46px;
+	width: 100%;
+	font-size: 1.3em;
+	line-height: 1.9em;
 	cursor: pointer;
 }
 
+.eventResRow span {
+	width: 93%;
+	height: 46px;
+	position: absolute;
+	left: 0px;
+	text-align: left;
+	text-overflow: ellipsis; 
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.eventResRow span .glyphicon-chevron-right {
+	margin-left: 10px;
+	margin-right: 10px;
+	color: rgb(21, 177, 238);
+	font-size: 0.8em;
+}
+
 .eventResRowPin {
-	height: 7%;
+	height: 8%;
+	right: 10px;
+	position: absolute;
 }
