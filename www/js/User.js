@@ -102,6 +102,18 @@ PinsterApp.User = function() {
     currentUser.logOut();
   };
 
+  obj.isUserLoggedIn = function()
+  {
+    //Am I logged in already?
+    currentUser = Parse.User.current();
+    if(currentUser) {
+      console.log("logged in");
+    }
+    else {
+      console.log("not logged in")
+    }
+  };
+
 
   //------------
   // Settings

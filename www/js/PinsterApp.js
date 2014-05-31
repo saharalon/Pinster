@@ -67,6 +67,7 @@ var PinsterApp = {
 
     // Update DOM on a Received Event
     receivedEvent : function (id) {
+
       var parentElement = document.getElementById(id);
       var listeningElement = parentElement.querySelector('.listening');
       var receivedElement = parentElement.querySelector('.received');
@@ -75,6 +76,7 @@ var PinsterApp = {
       receivedElement.setAttribute('style', 'display:block;');
 
       console.log('Received Event: ' + id);
+
     },
 
     registerEvents : function() {
@@ -135,24 +137,31 @@ var PinsterApp = {
 
       });
 
-      //click -publish events - TODO: create the UI element
       $('#reportBtnModal').click(function() {
 
-          //get current location of the device
+        if (PinsterApp.fields.user.isUserLoggedIn())
+        {
           //TODO: get the precise location of the device, NOT raw location
-         navigator.geolocation.getCurrentPosition(
-          that.onCurrentLocationSuccess, that.onCurrentLocationError,  PinsterApp.CONSTANTS.GPS_SETTINGS);
+          navigator.geolocation.getCurrentPosition(
+            that.onCurrentLocationSuccess, that.onCurrentLocationError,
+              PinsterApp.CONSTANTS.GPS_SETTINGS);
+        }
+        else 
+        {
+          if (isPhone)
+            window.plugins.toast.show("You need to be logged in order to report an event");
+          else
+            alert("You need to be logged in order to report an event");
+        }
 
       });
 
       $('#takeMeThereBtn').click(function() {
 
-        if (isPhone)
-        { 
+        if (isPhone) { 
           calcRoute(PinsterApp.currentPosition);
         }
-        else
-        {
+        else {
           navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError, PinsterApp.CONSTANTS.GPS_SETTINGS);
         }
@@ -213,8 +222,7 @@ var PinsterApp = {
       geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
         var eventAddress = "";
 
-        if (status == google.maps.GeocoderStatus.OK)
-        {
+        if (status == google.maps.GeocoderStatus.OK) {
           eventAddress = results[0].formatted_address;
         }
 
@@ -230,15 +238,18 @@ var PinsterApp = {
         new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         
       PinsterApp.calcRoute(currentLocation);
+
     },
 
     // Error Callback receives a PositionError object
     onCurrentLocationError : function(error) {
+
       alert('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
     },
 
     hideEventModal : function() {
+
       console.log("hidden!");
       $("#eventModal").hide();
     },
@@ -294,12 +305,10 @@ var PinsterApp = {
 
       var that = this;
       
-      if (val < that.CONSTANTS.METERS)
-      {
+      if (val < that.CONSTANTS.METERS) {
         document.querySelector('#output').value = "Radius is: " + val + " Meters";
       }
-      else
-      {
+      else {
         document.querySelector('#output').value = "Radius is: " + val / that.CONSTANTS.METERS + " Kilometers";
       }
 
@@ -449,8 +458,7 @@ var PinsterApp = {
                   $("#eventModalLabel").text(userEvent.title);
                   $("#eventDesc").text(userEvent.description);
 
-                  if (userEvent.imageURL)
-                  {
+                  if (userEvent.imageURL) {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
 
@@ -498,6 +506,8 @@ var PinsterApp = {
           google.maps.event.addListenerOnce(map, 'idle', function(){
                 //loaded fully
                 console.log("Map loaded...");
+                // Filter pins by user last choosen category
+                PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
                 // navigator.splashscreen.hide();
           });
 
@@ -512,12 +522,10 @@ var PinsterApp = {
 
         for (var i = 0; i < PinsterApp.fields.markers.length; i++) {
 
-          if (filter != "all" && PinsterApp.fields.markers[i].category.toLowerCase() != filter)  
-          {
+          if (filter != "all" && PinsterApp.fields.markers[i].category.toLowerCase() != filter) {
             PinsterApp.fields.markers[i].setVisible(false);
           }
-          else
-          {
+          else {
             PinsterApp.fields.markers[i].setVisible(true);
           }
         }
@@ -635,9 +643,9 @@ var PinsterApp = {
 
         getFoursquareTips : function(venueID)
         {
-           var venueTips = [];
+            var venueTips = [];
        
-         $.ajax({
+            $.ajax({
 
               url: 'https://api.foursquare.com/v2/venues/'+ venueID +'/tips?sort=popular&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",

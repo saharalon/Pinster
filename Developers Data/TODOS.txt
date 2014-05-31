@@ -11,6 +11,10 @@
 
 6) Collect search data on users
 
-7) Random user matching event
+7) Random smart user event recommendation
 
 8) Users login
+
+9) Rating system for users and events
+
+10) Indication of what events category is the user seeing currently
