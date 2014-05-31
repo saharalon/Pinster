@@ -81,8 +81,7 @@ PinsterApp.User = function() {
             var lat = $(this).attr("lat");
             var lon = $(this).attr("long");
 
-            PinsterApp.fields.mapInstance.setCenter(
-              new google.maps.LatLng(lat, lon));
+            PinsterApp.fields.mapInstance.setCenter(new google.maps.LatLng(lat, lon));
             google.maps.event.trigger(PinsterApp.fields.eventsHasMap[$(this).attr("eventId")], 'click');
           });
 
