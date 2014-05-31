@@ -320,16 +320,17 @@ var PinsterApp = {
 
       switch (category.toLowerCase())
       {
-        case 'shopping':
-          return path + 'pin1.png';
         case 'sport':
-          return path + 'pin2.png';
+          return path + 'sportsPin.png';
+
         case 'parties':
-          return path + 'pin3.png';
-        case 'other':
-          return path + 'pin4.png';
+          return path + 'partiesPin.png';
+
+        case 'hazards':
+          return path + 'hazardsPin.png';
+
         default:
-          return path + 'pin5.png';
+          return path + 'pin6.png';
       }
 
     },
