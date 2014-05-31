@@ -15,7 +15,7 @@ PinsterApp.User = function() {
        address:address, category:category, imageURL:""}, {
         success:function(object) 
         {
-          if(img != null)
+          if (img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
             
@@ -49,6 +49,8 @@ PinsterApp.User = function() {
 
   obj.searchEvents = function (address, radius)
   {
+    var searchCategory = $("#dropdownMenu1").text();
+
     var events = Parse.Object.extend("Event");
     //set query for events objectr
     var query = new Parse.Query(events);
@@ -60,12 +62,15 @@ PinsterApp.User = function() {
    
     query.find({
         success: function(placesObjects) {
+          var image;
           console.log(placesObjects);
           // var resultsStr = "";
           $("#eventsResults").html('');
           $(".eventResRow").unbind();
           placesObjects.forEach(function(item){
-            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "</div>");
+            image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
+            if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
+            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "<img class='eventResRowPin' src='img/" + image + "' /></div>");
             // resultsStr += item.attributes.title + " | ";
           });
           $(".eventResRow").click(function() {
@@ -73,6 +78,10 @@ PinsterApp.User = function() {
           });
           $("#eventsResults").show();
           // alert(resultsStr);
+
+          if (isUserLoggedIn()) {
+            searchData.addSearchData(address, searchCategory);
+          }
         }
       });
   };
@@ -104,9 +113,9 @@ PinsterApp.User = function() {
 
   obj.isUserLoggedIn = function()
   {
-    //Am I logged in already?
     currentUser = Parse.User.current();
-    if(currentUser) {
+
+    if (currentUser) {
       console.log("logged in");
     }
     else {
@@ -121,9 +130,15 @@ PinsterApp.User = function() {
 
   obj.settings = {
 
+    language: "עברית",
     address: "",
     category: "",
     radius: 1000,
+
+    setLanguage : function (language) {
+      this.language = language;
+      localStorage.setItem("pinsterSettings", JSON.stringify(this));
+    },    
 
     setAddress : function (address) {
       this.address = address;
@@ -146,11 +161,13 @@ PinsterApp.User = function() {
 
       if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
         localStorage.setItem("pinsterSettings", JSON.stringify({
+          language: "עברית", 
           address: "",
           category: "",
           radius: 1000
         }));
 
+        $("#languageDropdownMenu").html('עברית<span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
         $("#dropdownMenu1").html('Favorite Category<span class="caret caretRight"></span>');
         $('#radiusSlider').val(1000);
@@ -158,14 +175,67 @@ PinsterApp.User = function() {
       }
       else {
         var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
+        that.language = tmpObj.language; 
         that.address = tmpObj.address;
         that.category = tmpObj.category;
         that.radius = tmpObj.radius;
+
+        $("#languageDropdownMenu").html(that.language + '<span class="caret caretRight"></span>');
         $("#settingsModal #address").val(that.address);
         $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
         $('#radiusSlider').val(that.radius);
         PinsterApp.sliderOutputUpdate(that.radius);
       }
+    }
+
+  };
+
+  //-------------
+  // Search Data
+  //-------------
+
+  obj.searchData = {
+
+    addSearchData : function(location, category) {
+
+      var currentUserId = Parse.User.current().get("userId");
+      
+      var SearchDataObject = Parse.Object.extend("SearchData");
+      var searchDataObject = new SearchDataObject();
+
+      searchDataObject.save({userId:currentUserId, location:location, category:category}, {
+        
+        success:function(object) {
+          console.log("Search data saved");
+        },
+        error:function(object,error) {
+          console.log(error);
+          alert("Sorry, I couldn't save it.");
+        }
+
+      });
+
+    },
+
+    getSearchData : function() {
+
+      var currentUserId = Parse.User.current().get("userId");
+
+      // Retreive search data from the databas
+      var Searches = Parse.Object.extend("SearchData");
+      var query = new Parse.Query(Searches);
+      query.equalTo("userId", currentUserId);
+
+      query.find({
+        success: function(results) {
+          // Do something with the results
+        },
+        error:function(object,error) {
+          console.log(error);
+          alert("Sorry, I couldn't save it.");
+        }
+      });
+
     }
 
   };

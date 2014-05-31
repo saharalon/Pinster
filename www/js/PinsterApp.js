@@ -22,6 +22,13 @@ var PinsterApp = {
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
       GPS_SETTINGS :  {enableHighAccuracy: true, maximumAge:3000, timeout: 8000},
+      pinImgs : {
+        "Shopping" : "shoppingPin.png",
+        "Parties" : "partiesPin.png",
+        "Hazards" : "hazardsPin.png",
+        "Sports" : "sportsPin.png",
+        "undefined" : "defaultPin.png"
+      }
     },
 
     initialize : function () {
@@ -62,6 +69,8 @@ var PinsterApp = {
 
       that.fields.user = new that.User();
       that.fields.user.settings.init();
+
+      that.setAppLanguage($("#languageDropdownMenu").text());
 
     },  // END of onDocumentReady()
 
@@ -115,7 +124,11 @@ var PinsterApp = {
         $("#reportModal").modal();
       });
 
-      $("#settingsModal .dropdown-menu li a").click(function(){
+      $("#settingsModal #languageDropdownMenu li a").click(function(){
+        $("#languageDropdownMenu").html($(this).text() + '<span class="caret caretRight"></span>');
+      });
+
+      $("#settingsModal #categoryDropdownMenu li a").click(function(){
         $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
       });
 
@@ -128,12 +141,15 @@ var PinsterApp = {
         var user = that.fields.user;
         var map = that.fields.map;
 
+        var language = $("#languageDropdownMenu").text();
         var category = $("#dropdownMenu1").text();
 
+        user.settings.setLanguage(language);
         user.settings.setAddress($("#settingsModal #address").val());
         user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
 
+        that.setAppLanguage($("#languageDropdownMenu").text());
         map.filterMarkers(category.toLowerCase());
 
       });
@@ -255,6 +271,35 @@ var PinsterApp = {
       $("#eventModal").hide();
     },
 
+    setAppLanguage : function(language) {
+
+      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "הקלד כתובת...");
+      $("#takeMeThereBtn").text((language == "English") ? "Take me there" : "קח אותי לשם");
+      
+      // Login
+      $("#loginHeadline").text((language == "English") ? "Login" : "התחבר");
+      $("#pinUsername").attr("placeholder", (language == "English") ? "Username" : "שם משתמש");
+      $("#pinPassword").attr("placeholder", (language == "English") ? "Password" : "סיסמה");
+      $("#loginBtnModal").text((language == "English") ? "Login" : "התחבר");
+
+      // Settings
+      $("#settingsHedline").text((language == "English") ? "Settings" : "הגדרות");
+      //$("#languageDropdownMenu").text((language == "English") ? "Favourite Language" : "שפה מועדפת");
+      if ($("#address").attr("placeholder") == undefined)
+        $("#address").attr("placeholder", (language == "English") ? "Favourite Address" : "כתובת מועדפת");
+      //$("#dropdownMenu1").text((language == "English") ? "Favourite Category" : "קטגוריה מועדפת");
+      $("#settingsSaveBtn").text((language == "English") ? "Save" : "שמור");
+      
+      // Report
+      $("#reportHeadline").text((language == "English") ? "Report an event" : "דווח אירוע");
+      $("#addressDiv").text((language == "English") ? "Address:" : ":דווח");
+      $("#dropdownMenu2").text((language == "English") ? "Please select a category" : "אנא בחר קטגוריה");
+      $("#eventTitle").attr("placeholder", (language == "English") ? "Event title" : "כותרת האירוע");
+      $("#eventDescription").attr("placeholder", (language == "English") ? "Event description" : "תיאור האירוע");
+      $("#reportBtnModal").text((language == "English") ? "Report" : "דווח");
+
+    },
+
     searchEvents : function() {
 
       var that = this;
@@ -306,12 +351,17 @@ var PinsterApp = {
     sliderOutputUpdate : function(val) {
 
       var that = this;
+
+      var language = $("#languageDropdownMenu").text();
+      var text = (language == "English") ? "Radius is: " : "רדיוס: ";
+      var metersStr = (language == "English") ? " Meters" : " מטרים";
+      var kilometersStr = (language == "English") ? " Kilometers" : " קילומטרים";
       
       if (val < that.CONSTANTS.METERS) {
-        document.querySelector('#output').value = "Radius is: " + val + " Meters";
+        document.querySelector('#output').value = text + val + metersStr;
       }
       else {
-        document.querySelector('#output').value = "Radius is: " + val / that.CONSTANTS.METERS + " Kilometers";
+        document.querySelector('#output').value = text + val / that.CONSTANTS.METERS + kilometersStr;
       }
 
     },
@@ -322,16 +372,17 @@ var PinsterApp = {
 
       switch (category.toLowerCase())
       {
-        case 'shopping':
-          return path + 'pin1.png';
         case 'sport':
-          return path + 'pin2.png';
+          return path + 'sportsPin.png';
+
         case 'parties':
-          return path + 'pin3.png';
-        case 'other':
-          return path + 'pin4.png';
+          return path + 'partiesPin.png';
+
+        case 'hazards':
+          return path + 'hazardsPin.png';
+
         default:
-          return path + 'pin5.png';
+          return path + 'pin6.png';
       }
 
     },
@@ -491,7 +542,6 @@ var PinsterApp = {
         infowindow = new google.maps.InfoWindow();
         var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
 
-        var styleArray = [{"featureType":"administrative","stylers":[{"visibility":"off"}]},{"featureType":"poi","stylers":[{"visibility":"simplified"}]},{"featureType":"road","stylers":[{"visibility":"simplified"}]},{"featureType":"water","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","stylers":[{"visibility":"simplified"}]},{"featureType":"landscape","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"visibility":"off"}]},{"featureType":"road.local","stylers":[{"visibility":"on"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"visibility":"on"}]},{"featureType":"road.arterial","stylers":[{"visibility":"off"}]},{"featureType":"water","stylers":[{"color":"#5f94ff"},{"lightness":26},{"gamma":5.86}]},{},{"featureType":"road.highway","stylers":[{"weight":0.6},{"saturation":-85},{"lightness":61}]},{"featureType":"road"},{},{"featureType":"landscape","stylers":[{"hue":"#0066ff"},{"saturation":74},{"lightness":100}]}];
         var style = [ { "stylers": [ { "visibility": "simplified" } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#838080" } ] },{ "featureType": "administrative.province", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative.locality" },{ "featureType": "administrative.neighborhood", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative", "stylers": [ { "visibility": "on" } ] },{ "elementType": "labels.text.fill", "stylers": [ { "color": "#54b5da" } ] },{ "featureType": "water", "elementType": "geometry.fill", "stylers": [ { "color": "#c4e3ff" } ] },{ "featureType": "landscape.man_made", "stylers": [ { "color": "#ececef" }, { "saturation": 5 }, { "lightness": -4 } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#ff755c" } ] },{ "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#ffffff" } ] },{ "featureType": "landscape.natural.terrain", "elementType": "geometry.fill", "stylers": [ { "color": "#a0ccb5" }, { "visibility": "off" } ] },{ "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [ { "color": "#badfbb" }, { "visibility": "simplified" } ] },{ },{ "featureType": "landscape.natural.landcover", "elementType": "geometry", "stylers": [ { "color": "#f4f7f6" } ] },{ "featureType": "landscape.natural", "stylers": [ { "visibility": "simplified" }, { "color": "#f4f4f6" } ] },{ },{ "featureType": "road", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#8d8c8c" } ] },{ } ];
 
         var mapOptions = {
