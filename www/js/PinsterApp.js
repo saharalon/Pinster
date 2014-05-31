@@ -6,6 +6,7 @@ var PinsterApp = {
       eventsHasMap : {},
       user : {},
       map : {},
+      mapInstance : {},
       geocoder : {},
       directionsDisplay: {},
       directionsService: {},
@@ -285,6 +286,9 @@ var PinsterApp = {
       // Settings
       $("#settingsHedline").text((language == "English") ? "Settings" : "הגדרות");
 
+      if ($("#languageDropdownMenu").attr("placeholder") == undefined)
+        $("#languageDropdownMenu").attr("placeholder", (language == "English") ? "Select Language" : "בחר שפה");
+
       if ($("#address").attr("placeholder") == undefined)
         $("#address").attr("placeholder", (language == "English") ? "Favourite Address" : "כתובת מועדפת");
       
@@ -324,8 +328,10 @@ var PinsterApp = {
         //address is not valid - TODO visualize an alert to user
         else
         {
+          var language = $("#languageDropdownMenu").text();
+          var msg = (language == "English") ? "No results were found" : "לא נצאו תוצאות מתאימות";
           $("#eventsResults").html('');
-          $("#eventsResults").append("<div class='eventResRow'>No results were found... (" + status + ")</div>");
+          $("#eventsResults").append("<div class='eventResRow'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
         }
       });
@@ -445,8 +451,8 @@ var PinsterApp = {
       var that = this;
         
       this.initialize = function(){
-          var map = showMap();
-          loadMarkers(map);
+          PinsterApp.fields.mapInstance = showMap();
+          loadMarkers(PinsterApp.fields.mapInstance);
       };
       
       var loadMarkers = function(map)
