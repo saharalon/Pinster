@@ -2,6 +2,7 @@ var PinsterApp = {
 
     fields : {
 
+      currentLanguage : "עברית",
       markers : [],
       eventsHashMap : {},
       user : {},
@@ -145,6 +146,7 @@ var PinsterApp = {
         var language = $("#languageDropdownMenu").text();
         var category = $("#dropdownMenu1").text();
 
+        that.fields.currentLanguage = language;
         user.settings.setLanguage(language);
         user.settings.setAddress($("#settingsModal #address").val());
         user.settings.setCategory(category);
@@ -328,7 +330,7 @@ var PinsterApp = {
         //address is not valid - TODO visualize an alert to user
         else
         {
-          var language = $("#languageDropdownMenu").text();
+          var language = that.fields.currentLanguage;
           var msg = (language == "English") ? "No results were found" : "לא נצאו תוצאות מתאימות";
           $("#eventsResults").html('');
           $("#eventsResults").append("<div class='eventResRow'>" + msg + "... (" + status + ")</div>");
@@ -358,7 +360,7 @@ var PinsterApp = {
 
       var that = this;
 
-      var language = $("#languageDropdownMenu").text();
+      var language = that.fields.currentLanguage;
       var text = (language == "English") ? "Radius is: " : "רדיוס: ";
       var metersStr = (language == "English") ? " Meters" : " מטרים";
       var kilometersStr = (language == "English") ? " Kilometers" : " קילומטרים";

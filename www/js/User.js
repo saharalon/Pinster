@@ -99,7 +99,6 @@ PinsterApp.User = function() {
             
             $("#eventsResults").show();
           }
-          // alert(resultsStr);
 
           /*if (this.isUserLoggedIn()) {
             searchData.addSearchData(address, searchCategory);
