@@ -77,16 +77,28 @@ PinsterApp.User = function() {
             $("#eventsResults").append("<div class='eventResRow' eventId='" + item.id + "' lat=" + item.attributes.location._latitude + " long=" + item.attributes.location._longitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
           });
 
-          $(".eventResRow").click(function() {
-            var lat = $(this).attr("lat");
-            var lon = $(this).attr("long");
+          if (placesObjects.length != 0) {
+            
+            $(".eventResRow").click(function() {
+              google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
+            });
 
-            PinsterApp.fields.mapInstance.setCenter(
-              new google.maps.LatLng(lat, lon));
-            google.maps.event.trigger(PinsterApp.fields.eventsHasMap[$(this).attr("eventId")], 'click');
-          });
+            $(".eventResRowPin").click(function(e) {
 
-          $("#eventsResults").show();
+              e.preventDefault();
+              e.stopPropagation();
+
+              var lat = $(this).parent().attr("lat");
+              var lon = $(this).parent().attr("long");
+
+              $("#eventsResults").hide();
+
+              PinsterApp.fields.mapInstance.setCenter(new google.maps.LatLng(lat, lon));
+              PinsterApp.fields.mapInstance.setZoom(18);
+            });
+            
+            $("#eventsResults").show();
+          }
           // alert(resultsStr);
 
           /*if (this.isUserLoggedIn()) {

@@ -53,6 +53,9 @@ html, body {
     text-align: center;
     width: 80%;
     border-radius: 15px;
+    min-height: 40px;
+    max-height: 400px;
+	overflow: auto;
 }
 
 #quickSearch {
@@ -294,13 +297,11 @@ html, body {
 	-webkit-transition: 0.7s;
 	display: block;
 	border-radius: 13px;
-	max-height: 500px;
 }
 
 #eventsResults {
 	display: none;
 	margin-top: 40px;
-	max-height: 100%;
 	transition: 0.7s;
 	-webkit-transition: 0.7s;
 }
@@ -332,7 +333,8 @@ html, body {
 }
 
 .eventResRowPin {
-	height: 8%;
+	height: 35px;
+	width: 25px;
 	right: 10px;
 	position: absolute;
 }

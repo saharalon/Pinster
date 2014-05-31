@@ -3,7 +3,7 @@ var PinsterApp = {
     fields : {
 
       markers : [],
-      eventsHasMap : {},
+      eventsHashMap : {},
       user : {},
       map : {},
       mapInstance : {},
@@ -216,7 +216,7 @@ var PinsterApp = {
       });
 
       // $(".eventResRow").click(function() {
-      //   google.maps.event.trigger(PinsterApp.fields.eventsHasMap[$(this).attr("eventId")], 'click');
+      //   google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
       // });
 
     },  // END of registerEvents()
@@ -487,7 +487,7 @@ var PinsterApp = {
                   //zIndex: events[i][3]
                 });
 
-                PinsterApp.fields.eventsHasMap[item.id] = marker;
+                PinsterApp.fields.eventsHashMap[item.id] = marker;
                 PinsterApp.fields.markers.push(marker);
 
                 // Show event title tooltip on mouse over
