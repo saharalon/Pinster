@@ -49,7 +49,7 @@ var PinsterApp = {
       document.addEventListener("searchbutton", that.searchEvents, false);
       document.addEventListener("backbutton", that.hideEventModal, false);
 
-      var options = { frequency: 3000 };
+      var options = { enableHighAccuracy: true, timeout: 1000, frequency: 3000 };
       watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
 
     },
@@ -69,6 +69,8 @@ var PinsterApp = {
 
       that.fields.user = new that.User();
       that.fields.user.settings.init();
+
+      that.setAppLanguage($("#languageDropdownMenu").text());
 
     },  // END of onDocumentReady()
 
@@ -115,13 +117,18 @@ var PinsterApp = {
 
       $(".settingsBtn").click(function(){
         $("#settingsModal").modal();
+
       });
 
       $(".reportBtn").click(function(){
         $("#reportModal").modal();
       });
 
-      $("#settingsModal .dropdown-menu li a").click(function(){
+      $("#settingsModal #languageDropdownMenu li a").click(function(){
+        $("#languageDropdownMenu").html($(this).text() + '<span class="caret caretRight"></span>');
+      });
+
+      $("#settingsModal #categoryDropdownMenu li a").click(function(){
         $("#dropdownMenu1").html($(this).text() + '<span class="caret caretRight"></span>');
       });
 
@@ -134,12 +141,15 @@ var PinsterApp = {
         var user = that.fields.user;
         var map = that.fields.map;
 
+        var language = $("#languageDropdownMenu").text();
         var category = $("#dropdownMenu1").text();
 
+        user.settings.setLanguage(language);
         user.settings.setAddress($("#settingsModal #address").val());
         user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
 
+        that.setAppLanguage($("#languageDropdownMenu").text());
         map.filterMarkers(category.toLowerCase());
 
       });
@@ -261,6 +271,35 @@ var PinsterApp = {
       $("#eventModal").hide();
     },
 
+    setAppLanguage : function(language) {
+
+      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "הקלד כתובת לחיפוש...");
+      $("#takeMeThereBtn").text((language == "English") ? "Take me there" : "קח אותי לשם");
+      
+      // Login
+      $("#loginHeadline").text((language == "English") ? "Login" : "התחבר");
+      $("#pinUsername").attr("placeholder", (language == "English") ? "Username" : "שם משתמש");
+      $("#pinPassword").attr("placeholder", (language == "English") ? "Password" : "סיסמה");
+      $("#loginBtnModal").text((language == "English") ? "Login" : "התחבר");
+
+      // Settings
+      $("#settingsHedline").text((language == "English") ? "Settings" : "הגדרות");
+
+      if ($("#address").attr("placeholder") == undefined)
+        $("#address").attr("placeholder", (language == "English") ? "Favourite Address" : "כתובת מועדפת");
+      
+      $("#settingsSaveBtn").text((language == "English") ? "Save" : "שמור");
+      
+      // Report
+      $("#reportHeadline").text((language == "English") ? "Report an event" : "דווח אירוע");
+      $("#addressDiv").text((language == "English") ? "Address:" : ":דווח");
+      $("#dropdownMenu2").text((language == "English") ? "Please select a category" : "אנא בחר קטגוריה");
+      $("#eventTitle").attr("placeholder", (language == "English") ? "Event title" : "כותרת האירוע");
+      $("#eventDescription").attr("placeholder", (language == "English") ? "Event description" : "תיאור האירוע");
+      $("#reportBtnModal").text((language == "English") ? "Report" : "דווח");
+
+    },
+
     searchEvents : function() {
 
       var that = this;
@@ -300,6 +339,7 @@ var PinsterApp = {
 
     onPositionError : function(error)
     {
+        alert("this App works great with GPS on, Please turn on GPS");
         console.log(error.code + "  " + error.message);
     },
 
@@ -311,12 +351,17 @@ var PinsterApp = {
     sliderOutputUpdate : function(val) {
 
       var that = this;
+
+      var language = $("#languageDropdownMenu").text();
+      var text = (language == "English") ? "Radius is: " : "רדיוס: ";
+      var metersStr = (language == "English") ? " Meters" : " מטרים";
+      var kilometersStr = (language == "English") ? " Kilometers" : " קילומטרים";
       
       if (val < that.CONSTANTS.METERS) {
-        document.querySelector('#output').value = "Radius is: " + val + " Meters";
+        document.querySelector('#output').value = text + val + metersStr;
       }
       else {
-        document.querySelector('#output').value = "Radius is: " + val / that.CONSTANTS.METERS + " Kilometers";
+        document.querySelector('#output').value = text + val / that.CONSTANTS.METERS + kilometersStr;
       }
 
     },

@@ -34,5 +34,6 @@ $(document).ready(function() {
     }
     
     PinsterApp.onDocumentReady();
+    
   
 });

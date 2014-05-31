@@ -23,7 +23,7 @@
         </button> -->
         
         <span id="searchBar">
-          <input id="quickSearch" type="text" class="form-control" placeholder="Enter an address..." /><i id="quickSearchBtn" class="glyphicon glyphicon-search"></i>
+          <input id="quickSearch" type="text" class="form-control" /><i id="quickSearchBtn" class="glyphicon glyphicon-search"></i>
           <div id="searchResultsContainer">
             <div id="eventsResults">
             </div>
@@ -56,7 +56,7 @@
                     </div>
 
                     <br>  
-                    <button id="takeMeThereBtn">Take me there</button>
+                    <button id="takeMeThereBtn"></button>
                 </div>
           </div>
         </div>
@@ -73,10 +73,10 @@
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
-                  <h1>Login</h1>
-                  <input id="pinUsername" type="text" class="form-control" placeholder="Username" autofocus>
-                  <input id="pinPassword" type="password" class="form-control" placeholder="Password">
-                  <a id="loginBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Login</a>
+                  <h1 id="loginHeadline"></h1>
+                  <input id="pinUsername" type="text" class="form-control" autofocus>
+                  <input id="pinPassword" type="password" class="form-control">
+                  <a id="loginBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#"></a>
               </div>
             </div>
             <!-- <div class="modal-footer">
@@ -100,15 +100,25 @@
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
-                  <h1>Settings</h1><br>
-                  <input id="address" type="text" class="form-control" placeholder="Favorite Address" autofocus>
+                  <h1 id="settingsHedline"></h1><br>
+
+                  <div class="dropdown">
+                    <button class="form-control dropdown-toggle" type="button" id="languageDropdownMenu" data-toggle="dropdown">
+                      <span class="caret caretRight"></span>
+                    </button>
+                    <ul class="dropdown-menu" id="languageDropdownMenu" role="menu" aria-labelledby="languageDropdownMenu" style="width: 100%">
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">עברית</a></li>
+                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">English</a></li>
+                    </ul>
+                  </div>
+
+                  <input id="address" type="text" class="form-control" autofocus>
 
                   <div class="dropdown">
                     <button class="form-control dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                      Favorite Category
                       <span class="caret caretRight"></span>
                     </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="width: 100%">
+                    <ul class="dropdown-menu" id="categoryDropdownMenu" role="menu" aria-labelledby="dropdownMenu1" style="width: 100%">
                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Shopping</a></li>
                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Parties</a></li>
@@ -127,7 +137,7 @@
                   <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" 
                     oninput="PinsterApp.sliderOutputUpdate(value)">
                   <output for=fader id="output"></output><br>
-                  <a id="settingsSaveBtn" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Save</a>
+                  <a id="settingsSaveBtn" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#"></a>
               </div>
             </div>
           </div>
@@ -150,12 +160,11 @@
             </div> -->
             <div class="modal-body">
               <div class="text-center form-signin">
-                  <h1>Report an event</h1><br>
-                  <div>Address: <span id="myLocationStr"></span></div>
+                  <h1 id="reportHeadline"></h1><br>
+                  <div id="addressDiv"><span id="myLocationStr"></span></div>
 
                   <div class="dropdown">
                     <button class="form-control dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown">
-                      Please select a category
                       <span class="caret caretRight"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu2" style="width: 100%">
@@ -172,13 +181,13 @@
                     </ul>
                   </div>
 
-                  <input id="eventTitle" type="text" class="form-control" placeholder="Event Title">
-                  <input id="eventDescription" type="text" class="form-control" placeholder="Event Description">
+                  <input id="eventTitle" type="text" class="form-control">
+                  <input id="eventDescription" type="text" class="form-control">
 
                   <br>
                     <div id="captureImage"><i class="glyphicon glyphicon-camera" style="font-size: 60px;"></i></div>
                   <br>
-                  <a id="reportBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#">Report</a>
+                  <a id="reportBtnModal" class="btn btn-lg btn-primary btn-block" data-dismiss="modal" href="#"></a>
               </div>
             </div>
           </div>
@@ -202,7 +211,43 @@
     <script type="text/javascript">
         PinsterApp.initialize();
     </script>
+ <div id="fb-root"></div> 
+    <script>
+       window.fbAsyncInit = function() {
+        Parse.FacebookUtils.init({
+           appId      : '1401154480155719',
+           channelUrl : 'http://pinster.parseapp.com/www/main.html',
+           cookie     : true, 
+           xfbml      : true
+        });
+  
 
+  Parse.FacebookUtils.logIn(null, {
+  success: function(user) {
+    if (!user.existed()) {
+      alert("User signed up and logged in through Facebook!");
+    } else {
+      alert("User logged in through Facebook!");
+    }
+  },
+  error: function(user, error) {
+    alert("User cancelled the Facebook login or did not fully authorize.");
+    console.log(user);
+    console.log(error);
+  }
+});
+
+      };
+
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "http://connect.facebook.net/es_LA/all.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+     </script>
     
   </body>
 </html>

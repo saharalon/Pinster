@@ -130,9 +130,15 @@ PinsterApp.User = function() {
 
   obj.settings = {
 
+    language: "עברית",
     address: "",
     category: "",
     radius: 1000,
+
+    setLanguage : function (language) {
+      this.language = language;
+      localStorage.setItem("pinsterSettings", JSON.stringify(this));
+    },    
 
     setAddress : function (address) {
       this.address = address;
@@ -155,11 +161,13 @@ PinsterApp.User = function() {
 
       if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
         localStorage.setItem("pinsterSettings", JSON.stringify({
+          language: "עברית", 
           address: "",
           category: "",
           radius: 1000
         }));
 
+        $("#languageDropdownMenu").html('עברית<span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
         $("#dropdownMenu1").html('Favorite Category<span class="caret caretRight"></span>');
         $('#radiusSlider').val(1000);
@@ -167,9 +175,12 @@ PinsterApp.User = function() {
       }
       else {
         var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
+        that.language = tmpObj.language; 
         that.address = tmpObj.address;
         that.category = tmpObj.category;
         that.radius = tmpObj.radius;
+
+        $("#languageDropdownMenu").html(that.language + '<span class="caret caretRight"></span>');
         $("#settingsModal #address").val(that.address);
         $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
         $('#radiusSlider').val(that.radius);
@@ -193,14 +204,15 @@ PinsterApp.User = function() {
       var searchDataObject = new SearchDataObject();
 
       searchDataObject.save({userId:currentUserId, location:location, category:category}, {
-        success:function(object) 
-        {
+        
+        success:function(object) {
           console.log("Search data saved");
         },
         error:function(object,error) {
           console.log(error);
           alert("Sorry, I couldn't save it.");
         }
+
       });
 
     },
@@ -209,7 +221,7 @@ PinsterApp.User = function() {
 
       var currentUserId = Parse.User.current().get("userId");
 
-      // Retreive data from the databas
+      // Retreive search data from the databas
       var Searches = Parse.Object.extend("SearchData");
       var query = new Parse.Query(Searches);
       query.equalTo("userId", currentUserId);
