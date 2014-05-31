@@ -71,7 +71,7 @@ PinsterApp.User = function() {
 
           var image;
           console.log(placesObjects);
-          // var resultsStr = "";
+
           $("#eventsResults").html('');
           $(".eventResRow").unbind();
 
@@ -103,8 +103,16 @@ PinsterApp.User = function() {
               PinsterApp.fields.mapInstance.setZoom(18);
             });
             
-            $("#eventsResults").show();
           }
+          else {
+            var language = PinsterApp.fields.currentLanguage;
+            var msg = (language == "English") ? "No results were found" : "לא נצאו תוצאות מתאימות";
+            $("#eventsResults").html('');
+            $("#eventsResults").append("<div class='eventResRow'>" + msg + "...</div>");
+          }
+
+          $("#eventsResults").show();
+
 
           /*if (this.isUserLoggedIn()) {
             searchData.addSearchData(address, searchCategory);
