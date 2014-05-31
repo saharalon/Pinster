@@ -22,6 +22,13 @@ var PinsterApp = {
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
       GPS_SETTINGS :  {enableHighAccuracy: true, maximumAge:3000, timeout: 8000},
+      pinImgs : {
+        "Shopping" : "shoppingPin.png",
+        "Parties" : "partiesPin.png",
+        "Hazards" : "hazardsPin.png",
+        "Sports" : "sportsPin.png",
+        "undefined" : "defaultPin.png"
+      }
     },
 
     initialize : function () {

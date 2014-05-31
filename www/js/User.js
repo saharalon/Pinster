@@ -60,12 +60,15 @@ PinsterApp.User = function() {
    
     query.find({
         success: function(placesObjects) {
+          var image;
           console.log(placesObjects);
           // var resultsStr = "";
           $("#eventsResults").html('');
           $(".eventResRow").unbind();
           placesObjects.forEach(function(item){
-            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "</div>");
+            image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
+            if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
+            $("#eventsResults").append("<div class='eventResRow' eventId=" + item.id + ">" + item.attributes.title + "<img class='eventResRowPin' src='img/" + image + "' /></div>");
             // resultsStr += item.attributes.title + " | ";
           });
           $(".eventResRow").click(function() {

@@ -309,3 +309,7 @@ html, body {
 	height: 8%;
 	cursor: pointer;
 }
+
+.eventResRowPin {
+	height: 7%;
+}
