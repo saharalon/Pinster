@@ -67,6 +67,7 @@ html, body {
 	right: 15px;
 	z-index: 1000;
 	top: 10px;
+	cursor:pointer;
 }
 
 .TopLeft, .TopRight, .BottomLeft, .BottomRight {
