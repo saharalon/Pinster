@@ -49,7 +49,8 @@ var PinsterApp = {
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
-      document.addEventListener("backbutton", that.hideEventModal, false);
+      document.addEventListener("backbutton", that.setOverrideBackbutton, false);
+      document.addEventListener("offline", that.offlineSignalEvent, false);
 
       var options = { enableHighAccuracy: true, timeout: 1000, frequency: 3000 };
       watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
@@ -270,8 +271,46 @@ var PinsterApp = {
 
     hideEventModal : function() {
 
-      console.log("hidden!");
-      $("#eventModal").hide();
+        alert("back button");
+       navigator.notification.confirm(
+          'Exit PETAN Mobile App?'
+        , function(button) {
+              if (button == 2) {
+                  navigator.app.exitApp();
+              } 
+          }
+        , 'Exit'
+        , 'No,Yes'
+    );  
+    
+    return false;
+      //console.log("hidden!");
+      //$("#eventModal").hide();
+    },
+
+
+    setOverrideBackbutton: function()
+    {
+        if (typeof device != "undefined" && device.platform == "Android")
+        {
+            navigator.app.overrideBackbutton(true);
+        }
+
+        document.addEventListener("backbutton", PinsterApp.hideEventModal, true);
+    },
+
+    /**
+ * Callback after a backbutton tap on Android and windows platforms.
+ * Do nothing.
+ */
+    backButtonTap: function ()
+    {
+      alert("hello");
+    },
+
+    offlineSignalEvent : function() {
+
+      alert("You are offline, FYI - this App needs Internet connectivity")
     },
 
     setAppLanguage : function(language) {
@@ -634,6 +673,7 @@ var PinsterApp = {
 
               url: 'https://api.foursquare.com/v2/venues/search?ll=' + lat + ',' + lng +'&intent=browse&radius=30&limit=3&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
+              cache: false,
               dataType: "json",
               async:true,
 
@@ -695,6 +735,7 @@ var PinsterApp = {
 
               url: 'https://api.foursquare.com/v2/venues/'+ venueID +'/tips?sort=popular&limit=5&client_id=' + PinsterApp.CONSTANTS.CLIENT_ID_foursquare + '&client_secret=' + PinsterApp.CONSTANTS.CLIENT_SECRET_foursquare + '&v=20140503',
               type: "GET",
+              cache: false,
               dataType: "json",
               async:false,
 
