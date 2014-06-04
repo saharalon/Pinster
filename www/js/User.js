@@ -205,7 +205,7 @@ PinsterApp.User = function() {
 
         $("#languageDropdownMenu").html('עברית<span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
-        $("#dropdownMenu1").html('Favorite Category<span class="caret caretRight"></span>');
+        $("#dropdownMenu1").html('All<span class="caret caretRight"></span>');
         $('#radiusSlider').val(1000);
         PinsterApp.sliderOutputUpdate(1000);
       }
