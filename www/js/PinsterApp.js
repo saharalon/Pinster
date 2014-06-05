@@ -162,7 +162,6 @@ var PinsterApp = {
 
         if (PinsterApp.fields.user.isUserLoggedIn())
         {
-          //TODO: get the precise location of the device, NOT raw location
           navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationSuccess, that.onCurrentLocationError,
               PinsterApp.CONSTANTS.GPS_SETTINGS);
@@ -491,9 +490,9 @@ var PinsterApp = {
         var currentTime = new Date();
         // Subtract one day from today's time to search
         // only events that had been updated at the last 24 hours
-        // currentTime.setDate(currentTime.getDate() - 1);
-        // var time = new Date(currentTime.getTime());
-        // query.greaterThanOrEqualTo('updatedAt', time);
+        currentTime.setDate(currentTime.getDate() - 1);
+        var time = new Date(currentTime.getTime());
+        query.greaterThanOrEqualTo('updatedAt', time);
 
         query.find({
             success: function(results) {
