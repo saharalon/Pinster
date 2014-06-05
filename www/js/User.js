@@ -170,18 +170,6 @@ PinsterApp.User = function() {
 
     return true;
 
-<<<<<<< HEAD
-=======
-    if (currentUser) {
-      console.log("logged in");
-    }
-    else {
-      console.log("not logged in");
-    }
->>>>>>> c1f003a1211ca3bffe76adc6c25e63f08c0d6ee4
-  };
-
-
   //------------
   // Settings
   //------------
