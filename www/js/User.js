@@ -66,11 +66,6 @@ PinsterApp.User = function() {
     query.limit(10);
     // Final list of objects
 
-    // collect user searches
-    var tmpObj = JSON.parse(localStorage.getItem("pinsterSearches"));
-    tmpObj.addresses.push(address);
-    localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
-   
     query.find({
         success: function(placesObjects) {
 
@@ -112,7 +107,7 @@ PinsterApp.User = function() {
           }
           else {
             var language = PinsterApp.fields.currentLanguage;
-            var msg = (language == "English") ? "No results were found" : "לא נצאו תוצאות מתאימות";
+            var msg = (language == "English") ? "No results were found" : "לא נמצאו תוצאות מתאימות";
             $("#eventsResults").html('');
             $("#eventsResults").append("<div class='eventResRow'>" + msg + "...</div>");
           }

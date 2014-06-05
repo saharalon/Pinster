@@ -354,6 +354,11 @@ var PinsterApp = {
       //get radius from radius ele, divide with 1000, to get KM
       var radius = $('#radiusSlider').val() / that.CONSTANTS.METERS;
 
+      // collect user searches
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterSearches"));
+      tmpObj.addresses.push(address);
+      localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
+
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)
       {
         //address is OK
@@ -486,9 +491,9 @@ var PinsterApp = {
         var currentTime = new Date();
         // Subtract one day from today's time to search
         // only events that had been updated at the last 24 hours
-        currentTime.setDate(currentTime.getDate() - 1);
-        var time = new Date(currentTime.getTime()); 
-        query.greaterThanOrEqualTo('updatedAt', time); 
+        // currentTime.setDate(currentTime.getDate() - 1);
+        // var time = new Date(currentTime.getTime());
+        // query.greaterThanOrEqualTo('updatedAt', time);
 
         query.find({
             success: function(results) {
