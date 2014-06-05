@@ -149,14 +149,22 @@ PinsterApp.User = function() {
 
   obj.isUserLoggedIn = function()
   {
-    currentUser = Parse.User.current();
+   //  FB.getLoginStatus(function(response)
+   //  {
+   //     if (response.status === 'connected') 
+   //     {  
+   //        return true;
+   //     }
 
-    if (currentUser) {
-      console.log("logged in");
-    }
-    else {
-      console.log("not logged in")
-    }
+   //     else 
+   //      {
+   //        return false;
+   //      }
+
+   // });
+
+    return true;
+
   };
 
 

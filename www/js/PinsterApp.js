@@ -162,7 +162,6 @@ var PinsterApp = {
 
         if (PinsterApp.fields.user.isUserLoggedIn())
         {
-          //TODO: get the precise location of the device, NOT raw location
           navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationSuccess, that.onCurrentLocationError,
               PinsterApp.CONSTANTS.GPS_SETTINGS);
