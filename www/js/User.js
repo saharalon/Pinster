@@ -60,11 +60,16 @@ PinsterApp.User = function() {
     // Subtract one day from today's time to search
     // only events that had been updated at the last 24 hours
     currentTime.setDate(currentTime.getDate() - 1);
-    var time = new Date(currentTime.getTime()); 
-    query.greaterThanOrEqualTo('updatedAt', time); 
+    var time = new Date(currentTime.getTime());
+    query.greaterThanOrEqualTo('updatedAt', time);
     // Limit what could be a lot of points.
     query.limit(10);
     // Final list of objects
+
+    // collect user searches
+    var tmpObj = JSON.parse(localStorage.getItem("pinsterSearches"));
+    tmpObj.addresses.push(address);
+    localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
    
     query.find({
         success: function(placesObjects) {
@@ -155,7 +160,7 @@ PinsterApp.User = function() {
       console.log("logged in");
     }
     else {
-      console.log("not logged in")
+      console.log("not logged in");
     }
   };
 
@@ -174,7 +179,7 @@ PinsterApp.User = function() {
     setLanguage : function (language) {
       this.language = language;
       localStorage.setItem("pinsterSettings", JSON.stringify(this));
-    },    
+    },
 
     setAddress : function (address) {
       this.address = address;
@@ -195,9 +200,16 @@ PinsterApp.User = function() {
 
       var that = this;
 
+      if (!localStorage.pinsterSearches || localStorage.pinsterSearches == 'undefined') {
+        localStorage.setItem("pinsterSearches", JSON.stringify({
+          eventsCategory: [],
+          addresses: [],
+        }));
+      }
+
       if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
         localStorage.setItem("pinsterSettings", JSON.stringify({
-          language: "עברית", 
+          language: "עברית",
           address: "",
           category: "",
           radius: 1000
@@ -212,7 +224,7 @@ PinsterApp.User = function() {
       else {
         var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
         PinsterApp.fields.currentLanguage = tmpObj.language;
-        that.language = tmpObj.language; 
+        that.language = tmpObj.language;
         that.address = tmpObj.address;
         that.category = tmpObj.category;
         that.radius = tmpObj.radius;

@@ -370,7 +370,7 @@ var PinsterApp = {
         else
         {
           var language = that.fields.currentLanguage;
-          var msg = (language == "English") ? "No results were found" : "לא נצאו תוצאות מתאימות";
+          var msg = (language == "English") ? "No results were found" : "לא נמצאו תוצאות מתאימות";
           $("#eventsResults").html('');
           $("#eventsResults").append("<div class='eventResRow'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
@@ -540,6 +540,11 @@ var PinsterApp = {
                   // in case the user will want to drive there
                   PinsterApp.destination = new google.maps.LatLng(
                     userEvent.location.latitude, userEvent.location.longitude);
+
+                  // collect user searches
+                  var tmpObj = JSON.parse(localStorage.getItem("pinsterSearches"));
+                  tmpObj.eventsCategory.push(userEvent.category);
+                  localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
 
                   $("#eventModalLabel").text(userEvent.title);
                   $("#eventDesc").text(userEvent.description);
