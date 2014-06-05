@@ -165,6 +165,7 @@ PinsterApp.User = function() {
 
     return true;
 
+  }
   //------------
   // Settings
   //------------
