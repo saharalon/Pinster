@@ -193,14 +193,12 @@ var PinsterApp = {
 
         that.closeEventModal();
 
-        // show spinner
-
-        /*navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationForHyperlapseSuccess, that.onCurrentLocationError,
-              PinsterApp.CONSTANTS.GPS_SETTINGS);*/
+              PinsterApp.CONSTANTS.GPS_SETTINGS);
 
         // For debuging on local host
-        that.showHyperlapse(new google.maps.LatLng(31.911441999999994,34.8078167), PinsterApp.destination);
+        //that.showHyperlapse(new google.maps.LatLng(31.911441999999994,34.8078167), PinsterApp.destination);
       
       });
 
@@ -759,8 +757,6 @@ var PinsterApp = {
             var foursquareBarStrArr = [];
             var foursquareFields = [];
             var foursquareField = {};
-
-            $("#fourSquareBar").text("Loading comments...");
 
             $(".fsq-content").html("<h4>Loading comments...</h4>");
           
