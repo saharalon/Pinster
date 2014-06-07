@@ -8,6 +8,7 @@ var PinsterApp = {
       user : {},
       map : {},
       mapInstance : {},
+      searchArea : {},
       geocoder : {},
       directionsDisplay: {},
       directionsService: {},

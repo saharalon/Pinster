@@ -50,6 +50,28 @@ PinsterApp.User = function() {
 
   obj.searchEvents = function (address, radius)
   {
+    // Remove previous search area
+    if (PinsterApp.fields.searchArea.setMap != undefined)
+      PinsterApp.fields.searchArea.setMap(null);
+
+    // Show a circle as the search area
+    PinsterApp.fields.searchArea = new google.maps.Circle({
+      center:new google.maps.LatLng(address._latitude, address._longitude),
+      radius: (radius < 1000) ? radius * 1000 : radius,
+      strokeColor:"#0000FF",
+      strokeOpacity:0.8,
+      strokeWeight:2,
+      fillColor:"#0000FF",
+      fillOpacity:0.4
+    });
+
+    PinsterApp.fields.searchArea.setMap(PinsterApp.fields.mapInstance);
+
+    // Remove circle on mouse click
+    google.maps.event.addListener(PinsterApp.fields.searchArea, 'click', function(ev){
+      PinsterApp.fields.searchArea.setMap(null);            
+    });
+
     var searchCategory = $("#dropdownMenu1").text();
 
     var events = Parse.Object.extend("Event");
@@ -72,7 +94,7 @@ PinsterApp.User = function() {
 
           var image;
           console.log(placesObjects);
-
+          
           $("#eventsResults").html('');
           $(".eventResRow").unbind();
 
