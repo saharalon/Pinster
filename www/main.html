@@ -13,9 +13,7 @@
   </head>
   <body>
 
-    <div id="pano"></div>
     <div class="container fill">
-
 
       <!-- google map -->
       <div id="mapWrapper">
@@ -23,6 +21,12 @@
         <!-- <button id="loginBtn" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">
           Login
         </button> -->
+        <!-- Hyperlapse Modal -->
+        <div id="hyperlapseModal"></div>
+
+        <div id="hyperlapseSpinner" class="spinner">
+          <img id="spinnerImage" src="img/spinner.gif"/> 
+        </div>
         
         <span id="searchBar">
           <input id="quickSearch" type="text" class="form-control" /><i id="quickSearchBtn" class="glyphicon glyphicon-search"></i>
@@ -59,6 +63,7 @@
                     </div>
 
                     <button id="takeMeThereBtn"></button>
+                    <button id="hyperlapseBtn"></button>
                 </div>
           </div>
         </div>

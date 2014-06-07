@@ -76,8 +76,6 @@ var PinsterApp = {
 
       that.setAppLanguage(that.fields.currentLanguage);
 
-      that.showHyperlapse();
-
     },  // END of onDocumentReady()
 
     // Update DOM on a Received Event
@@ -186,8 +184,24 @@ var PinsterApp = {
         }
         else {
           navigator.geolocation.getCurrentPosition(
-            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError, PinsterApp.CONSTANTS.GPS_SETTINGS);
+            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError,
+              PinsterApp.CONSTANTS.GPS_SETTINGS);
         }
+      });
+
+      $('#hyperlapseBtn').click(function() {
+
+        that.closeEventModal();
+
+        // show spinner
+
+        /*navigator.geolocation.getCurrentPosition(
+            that.onCurrentLocationForHyperlapseSuccess, that.onCurrentLocationError,
+              PinsterApp.CONSTANTS.GPS_SETTINGS);*/
+
+        // For debuging on local host
+        that.showHyperlapse(new google.maps.LatLng(31.911441999999994,34.8078167), PinsterApp.destination);
+      
       });
 
       //Enter key - search events
@@ -216,10 +230,7 @@ var PinsterApp = {
       });
 
       $("#eventModalClose").click(function(){
-        $("#eventModal").hide();
-        $("#eventImg").attr("src","img/no-image.png");
-        // Make sure the foursquare display interval is cleared
-        clearInterval(PinsterApp.fields.foursquareInterval);
+        that.closeEventModal();
       });
 
       // $(".eventResRow").click(function() {
@@ -227,6 +238,15 @@ var PinsterApp = {
       // });
 
     },  // END of registerEvents()
+
+    closeEventModal : function() {
+
+      $("#eventModal").hide();
+      $("#eventImg").attr("src","img/no-image.png");
+      // Make sure the foursquare display interval is cleared
+      clearInterval(PinsterApp.fields.foursquareInterval);
+
+    },
 
     // Success Geolocation
     onCurrentLocationSuccess : function (position) {
@@ -263,6 +283,15 @@ var PinsterApp = {
         new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         
       PinsterApp.calcRoute(currentLocation);
+
+    },
+
+    onCurrentLocationForHyperlapseSuccess : function(position) {
+
+      var currentLocation = 
+        new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        
+      that.showHyperlapse(currentLocation, PinsterApp.destination);
 
     },
 
@@ -319,8 +348,9 @@ var PinsterApp = {
 
     setAppLanguage : function(language) {
 
-      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "הקלד כתובת לחיפוש...");
+      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "...הקלד כתובת לחיפוש");
       $("#takeMeThereBtn").text((language == "English") ? "Take me there" : "קח אותי לשם");
+      $("#hyperlapseBtn").text((language == "English") ? "Simulate" : "סימולציה");
       
       // Login
       $("#loginHeadline").text((language == "English") ? "Login" : "התחבר");
@@ -475,12 +505,12 @@ var PinsterApp = {
       });
     },
 
-    showHyperlapse : function() {
+    showHyperlapse : function(origin, destination) {
 
-      var hyperlapse = new Hyperlapse(document.getElementById('pano'), {
-        lookat: new google.maps.LatLng(37.81409525128964,-122.4775045005249),
+      var hyperlapse = new Hyperlapse(document.getElementById('hyperlapseModal'), {
+        //lookat: new google.maps.LatLng(32.0898263, 34.8028122),
         zoom: 1,
-        use_lookat: true,
+        use_lookat: false,
         elevation: 50
       });
 
@@ -489,10 +519,16 @@ var PinsterApp = {
       };
 
       hyperlapse.onRouteComplete = function(e) {
+        $("#hyperlapseModal").show();
         hyperlapse.load();
       };
 
+      hyperlapse.onRouteProgress = function(e) {
+        $("#hyperlapseSpinner").show();
+      };
+
       hyperlapse.onLoadComplete = function(e) {
+        $("#hyperlapseSpinner").hide();
         hyperlapse.play();
       };
 
@@ -501,8 +537,8 @@ var PinsterApp = {
 
       var route = {
         request:{
-          origin: new google.maps.LatLng(37.816480000000006,-122.47825,37),
-          destination: new google.maps.LatLng(37.81195,-122.47773000000001),
+          origin: origin,
+          destination: destination,
           travelMode: google.maps.DirectionsTravelMode.DRIVING
         }
       };
@@ -723,6 +759,9 @@ var PinsterApp = {
             var foursquareBarStrArr = [];
             var foursquareFields = [];
             var foursquareField = {};
+
+            $("#fourSquareBar").text("Loading comments...");
+
             $(".fsq-content").html("<h4>Loading comments...</h4>");
           
           $.ajax({
