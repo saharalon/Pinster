@@ -16,7 +16,8 @@ var PinsterApp = {
       watchID: null,
       currentPosition: {},
       dataImage: null,
-      foursquareInterval: {}
+      foursquareInterval: {},
+      currentWindow : "main"
     },
 
     CONSTANTS : {
@@ -36,8 +37,7 @@ var PinsterApp = {
 
     initialize : function () {
 
-      var that = this;
-      if (isPhone) { document.addEventListener('deviceready', that.onDeviceReady, false); }
+      document.addEventListener('deviceready', PinsterApp.onDeviceReady, false);
 
     },
 
@@ -45,16 +45,20 @@ var PinsterApp = {
 
     onDeviceReady : function() {
 
-      var that = this;
-      that.receivedEvent('deviceready');
+      console.log("deviceReady");
+      var that = PinsterApp;
+      // that.receivedEvent('deviceready');
+
+      //Android back key
+      document.addEventListener("backbutton", that.handleBackbutton, false);
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
-      document.addEventListener("backbutton", that.setOverrideBackbutton, false);
+      
       document.addEventListener("offline", that.offlineSignalEvent, false);
 
       var options = { enableHighAccuracy: true, timeout: 1000, frequency: 3000 };
-      watchID = navigator.geolocation.watchPosition(onPositionSuccess, onPositionError, options);
+      watchID = navigator.geolocation.watchPosition(that.onPositionSuccess, that.onPositionError, options);
 
     },
 
@@ -112,6 +116,7 @@ var PinsterApp = {
       $(".settingsBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
         $("#settingsModal").modal();
+        PinsterApp.fields.currentWindow = "settings";
       });
 
       $(".reportBtn").on("touchend", function(){
@@ -167,7 +172,7 @@ var PinsterApp = {
             that.onCurrentLocationSuccess, that.onCurrentLocationError,
               PinsterApp.CONSTANTS.GPS_SETTINGS);
         }
-        else 
+        else
         {
           if (isPhone)
             window.plugins.toast.show("You need to be logged in order to report an event");
@@ -246,6 +251,35 @@ var PinsterApp = {
 
     },
 
+    handleBackbutton : function() {
+
+      var that = PinsterApp;
+
+      if (that.fields.currentWindow == "main") {
+
+      }
+      else if (that.fields.currentWindow == "event") {
+
+      }
+      else if (that.fields.currentWindow == "reportEvent") {
+
+      }
+      else if (that.fields.currentWindow == "settings") {
+        that.fields.currentWindow = "main";
+        $("#settingsModal").modal('hide');
+      }
+      else if (that.fields.currentWindow == "eventsSearch") {
+
+      }
+      else if (that.fields.currentWindow == "simulation") {
+
+      }
+      else if (that.fields.currentWindow == "googleStreetView") {
+
+      }
+
+    },
+
     // Success Geolocation
     onCurrentLocationSuccess : function (position) {
 
@@ -253,7 +287,7 @@ var PinsterApp = {
       console.log(position.coords.heading);
       console.log(position.coords.longitude);
 
-      var currentLocation = 
+      var currentLocation =
         PinsterApp.convertToGeoPointObject(position.coords.latitude,position.coords.longitude);
 
       var title = $('#eventTitle').val();
@@ -262,7 +296,7 @@ var PinsterApp = {
 
       var geocoder = new google.maps.Geocoder();
       // Convert the event position to actual address
-      geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
+      geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {
       var eventAddress = "";
 
         if (status == google.maps.GeocoderStatus.OK) {
@@ -277,7 +311,7 @@ var PinsterApp = {
 
     onCurrentLocationForRouteSuccess : function(position) {
 
-      var currentLocation = 
+      var currentLocation =
         new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         
       PinsterApp.calcRoute(currentLocation);
@@ -286,7 +320,7 @@ var PinsterApp = {
 
     onCurrentLocationForHyperlapseSuccess : function(position) {
 
-      var currentLocation = 
+      var currentLocation =
         new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         
       that.showHyperlapse(currentLocation, PinsterApp.destination);
@@ -300,48 +334,9 @@ var PinsterApp = {
             'message: ' + error.message + '\n');
     },
 
-    hideEventModal : function() {
-
-        alert("back button");
-       navigator.notification.confirm(
-          'Exit PETAN Mobile App?'
-        , function(button) {
-              if (button == 2) {
-                  navigator.app.exitApp();
-              } 
-          }
-        , 'Exit'
-        , 'No,Yes'
-    );  
-    
-    return false;
-      //console.log("hidden!");
-      //$("#eventModal").hide();
-    },
-
-
-    setOverrideBackbutton: function()
-    {
-        if (typeof device != "undefined" && device.platform == "Android")
-        {
-            navigator.app.overrideBackbutton(true);
-        }
-
-        document.addEventListener("backbutton", PinsterApp.hideEventModal, true);
-    },
-
-    /**
- * Callback after a backbutton tap on Android and windows platforms.
- * Do nothing.
- */
-    backButtonTap: function ()
-    {
-      alert("hello");
-    },
-
     offlineSignalEvent : function() {
 
-      alert("You are offline, FYI - this App needs Internet connectivity")
+      alert("You are offline, FYI - this App needs Internet connectivity");
     },
 
     setAppLanguage : function(language) {
@@ -758,7 +753,7 @@ var PinsterApp = {
             var foursquareFields = [];
             var foursquareField = {};
 
-            $(".fsq-content").html("<h4>Loading comments...</h4>");
+            $(".fsq-content").html("<h4>Searching for comments...</h4>");
           
           $.ajax({
 

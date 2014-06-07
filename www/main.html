@@ -10,8 +10,11 @@
         
     <title>Pinster</title>
 
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/PinsterApp.js"></script>
+
   </head>
-  <body>
+  <body onload="PinsterApp.initialize()">
 
     <div class="container fill">
 
@@ -209,7 +212,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHRo-eztcykGmOp_-WCbQryG9Ao1kR1rI&sensor=false&language=he"></script>
     <script src="js/lib/jquery-1.11.0.min.js"></script>
     <script src="js/lib/bootstrap.js"></script>
-    <script type="text/javascript" src="phonegap.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.18.min.js"></script>
     <script type="application/javascript" src="js/lib/fastclick.js"></script>
 
@@ -217,12 +219,9 @@
     <script src="js/lib/GSVPano.js"></script>
     <script src="js/lib/Hyperlapse.js"></script>  
 
-    <script type="text/javascript" src="js/PinsterApp.js"></script>
     <script type="text/javascript" src="js/User.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript">
-        PinsterApp.initialize();
-    </script>
+
  <div id="fb-root"></div> 
     <script>
        window.fbAsyncInit = function() {
