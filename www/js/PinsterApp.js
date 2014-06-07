@@ -48,6 +48,18 @@ var PinsterApp = {
       var that = this;
       that.receivedEvent('deviceready');
 
+      var fbLoginSuccess = function (userData) {
+         alert("UserInfo: " + JSON.stringify(userData));
+    }
+
+     if (isPhone)
+     {
+        facebookConnectPlugin.login(["basic_info"],
+            fbLoginSuccess,
+            function (error) { alert("" + error) }
+        );
+      }
+
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
       document.addEventListener("backbutton", that.setOverrideBackbutton, false);
