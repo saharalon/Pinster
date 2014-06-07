@@ -387,6 +387,9 @@ var PinsterApp = {
       $("#eventDescription").attr("placeholder", (language == "English") ? "Event description" : "תיאור האירוע");
       $("#reportBtnModal").text((language == "English") ? "Report" : "דווח");
 
+      // Trigger the slider text change
+      PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
+
     },
 
     searchEvents : function() {
