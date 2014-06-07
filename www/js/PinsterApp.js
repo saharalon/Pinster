@@ -723,7 +723,7 @@ var PinsterApp = {
             var foursquareBarStrArr = [];
             var foursquareFields = [];
             var foursquareField = {};
-            $("#fourSquareBar").text("");
+            $(".fsq-content").html("<h4>Loading comments...</h4>");
           
           $.ajax({
 
@@ -739,7 +739,7 @@ var PinsterApp = {
                  var venues = json.response.venues;
           
                 for(var i = 0; i < venues.length; i++)
-                {  
+                {
                      foursquareField = {};
                      foursquareField.venueID = venues[i].id;
                      foursquareField.name = venues[i].name;
@@ -750,18 +750,18 @@ var PinsterApp = {
                 console.log(foursquareFields);
                 //add to UI ele
 
-               foursquareFields.forEach(function(item){              
+               foursquareFields.forEach(function(item){
 
                    item.tips.forEach(function(tip, index){
-                      foursquareBarStrArr.push("<b> " + item.name + " :</b> " + tip + "");                      
+                      foursquareBarStrArr.push("<b> " + item.name + " :</b> " + tip + "");
                    });
                });
 
-                var k = 0;
+               var k = 0;
                PinsterApp.fields.foursquareInterval = setInterval(function()
                 {
-                  $("#fourSquareBar").html(""); 
-                  $("#fourSquareBar").html(foursquareBarStrArr[k]);
+                  $(".fsq-content").html("");
+                  $(".fsq-content").html(foursquareBarStrArr[k]);
                   k++;
 
                   if(k == foursquareBarStrArr.length)
