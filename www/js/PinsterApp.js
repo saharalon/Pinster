@@ -15,7 +15,8 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      dataImage: null
+      dataImage: null,
+      foursquareInterval: {}
     },
 
     CONSTANTS : {
@@ -74,6 +75,8 @@ var PinsterApp = {
       that.fields.user.settings.init();
 
       that.setAppLanguage(that.fields.currentLanguage);
+
+      that.showHyperlapse();
 
     },  // END of onDocumentReady()
 
@@ -215,6 +218,8 @@ var PinsterApp = {
       $("#eventModalClose").click(function(){
         $("#eventModal").hide();
         $("#eventImg").attr("src","img/no-image.png");
+        // Make sure the foursquare display interval is cleared
+        clearInterval(PinsterApp.fields.foursquareInterval);
       });
 
       // $(".eventResRow").click(function() {
@@ -240,7 +245,7 @@ var PinsterApp = {
       var geocoder = new google.maps.Geocoder();
       // Convert the event position to actual address
       geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
-        var eventAddress = "";
+      var eventAddress = "";
 
         if (status == google.maps.GeocoderStatus.OK) {
           eventAddress = results[0].formatted_address;
@@ -248,7 +253,7 @@ var PinsterApp = {
 
         PinsterApp.fields.user.addEvent(
             currentLocation, title, description, category,
-              PinsterApp.fields.dataImage, eventAddress);
+              PinsterApp.fields.dataImage, eventAddress, Parse.User.current());
       });
     },
 
@@ -468,6 +473,48 @@ var PinsterApp = {
               directionsDisplay.setDirections(response);
             }
       });
+    },
+
+    showHyperlapse : function() {
+
+      var hyperlapse = new Hyperlapse(document.getElementById('pano'), {
+        lookat: new google.maps.LatLng(37.81409525128964,-122.4775045005249),
+        zoom: 1,
+        use_lookat: true,
+        elevation: 50
+      });
+
+      hyperlapse.onError = function(e) {
+        console.log(e);
+      };
+
+      hyperlapse.onRouteComplete = function(e) {
+        hyperlapse.load();
+      };
+
+      hyperlapse.onLoadComplete = function(e) {
+        hyperlapse.play();
+      };
+
+      // Google Maps API stuff here...
+      var directions_service = new google.maps.DirectionsService();
+
+      var route = {
+        request:{
+          origin: new google.maps.LatLng(37.816480000000006,-122.47825,37),
+          destination: new google.maps.LatLng(37.81195,-122.47773000000001),
+          travelMode: google.maps.DirectionsTravelMode.DRIVING
+        }
+      };
+
+      directions_service.route(route.request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          hyperlapse.generate( {route:response} );
+        } else {
+          console.log(status);
+        }
+      });
+
     },
 
     GoogleMap : function() {
@@ -711,7 +758,7 @@ var PinsterApp = {
                });
 
                 var k = 0;
-               var foursquareInterval =  setInterval(function()
+               PinsterApp.fields.foursquareInterval = setInterval(function()
                 {
                   $("#fourSquareBar").html(""); 
                   $("#fourSquareBar").html(foursquareBarStrArr[k]);
@@ -719,7 +766,7 @@ var PinsterApp = {
 
                   if(k == foursquareBarStrArr.length)
                   {
-                    clearInterval(foursquareInterval);
+                    clearInterval(PinsterApp.fields.foursquareInterval);
                   }
                 }, 3000);
                // $("#fourSquareBar").text(foursquareFields);
