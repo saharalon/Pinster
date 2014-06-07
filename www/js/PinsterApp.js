@@ -15,7 +15,8 @@ var PinsterApp = {
       infowindow : {},
       watchID: null,
       currentPosition: {},
-      dataImage: null
+      dataImage: null,
+      foursquareInterval: {}
     },
 
     CONSTANTS : {
@@ -215,6 +216,8 @@ var PinsterApp = {
       $("#eventModalClose").click(function(){
         $("#eventModal").hide();
         $("#eventImg").attr("src","img/no-image.png");
+        // Make sure the foursquare display interval is cleared
+        clearInterval(PinsterApp.fields.foursquareInterval);
       });
 
       // $(".eventResRow").click(function() {
@@ -711,7 +714,7 @@ var PinsterApp = {
                });
 
                 var k = 0;
-               var foursquareInterval =  setInterval(function()
+               PinsterApp.fields.foursquareInterval = setInterval(function()
                 {
                   $("#fourSquareBar").html(""); 
                   $("#fourSquareBar").html(foursquareBarStrArr[k]);
@@ -719,7 +722,7 @@ var PinsterApp = {
 
                   if(k == foursquareBarStrArr.length)
                   {
-                    clearInterval(foursquareInterval);
+                    clearInterval(PinsterApp.fields.foursquareInterval);
                   }
                 }, 3000);
                // $("#fourSquareBar").text(foursquareFields);
