@@ -15,7 +15,7 @@ PinsterApp.User = function() {
        address:address, category:category, imageURL:"", user:user}, {
         success:function(object) 
         {
-          obj.postOnFacebook(title, desc, user);
+         // obj.postOnFacebook(title, desc, user);
           if (img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
