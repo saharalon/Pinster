@@ -18,3 +18,5 @@
 9) Rating system for users and events
 
 10) Indication of what events category is the user seeing currently
+
+11) See which friends (from facebook) are close to an event 
