@@ -8,6 +8,7 @@ var PinsterApp = {
       user : {},
       map : {},
       mapInstance : {},
+      searchArea : {},
       geocoder : {},
       directionsDisplay: {},
       directionsService: {},
@@ -51,6 +52,18 @@ var PinsterApp = {
 
       //Android back key
       document.addEventListener("backbutton", that.handleBackbutton, false);
+
+      var fbLoginSuccess = function (userData) {
+         alert("UserInfo: " + JSON.stringify(userData));
+    }
+
+     if (isPhone)
+     {
+        facebookConnectPlugin.login(["basic_info"],
+            fbLoginSuccess,
+            function (error) { alert("" + error) }
+        );
+      }
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
@@ -369,6 +382,9 @@ var PinsterApp = {
       $("#eventTitle").attr("placeholder", (language == "English") ? "Event title" : "כותרת האירוע");
       $("#eventDescription").attr("placeholder", (language == "English") ? "Event description" : "תיאור האירוע");
       $("#reportBtnModal").text((language == "English") ? "Report" : "דווח");
+
+      // Trigger the slider text change
+      PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
 
     },
 
