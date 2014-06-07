@@ -243,7 +243,7 @@ var PinsterApp = {
       var geocoder = new google.maps.Geocoder();
       // Convert the event position to actual address
       geocoder.geocode({ "location": PinsterApp.destination }, function(results, status) {     
-        var eventAddress = "";
+      var eventAddress = "";
 
         if (status == google.maps.GeocoderStatus.OK) {
           eventAddress = results[0].formatted_address;
@@ -251,7 +251,7 @@ var PinsterApp = {
 
         PinsterApp.fields.user.addEvent(
             currentLocation, title, description, category,
-              PinsterApp.fields.dataImage, eventAddress);
+              PinsterApp.fields.dataImage, eventAddress, Parse.User.current());
       });
     },
 

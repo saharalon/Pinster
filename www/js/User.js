@@ -6,13 +6,13 @@ PinsterApp.User = function() {
   // Events
   //------------
 
-  obj.addEvent = function (location, title, desc, category, img, address)
+  obj.addEvent = function (location, title, desc, category, img, address, user)
   {
       var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
       eventObject.save({title:title, description:desc, location:location,
-       address:address, category:category, imageURL:""}, {
+       address:address, category:category, imageURL:"", user:user}, {
         success:function(object) 
         {
           if (img != null)
@@ -149,23 +149,19 @@ PinsterApp.User = function() {
 
   obj.isUserLoggedIn = function()
   {
-   //  FB.getLoginStatus(function(response)
-   //  {
-   //     if (response.status === 'connected') 
-   //     {  
-   //        return true;
-   //     }
-
-   //     else 
-   //      {
-   //        return false;
-   //      }
-
-   // });
-
-    return true;
-
-  }
+      var currentUser = Parse.User.current();
+     
+      if (currentUser != null) 
+      {
+        console.log(currentUser);
+        return true;
+      }
+       else
+      {
+         console.log("Not logged");
+         return false;
+      }
+  };
   //------------
   // Settings
   //------------
