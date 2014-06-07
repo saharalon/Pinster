@@ -15,6 +15,7 @@ PinsterApp.User = function() {
        address:address, category:category, imageURL:"", user:user}, {
         success:function(object) 
         {
+         // obj.postOnFacebook(title, desc, user);
           if (img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
@@ -145,6 +146,24 @@ PinsterApp.User = function() {
   {
     //need to check
     currentUser.logOut();
+  };
+
+  obj.postOnFacebook = function(title, desc, user)
+  {
+    FB.api('/me/feed',
+
+      'post', { message: title, /* More options 
+      here at : https://developers.facebook.com/docs/graph-api/reference/v1.0/user/feed */ },
+
+
+      function (response) {
+          if (response && !response.error) {
+           console.log("error");
+          }
+
+          else 
+            console.log(response);
+        });
   };
 
   obj.isUserLoggedIn = function()

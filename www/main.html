@@ -251,7 +251,7 @@ FB.getLoginStatus(function(response)
   } 
 
   else {
-          Parse.FacebookUtils.logIn(null, {
+          Parse.FacebookUtils.logIn("read_friendlists,email,publish_actions,read_stream", {
           success: function(user) 
           {
               if (!user.existed())
