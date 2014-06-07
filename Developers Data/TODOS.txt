@@ -5,15 +5,15 @@
 
 3) Event popup design
 
-4) Search results design
+4) Search results design (Done)
 
 5) Back button event
 
-6) Collect search data on users
+6) Collect search data on users (Done)
 
 7) Random smart user event recommendation
 
-8) Users login (via facebook)
+8) Users login (via facebook) [backend-Done, UI remains]
 
 9) Rating system for users and events
 

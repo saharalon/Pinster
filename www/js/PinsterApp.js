@@ -487,12 +487,12 @@ var PinsterApp = {
         var Event = Parse.Object.extend("Event");
         var query = new Parse.Query(Event);
 
-        var currentTime = new Date();
+        // var currentTime = new Date();
         // Subtract one day from today's time to search
         // only events that had been updated at the last 24 hours
-        currentTime.setDate(currentTime.getDate() - 1);
-        var time = new Date(currentTime.getTime());
-        query.greaterThanOrEqualTo('updatedAt', time);
+        // currentTime.setDate(currentTime.getDate() - 1);
+        // var time = new Date(currentTime.getTime());
+        // query.greaterThanOrEqualTo('updatedAt', time);
 
         query.find({
             success: function(results) {
