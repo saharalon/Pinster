@@ -50,20 +50,20 @@ var PinsterApp = {
       var that = PinsterApp;
       // that.receivedEvent('deviceready');
 
-      //Android back key
-      document.addEventListener("backbutton", that.handleBackbutton, false);
-
       var fbLoginSuccess = function (userData) {
          alert("UserInfo: " + JSON.stringify(userData));
-    }
+      };
 
      if (isPhone)
      {
         facebookConnectPlugin.login(["basic_info"],
             fbLoginSuccess,
-            function (error) { alert("" + error) }
+            function (error) { alert("" + error); }
         );
       }
+
+      //Android back key
+      document.addEventListener("backbutton", that.handleBackbutton, false);
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
@@ -128,22 +128,32 @@ var PinsterApp = {
         
       $(".settingsBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
-        $("#settingsModal").modal();
         PinsterApp.fields.currentWindow = "settings";
+        $("#settingsModal").modal();
       });
 
       $(".reportBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
+        PinsterApp.fields.currentWindow = "reportEvent";
         $("#reportModal").modal();
       });
 
       $(".settingsBtn").click(function(){
+        PinsterApp.fields.currentWindow = "settings";
         $("#settingsModal").modal();
-
       });
 
       $(".reportBtn").click(function(){
+        PinsterApp.fields.currentWindow = "reportEvent";
         $("#reportModal").modal();
+      });
+
+      $('#settingsModal').on('hidden.bs.modal', function () {
+          PinsterApp.fields.currentWindow = "main";
+      });
+
+      $('#reportModal').on('hidden.bs.modal', function () {
+          PinsterApp.fields.currentWindow = "main";
       });
 
       $("#settingsModal #languageDropdownMenu li a").click(function(){
@@ -209,7 +219,8 @@ var PinsterApp = {
 
       $('#hyperlapseBtn').click(function() {
 
-        that.closeEventModal();
+        // that.closeEventModal();
+        PinsterApp.fields.currentWindow = "simulation";
 
         navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationForHyperlapseSuccess, that.onCurrentLocationError,
@@ -257,6 +268,7 @@ var PinsterApp = {
 
     closeEventModal : function() {
 
+      PinsterApp.fields.currentWindow = "main";
       $("#eventModal").hide();
       $("#eventImg").attr("src","img/no-image.png");
       // Make sure the foursquare display interval is cleared
@@ -264,31 +276,51 @@ var PinsterApp = {
 
     },
 
+    closeSimulation : function () {
+
+      var that = this;
+      that.fields.currentWindow = "event";
+      // @idogold : maybe some more code needed here to free memory or somthing
+    },
+
     handleBackbutton : function() {
 
       var that = PinsterApp;
 
-      if (that.fields.currentWindow == "main") {
+      function handleMain() {
+        if (that.fields.mapInstance.getZoom() > 10) { that.fields.mapInstance.setZoom(10); }
+        else { navigator.app.exitApp(); }
+      }
 
+      if (that.fields.currentWindow == "main") {
+        handleMain();
       }
       else if (that.fields.currentWindow == "event") {
-
+        that.closeEventModal(); // this function also changing currentWinow to = "main"
       }
       else if (that.fields.currentWindow == "reportEvent") {
 
+        that.fields.currentWindow = "main";
+        $("#reportModal").modal('hide');
       }
       else if (that.fields.currentWindow == "settings") {
         that.fields.currentWindow = "main";
         $("#settingsModal").modal('hide');
       }
       else if (that.fields.currentWindow == "eventsSearch") {
-
+        
+        if (!$("#eventsResults").is(":visible")) { handleMain(); }
+        else {
+          that.fields.currentWindow = "main";
+          $("#eventsResults").hide();
+          // @idogold : remove also the blue circle
+        }
       }
       else if (that.fields.currentWindow == "simulation") {
-
+        that.closeSimulation(); // this function also changing currentWinow to = "event"
       }
       else if (that.fields.currentWindow == "googleStreetView") {
-
+        // TODO
       }
 
     },
@@ -392,6 +424,8 @@ var PinsterApp = {
 
       var that = this;
 
+      that.fields.currentWindow = "eventsSearch";
+
       //get address from address element
       var address = $('#quickSearch').val();
       //get radius from radius ele, divide with 1000, to get KM
@@ -463,11 +497,12 @@ var PinsterApp = {
 
     calcRoute : function(currentLocation) {
 
-      $("#eventModal").hide();
+      var that = PinsterApp;
 
-      PinsterApp.currentPosition = currentLocation;
+      that.closeEventModal();
+      that.currentPosition = currentLocation;
       // Convert the coordinates to addresses
-      this.geoPointToAddress(PinsterApp.currentPosition, PinsterApp.destination);
+      this.geoPointToAddress(that.currentPosition, that.destination);
     },
 
     geoPointToAddress : function(currentPosition, destination) {
@@ -655,6 +690,7 @@ var PinsterApp = {
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
                                 
+                  PinsterApp.fields.currentWindow = "event";
                   $("#eventModal").show();
                 }
                 })(marker, index));

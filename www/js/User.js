@@ -110,6 +110,8 @@ PinsterApp.User = function() {
           if (placesObjects.length != 0) {
             
             $(".eventResRow").click(function() {
+              // @idogold : remove blue circle
+              PinsterApp.fields.currentWindow = "main";
               google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
             });
 
