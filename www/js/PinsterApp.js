@@ -50,17 +50,17 @@ var PinsterApp = {
       var that = PinsterApp;
       // that.receivedEvent('deviceready');
 
-      var fbLoginSuccess = function (userData) {
-         alert("UserInfo: " + JSON.stringify(userData));
-      };
+     //  var fbLoginSuccess = function (userData) {
+     //     alert("UserInfo: " + JSON.stringify(userData));
+     //  };
 
-     if (isPhone)
-     {
-        facebookConnectPlugin.login(["basic_info"],
-            fbLoginSuccess,
-            function (error) { alert("" + error); }
-        );
-      }
+     // if (isPhone)
+     // {
+     //    facebookConnectPlugin.login(["basic_info"],
+     //        fbLoginSuccess,
+     //        function (error) { alert("" + error); }
+     //    );
+     //  }
 
       //Android back key
       document.addEventListener("backbutton", that.handleBackbutton, false);
@@ -259,10 +259,7 @@ var PinsterApp = {
       $("#eventModalClose").click(function(){
         that.closeEventModal();
       });
-
-      // $(".eventResRow").click(function() {
-      //   google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
-      // });
+      
 
     },  // END of registerEvents()
 
