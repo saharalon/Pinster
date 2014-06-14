@@ -51,14 +51,14 @@ var PinsterApp = {
       // that.receivedEvent('deviceready');
 
      //  var fbLoginSuccess = function (userData) {
-     //     alert("UserInfo: " + JSON.stringify(userData));
+     //     PinsterApp.log("UserInfo: " + JSON.stringify(userData));
      //  };
 
      // if (isPhone)
      // {
      //    facebookConnectPlugin.login(["basic_info"],
      //        fbLoginSuccess,
-     //        function (error) { alert("" + error); }
+     //        function (error) { PinsterApp.log("" + error); }
      //    );
      //  }
 
@@ -197,10 +197,7 @@ var PinsterApp = {
         }
         else
         {
-          if (isPhone)
-            window.plugins.toast.show("You need to be logged in order to report an event");
-          else
-            alert("You need to be logged in order to report an event");
+          PinsterApp.log("You need to be logged in order to report an event");
         }
 
       });
@@ -262,6 +259,13 @@ var PinsterApp = {
       
 
     },  // END of registerEvents()
+
+    log : function (msg) {
+
+      if (isPhone) { window.plugins.toast.show(msg); }
+      else { alert(msg); }
+
+    },
 
     closeEventModal : function() {
 
@@ -372,13 +376,13 @@ var PinsterApp = {
     // Error Callback receives a PositionError object
     onCurrentLocationError : function(error) {
 
-      alert('code: '    + error.code    + '\n' +
+      PinsterApp.log('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
     },
 
     offlineSignalEvent : function() {
 
-      alert("You are offline, FYI - this App needs Internet connectivity");
+      PinsterApp.log("You are offline, FYI - this App needs Internet connectivity");
     },
 
     setAppLanguage : function(language) {
@@ -465,7 +469,7 @@ var PinsterApp = {
 
     onPositionError : function(error)
     {
-        alert("this App works great with GPS on, Please turn on GPS");
+        PinsterApp.log("this App works great with GPS on, Please turn on GPS");
         console.log(error.code + "  " + error.message);
     },
 
@@ -697,7 +701,7 @@ var PinsterApp = {
             error: function(object, error) {
               // The object was not retrieved successfully.
               // error is a Parse.Error with an error code and description.
-              alert("Failed to retreive events from the database");
+              PinsterApp.log("Failed to retreive events from the database");
             }
         });
       };
@@ -789,7 +793,7 @@ var PinsterApp = {
       },
 
       onFail : function(message) {
-        alert('Failed because: ' + message);
+        PinsterApp.log('Failed because: ' + message);
       }
 
     },

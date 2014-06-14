@@ -24,14 +24,14 @@ PinsterApp.User = function() {
               {
                  object.set("imageURL",parseFile.url());
                  object.save();
-                 alert("image saved");
+                 PinsterApp.log("image saved");
                  PinsterApp.onDocumentReady();  // redraw map with new data
               },
 
               function(error)
               {
                   console.log(error);
-                  alert("error saving image");
+                  PinsterApp.log("error saving image");
               });
           }
           else {
@@ -41,7 +41,7 @@ PinsterApp.User = function() {
         },
         error:function(object,error) {
           console.log(error);
-          alert("Sorry, I couldn't save it.");
+          PinsterApp.log("Sorry, I couldn't save it.");
         }
       });
   };
@@ -299,7 +299,7 @@ PinsterApp.User = function() {
         },
         error:function(object,error) {
           console.log(error);
-          alert("Sorry, I couldn't save it.");
+          PinsterApp.log("Sorry, I couldn't save it.");
         }
 
       });
@@ -321,7 +321,7 @@ PinsterApp.User = function() {
         },
         error:function(object,error) {
           console.log(error);
-          alert("Sorry, I couldn't save it.");
+          PinsterApp.log("Sorry, I couldn't save it.");
         }
       });
 
