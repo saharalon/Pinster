@@ -13,7 +13,7 @@ PinsterApp.User = function() {
 
       eventObject.save({title:title, description:desc, location:location,
        address:address, category:category, imageURL:"", user:user}, {
-        success:function(object) 
+        success:function(object)
         {
          // obj.postOnFacebook(title, desc, user);
           if (img != null)

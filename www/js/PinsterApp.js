@@ -204,7 +204,7 @@ var PinsterApp = {
 
       $('#takeMeThereBtn').click(function() {
 
-        if (isPhone) { 
+        if (isPhone) {
           calcRoute(PinsterApp.currentPosition);
         }
         else {
@@ -840,26 +840,33 @@ var PinsterApp = {
                    });
                });
 
-               var k = 0;
-               PinsterApp.fields.foursquareInterval = setInterval(function()
-                {
-                  $(".fsq-content").html("");
-                  $(".fsq-content").html(foursquareBarStrArr[k]);
-                  k++;
+                if (foursquareBarStrArr.length > 0) {
 
-                  if(k == foursquareBarStrArr.length)
-                  {
-                    clearInterval(PinsterApp.fields.foursquareInterval);
-                  }
-                }, 3000);
-               // $("#fourSquareBar").text(foursquareFields);
+                  var k = 0;
+                  PinsterApp.fields.foursquareInterval = setInterval(function()
+                    {
+                      $(".fsq-content").html("");
+                      if (foursquareBarStrArr[k] == "") { k++ }
+                      $(".fsq-content").html(foursquareBarStrArr[k]);
+                      k++;
+
+                      if(k == foursquareBarStrArr.length)
+                      {
+                        clearInterval(PinsterApp.fields.foursquareInterval);
+                      }
+                    }, 3000);
+                }
+                else {
+                  $(".fsq-content").html("<h4>No comments in this area</h4>");
+                }
 
               },
               
               //failure of fetching json
               error: function ()
               {
-                  console.log("error: Foursquare API - Places info fetching");
+                $(".fsq-content").html("<h4>No comments in this area</h4>");
+                console.log("error: Foursquare API - Places info fetching");
               }
 
             });
