@@ -26,14 +26,21 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
-      GPS_SETTINGS :  {enableHighAccuracy: true, maximumAge:3000, timeout: 8000},
+      GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 8000 },
       pinImgs : {
         "Shopping" : "shoppingPin.png",
         "Parties" : "partiesPin.png",
         "Hazards" : "hazardsPin.png",
         "Sports" : "sportsPin.png",
         "undefined" : "defaultPin.png"
-      }
+      },
+      categories : [
+        "All",
+        "Shopping",
+        "Parties",
+        "Hazards",
+        "Sports"
+      ],
     },
 
     initialize : function () {
@@ -117,8 +124,9 @@ var PinsterApp = {
 
       // When clicking outside the events search results -> hide it
       $("body").click(function(e){
-        if (e.target.id != "quickSearch" && e.target.className != "eventResRow" && e.target.id != "eventModalClose") {
+        if (e.target.id != "quickSearch" && e.target.className != "eventResRow" && e.target.id != "eventModalClose" && e.target.id != "searchByCatTooltip") {
           $("#eventsResults").hide();
+          $("#searchByCatTooltip").hide();
         }
       });
 
@@ -228,12 +236,16 @@ var PinsterApp = {
       
       });
 
+      $('#quickSearch').click(function(){
+        PinsterApp.addSearchByCatElem();
+      });
+
       //Enter key - search events
       $('#quickSearch').keypress(function( event ) {
         
         if ( event.which == 13 ) {
           event.preventDefault();
-          that.searchEvents();
+          PinsterApp.searchEvents();
         }
       });
 
@@ -256,7 +268,9 @@ var PinsterApp = {
       $("#eventModalClose").click(function(){
         that.closeEventModal();
       });
-      
+
+      // bing a listener for categories picker
+      that.scrollStoppedListener(that.handleCatPicker);
 
     },  // END of registerEvents()
 
@@ -265,6 +279,60 @@ var PinsterApp = {
       if (isPhone) { window.plugins.toast.show(msg); }
       else { alert(msg); }
 
+    },
+
+    addSearchByCatElem : function() {
+
+      // var that = this;
+
+      // var image = that.CONSTANTS.pinImgs[item.attributes.category];
+      // $("#eventsResults").html('');
+      // $("#eventsResults").append("<div class='eventResRow'><span><i class='glyphicon glyphicon-chevron-right'></i>" + item + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
+      currentWindow = "eventsSearch";
+      $("#searchByCatTooltip").show();
+
+    },
+
+    scrollStoppedListener : function(handleCatPicker) {
+      $(".categories").scroll(function(){
+          var self = this, $this = $(self);
+          if ($this.data('scrollTimeout')) {
+            clearTimeout($this.data('scrollTimeout'));
+          }
+          $this.data('scrollTimeout', setTimeout(handleCatPicker,250,self));
+      });
+    },
+
+    handleCatPicker : function(){
+      var rowHeight = $(".categoryRow").height(),
+          diff = $(".categories").scrollTop(),
+          level = parseInt(diff / rowHeight),
+          scrollTo;
+
+      console.log(diff);
+      diff = diff - (level * rowHeight);
+      if (diff > (rowHeight / 2) - 1) {
+        console.log("higher: " + diff);
+        scrollTo = (level * rowHeight) + rowHeight;
+        clearTimeout($(".categories").data('scrollTimeout'));
+        $(".categories").unbind();
+        $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
+        console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
+        setTimeout(function(){
+          PinsterApp.scrollStoppedListener(PinsterApp.handleCatPicker);
+        }, 500);
+      }
+      else {
+        console.log("lower: " + diff);
+        scrollTo = level * rowHeight;
+        clearTimeout($(".categories").data('scrollTimeout'));
+        $(".categories").unbind();
+        $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
+        console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
+        setTimeout(function(){
+          PinsterApp.scrollStoppedListener(PinsterApp.handleCatPicker);
+        }, 500);
+      }
     },
 
     closeEventModal : function() {
@@ -310,10 +378,11 @@ var PinsterApp = {
       }
       else if (that.fields.currentWindow == "eventsSearch") {
         
-        if (!$("#eventsResults").is(":visible")) { handleMain(); }
+        if (!$("#eventsResults").is(":visible") || !$("#searchByCatTooltip").is(":visible")) { handleMain(); }
         else {
           that.fields.currentWindow = "main";
           $("#eventsResults").hide();
+          $("#searchByCatTooltip").hide();
           // @idogold : remove also the blue circle
         }
       }
