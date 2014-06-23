@@ -484,3 +484,11 @@ html, body {
 .categories::-webkit-scrollbar {
 	display: none;
 }
+
+.filterPin {
+	width: 18px;
+	top: 5px;
+	z-index: 1000;
+	left: 9px;
+	position: absolute;
+}

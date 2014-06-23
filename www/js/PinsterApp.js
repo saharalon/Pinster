@@ -28,6 +28,7 @@ var PinsterApp = {
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
       GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 8000 },
       pinImgs : {
+        "All" : "allPin.png",
         "Shopping" : "shoppingPin.png",
         "Parties" : "partiesPin.png",
         "Hazards" : "hazardsPin.png",
@@ -285,10 +286,17 @@ var PinsterApp = {
 
       var that = this;
 
-      // var image = that.CONSTANTS.pinImgs[item.attributes.category];
-      // $("#eventsResults").html('');
-      // $("#eventsResults").append("<div class='eventResRow'><span><i class='glyphicon glyphicon-chevron-right'></i>" + item + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
       that.fields.currentWindow = "eventsSearch";
+      var elem = $("#searchByCatTooltip .categories"),
+          image;
+
+      that.CONSTANTS.categories.forEach(function(item) {
+        image = that.CONSTANTS.pinImgs[item];
+        elem.append("<div class='categoryRow'><span style='margin-left: 30px;'>" + item + "</span><img class='' style='width: 18px;float: right;margin-top: -2px;margin-right: 8px;' src='img/" + image + "' /></div>");
+      });
+
+      elem.append("<div class='categoryRow'>&nbsp;</div>");
+      
       $("#searchByCatTooltip").show();
 
     },
@@ -304,35 +312,34 @@ var PinsterApp = {
     },
 
     handleCatPicker : function(){
+
       var rowHeight = $(".categoryRow").height(),
           diff = $(".categories").scrollTop(),
           level = parseInt(diff / rowHeight),
+          image,
           scrollTo;
 
-      console.log(diff);
+      // console.log(diff);
       diff = diff - (level * rowHeight);
       if (diff > (rowHeight / 2) - 1) {
-        console.log("higher: " + diff);
+        // console.log("higher: " + diff);
         scrollTo = (level * rowHeight) + rowHeight;
-        clearTimeout($(".categories").data('scrollTimeout'));
-        $(".categories").unbind();
-        $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
-        console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
-        setTimeout(function(){
-          PinsterApp.scrollStoppedListener(PinsterApp.handleCatPicker);
-        }, 500);
       }
       else {
-        console.log("lower: " + diff);
+        // console.log("lower: " + diff);
         scrollTo = level * rowHeight;
-        clearTimeout($(".categories").data('scrollTimeout'));
+      }
+
+      clearTimeout($(".categories").data('scrollTimeout'));
         $(".categories").unbind();
         $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
-        console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
+        image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.CONSTANTS.categories[(scrollTo / rowHeight)]];
+        $("#searchBar .filterPin").attr('src', 'img/' + image);
+        // console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
         setTimeout(function(){
           PinsterApp.scrollStoppedListener(PinsterApp.handleCatPicker);
         }, 500);
-      }
+
     },
 
     closeEventModal : function() {
@@ -495,6 +502,7 @@ var PinsterApp = {
       var that = this;
 
       that.fields.currentWindow = "eventsSearch";
+      $("#searchByCatTooltip").hide();
 
       //get address from address element
       var address = $('#quickSearch').val();
