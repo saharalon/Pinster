@@ -283,12 +283,12 @@ var PinsterApp = {
 
     addSearchByCatElem : function() {
 
-      // var that = this;
+      var that = this;
 
       // var image = that.CONSTANTS.pinImgs[item.attributes.category];
       // $("#eventsResults").html('');
       // $("#eventsResults").append("<div class='eventResRow'><span><i class='glyphicon glyphicon-chevron-right'></i>" + item + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
-      currentWindow = "eventsSearch";
+      that.fields.currentWindow = "eventsSearch";
       $("#searchByCatTooltip").show();
 
     },
@@ -378,7 +378,7 @@ var PinsterApp = {
       }
       else if (that.fields.currentWindow == "eventsSearch") {
         
-        if (!$("#eventsResults").is(":visible") || !$("#searchByCatTooltip").is(":visible")) { handleMain(); }
+        if (!$("#eventsResults").is(":visible") && !$("#searchByCatTooltip").is(":visible")) { handleMain(); }
         else {
           that.fields.currentWindow = "main";
           $("#eventsResults").hide();
