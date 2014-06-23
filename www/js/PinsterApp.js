@@ -290,6 +290,9 @@ var PinsterApp = {
       var elem = $("#searchByCatTooltip .categories"),
           image;
 
+      elem.html("");
+      elem.append("<div class='categoryRow' style='margin-top: 6px;'>&nbsp;</div>");
+
       that.CONSTANTS.categories.forEach(function(item) {
         image = that.CONSTANTS.pinImgs[item];
         elem.append("<div class='categoryRow'><span style='margin-left: 30px;'>" + item + "</span><img class='' style='width: 18px;float: right;margin-top: -2px;margin-right: 8px;' src='img/" + image + "' /></div>");
