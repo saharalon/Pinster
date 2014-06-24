@@ -79,7 +79,7 @@ var PinsterApp = {
       document.addEventListener("offline", that.offlineSignalEvent, false);
 
       var options = { enableHighAccuracy: true, timeout: 1000, frequency: 3000 };
-      watchID = navigator.geolocation.watchPosition(that.onPositionSuccess, that.onPositionError, options);
+      //watchID = navigator.geolocation.watchPosition(that.onPositionSuccess, that.onPositionError, options);
 
     },
 
@@ -932,7 +932,7 @@ var PinsterApp = {
 
                       if(k == foursquareBarStrArr.length)
                       {
-                        clearInterval(PinsterApp.fields.foursquareInterval);
+                        k = 0;
                       }
                     }, 3000);
                 }
