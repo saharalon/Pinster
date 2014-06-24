@@ -1,7 +1,7 @@
 
 2) Pins with matching pictures (only 3 .. add more)
 
-7) Random smart user event recommendation (Sahar)
+7) Random smart user event recommendation (Sahar [backend & UI])
 
 8) Users login (via facebook) (Eran) 
 
@@ -16,3 +16,11 @@
 14) event modal - wrong or no addresses (Ido)
 
 15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
+
+16) Switch the Robot picture at the beginning
+
+17) toast for event report completion
+
+18) English / Hebrew rest of application (Ido)
+
+19) Complete “Category” Table at parse.com (Eran)
