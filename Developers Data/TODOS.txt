@@ -1,22 +1,18 @@
 
-1) Foursquare (Done)
+2) Pins with matching pictures (only 3 .. add more)
 
-2) Pins with matching pictures
+7) Random smart user event recommendation (Sahar)
 
-3) Event popup design
+8) Users login (via facebook) (Eran) 
 
-4) Search results design (Done)
+9) Rating system for users and events (* beta *)
 
-5) Back button event
+11) See which friends (from facebook) are close to an event (* beta *)
 
-6) Collect search data on users (Done)
+12) Search events by address and/or category (Server-side) (Ido)
 
-7) Random smart user event recommendation
+13) delete the purple circle (Ido)
 
-8) Users login (via facebook) [backend-Done, UI remains]
+14) event modal - wrong or no addresses (Ido)
 
-9) Rating system for users and events
-
-10) Indication of what events category is the user seeing currently
-
-11) See which friends (from facebook) are close to an event 
+15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
