@@ -93,6 +93,8 @@ var PinsterApp = {
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
 
+      //that.fields.user.searchData.getSmartRandomEvent();
+
     },  // END of onDocumentReady()
 
     // Update DOM on a Received Event
