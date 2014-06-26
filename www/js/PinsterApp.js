@@ -242,6 +242,7 @@ var PinsterApp = {
       });
 
       $('#quickSearch').click(function(){
+        if ($("#eventsResults").is(":visible")) { $("#eventsResults").hide(); }
         PinsterApp.addSearchByCatElem();
       });
 
