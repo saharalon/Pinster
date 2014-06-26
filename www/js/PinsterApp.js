@@ -141,6 +141,11 @@ var PinsterApp = {
         $("#reportModal").modal();
       });
 
+      $(".randomEventBtn").on("touchend", function(){
+        $(".fancyBtn").removeClass('fancyBtnDown');
+        that.fields.user.searchData.getSmartRandomEvent();
+      });
+
       $(".settingsBtn").click(function(){
         PinsterApp.fields.currentWindow = "settings";
         $("#settingsModal").modal();
@@ -149,6 +154,10 @@ var PinsterApp = {
       $(".reportBtn").click(function(){
         PinsterApp.fields.currentWindow = "reportEvent";
         $("#reportModal").modal();
+      });
+
+      $(".randomEventBtn").click(function(){
+        that.fields.user.searchData.getSmartRandomEvent();
       });
 
       $('#settingsModal').on('hidden.bs.modal', function () {
@@ -724,6 +733,7 @@ var PinsterApp = {
                 };
 
                 marker = new google.maps.Marker({
+                  id: item.id,
                   position: new google.maps.LatLng(latitude, longitude),
                   map: map,
                   icon: markerImage,
