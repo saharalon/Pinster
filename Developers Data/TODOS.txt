@@ -9,10 +9,6 @@
 
 11) See which friends (from facebook) are close to an event (* beta *)
 
-12) Search events by address and/or category (Server-side) (Ido)
-
-13) delete the purple circle (Ido)
-
 14) event modal - wrong or no addresses (Ido)
 
 15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
@@ -21,6 +17,13 @@
 
 17) toast for event report completion
 
-18) English / Hebrew rest of application (Ido)
-
 19) Complete “Category” Table at parse.com (Eran)
+
+
+// COMPLETED //
+
+12) Search events by address and/or category (Server-side) (Ido) /* DONE */
+
+13) delete the purple circle (Ido) /* DELETED WHERE ASKED */
+
+18) English / Hebrew rest of application (Ido) /* DONE */

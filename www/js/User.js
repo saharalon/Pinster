@@ -51,34 +51,29 @@ PinsterApp.User = function() {
   obj.searchEvents = function (address, radius)
   {
     // Remove previous search area
-    if (PinsterApp.fields.searchArea.setMap != undefined)
-      PinsterApp.fields.searchArea.setMap(null);
+    PinsterApp.removeSearchArea();
 
     // Show a circle as the search area
-    PinsterApp.fields.searchArea = new google.maps.Circle({
-      center:new google.maps.LatLng(address._latitude, address._longitude),
-      radius: (radius < 1000) ? radius * 1000 : radius,
-      strokeColor:"#0000FF",
-      strokeOpacity:0.8,
-      strokeWeight:2,
-      fillColor:"#0000FF",
-      fillOpacity:0.4
-    });
-
-    PinsterApp.fields.searchArea.setMap(PinsterApp.fields.mapInstance);
+    PinsterApp.showSearchArea(address, radius);
 
     // Remove circle on mouse click
     google.maps.event.addListener(PinsterApp.fields.searchArea, 'click', function(ev){
       PinsterApp.fields.searchArea.setMap(null);            
     });
 
-    var searchCategory = $("#dropdownMenu1").text();
-
     var events = Parse.Object.extend("Event");
     //set query for events objectr
     var query = new Parse.Query(events);
+
     //check the events within the specify point to search from
-    query.withinKilometers("location", address, radius);
+    if (address != "")
+      query.withinKilometers("location", address, radius);
+    
+    var searchCategory = PinsterApp.currentSearchCategory;
+    // Add category parameter
+    if (searchCategory != undefined && searchCategory != "All")
+      query.equalTo("category", searchCategory);
+
     // var currentTime = new Date();
     // // Subtract one day from today's time to search
     // // only events that had been updated at the last 24 hours
@@ -110,7 +105,7 @@ PinsterApp.User = function() {
           if (placesObjects.length != 0) {
             
             $(".eventResRow").click(function() {
-              // @idogold : remove blue circle
+              PinsterApp.removeSearchArea();
               PinsterApp.fields.currentWindow = "main";
               google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
             });

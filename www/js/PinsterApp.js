@@ -6,6 +6,7 @@ var PinsterApp = {
       markers : [],
       eventsHashMap : {},
       user : {},
+      utils : {},
       map : {},
       mapInstance : {},
       searchArea : {},
@@ -18,6 +19,7 @@ var PinsterApp = {
       currentPosition: {},
       dataImage: null,
       foursquareInterval: {},
+      currentSearchCategory : {},
       currentWindow : "main"
     },
 
@@ -94,12 +96,14 @@ var PinsterApp = {
       that.fields.geocoder = new google.maps.Geocoder();
       that.fields.map.initialize();
 
+      that.fields.utils = new that.Utils();
+
       that.registerEvents();
 
       that.fields.user = new that.User();
       that.fields.user.settings.init();
 
-      that.setAppLanguage(that.fields.currentLanguage);
+      that.fields.utils.setAppLanguage(that.fields.currentLanguage);
 
     },  // END of onDocumentReady()
 
@@ -191,7 +195,7 @@ var PinsterApp = {
         user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
 
-        that.setAppLanguage($("#languageDropdownMenu").text());
+        that.fields.utils.setAppLanguage($("#languageDropdownMenu").text());
         map.filterMarkers(category.toLowerCase());
 
       });
@@ -336,7 +340,8 @@ var PinsterApp = {
       clearTimeout($(".categories").data('scrollTimeout'));
         $(".categories").unbind();
         $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
-        image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.CONSTANTS.categories[(scrollTo / rowHeight)]];
+        PinsterApp.currentSearchCategory = PinsterApp.CONSTANTS.categories[(scrollTo / rowHeight)];
+        image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.currentSearchCategory];
         $("#searchBar .filterPin").attr('src', 'img/' + image);
         // console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
         setTimeout(function(){
@@ -393,7 +398,7 @@ var PinsterApp = {
           that.fields.currentWindow = "main";
           $("#eventsResults").hide();
           $("#searchByCatTooltip").hide();
-          // @idogold : remove also the blue circle
+          PinsterApp.removeSearchArea();
         }
       }
       else if (that.fields.currentWindow == "simulation") {
@@ -464,42 +469,6 @@ var PinsterApp = {
       PinsterApp.log("You are offline, FYI - this App needs Internet connectivity");
     },
 
-    setAppLanguage : function(language) {
-
-      $("#quickSearch").attr("placeholder", (language == "English") ? "Enter an address..." : "...הקלד כתובת לחיפוש");
-      $("#takeMeThereBtn").text((language == "English") ? "Take me there" : "קח אותי לשם");
-      $("#hyperlapseBtn").text((language == "English") ? "Simulate" : "סימולציה");
-      
-      // Login
-      $("#loginHeadline").text((language == "English") ? "Login" : "התחבר");
-      $("#pinUsername").attr("placeholder", (language == "English") ? "Username" : "שם משתמש");
-      $("#pinPassword").attr("placeholder", (language == "English") ? "Password" : "סיסמה");
-      $("#loginBtnModal").text((language == "English") ? "Login" : "התחבר");
-
-      // Settings
-      $("#settingsHedline").text((language == "English") ? "Settings" : "הגדרות");
-
-      if ($("#languageDropdownMenu").attr("placeholder") == undefined)
-        $("#languageDropdownMenu").attr("placeholder", (language == "English") ? "Select Language" : "בחר שפה");
-
-      if ($("#address").attr("placeholder") == undefined)
-        $("#address").attr("placeholder", (language == "English") ? "Favourite Address" : "כתובת מועדפת");
-      
-      $("#settingsSaveBtn").text((language == "English") ? "Save" : "שמור");
-      
-      // Report
-      $("#reportHeadline").text((language == "English") ? "Report an event" : "דווח אירוע");
-      $("#addressDiv").text((language == "English") ? "Address:" : ":דווח");
-      $("#dropdownMenu2").text((language == "English") ? "Please select a category" : "אנא בחר קטגוריה");
-      $("#eventTitle").attr("placeholder", (language == "English") ? "Event title" : "כותרת האירוע");
-      $("#eventDescription").attr("placeholder", (language == "English") ? "Event description" : "תיאור האירוע");
-      $("#reportBtnModal").text((language == "English") ? "Report" : "דווח");
-
-      // Trigger the slider text change
-      PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
-
-    },
-
     searchEvents : function() {
 
       var that = this;
@@ -517,6 +486,13 @@ var PinsterApp = {
       tmpObj.addresses.push(address);
       localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
 
+      // No address given, search by category
+      if (address == "")
+      {
+        that.fields.user.searchEvents(address, radius);
+        return
+      }
+        
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)
       {
         //address is OK
@@ -533,7 +509,7 @@ var PinsterApp = {
         else
         {
           var language = that.fields.currentLanguage;
-          var msg = (language == "English") ? "No results were found" : "לא נמצאו תוצאות מתאימות";
+          var msg = that.fields.utils.getText("no_results", language);
           $("#eventsResults").html('');
           $("#eventsResults").append("<div class='eventResRow'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
@@ -563,9 +539,10 @@ var PinsterApp = {
       var that = this;
 
       var language = that.fields.currentLanguage;
-      var text = (language == "English") ? "Radius is: " : "רדיוס: ";
-      var metersStr = (language == "English") ? " Meters" : " מטרים";
-      var kilometersStr = (language == "English") ? " Kilometers" : " קילומטרים";
+
+      var text = that.fields.utils.getText("radius", language);
+      var metersStr = that.fields.utils.getText("meters", language);
+      var kilometersStr = that.fields.utils.getText("kilometers", language);
       
       if (val < that.CONSTANTS.METERS) {
         document.querySelector('#output').value = text + val + metersStr;
@@ -676,6 +653,27 @@ var PinsterApp = {
         }
       });
 
+    },
+
+    removeSearchArea : function()
+    {
+      if (PinsterApp.fields.searchArea.setMap != undefined)
+      PinsterApp.fields.searchArea.setMap(null);
+    },
+
+    showSearchArea : function(address, radius)
+    {
+      PinsterApp.fields.searchArea = new google.maps.Circle({
+        center:new google.maps.LatLng(address._latitude, address._longitude),
+        radius: (radius < 1000) ? radius * 1000 : radius,
+        strokeColor:"#0000FF",
+        strokeOpacity:0.8,
+        strokeWeight:2,
+        fillColor:"#0000FF",
+        fillOpacity:0.4
+      });
+
+      PinsterApp.fields.searchArea.setMap(PinsterApp.fields.mapInstance);
     },
 
     GoogleMap : function() {
@@ -886,7 +884,10 @@ var PinsterApp = {
             var foursquareFields = [];
             var foursquareField = {};
 
-            $(".fsq-content").html("<h4>Searching for comments...</h4>");
+            var utils = PinsterApp.fields.utils;
+            var language = PinsterApp.fields.currentLanguage;
+
+            $(".fsq-content").html("<h4>" + utils.getText("fsq-content-search", language) + "</h4>");
           
           $.ajax({
 
@@ -937,7 +938,7 @@ var PinsterApp = {
                     }, 3000);
                 }
                 else {
-                  $(".fsq-content").html("<h4>No comments in this area</h4>");
+                  $(".fsq-content").html("<h4>" + utils.getText("fsq-content-not-found", language) + "</h4>");
                 }
 
               },
@@ -945,7 +946,7 @@ var PinsterApp = {
               //failure of fetching json
               error: function ()
               {
-                $(".fsq-content").html("<h4>No comments in this area</h4>");
+                $(".fsq-content").html("<h4>" + utils.getText("fsq-content-not-found", language) + "</h4>");
                 console.log("error: Foursquare API - Places info fetching");
               }
 
