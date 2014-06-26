@@ -287,7 +287,7 @@ html, body {
 	background: rgba(139, 205, 231, 0.5);
 	padding-left: 8px;
 	padding-right: 8px;
-	border-radius: 2px;
+	border-radius: 3px;
 }
 
 #fourSquareBar {
@@ -338,9 +338,12 @@ html, body {
 	overflow: hidden;
 }
 
-#takeMeThereBtn {
-	position: relative;
-	margin-top: 16px;
+#wazeBtn {
+	position: absolute;
+	width: 130px;
+	left: -46px;
+	top: 86%;
+	display: none;
 }
 
 #searchResultsContainer {
@@ -373,7 +376,7 @@ html, body {
 }
 
 .eventResRow span {
-	width: 93%;
+	width: 86%;
 	height: 46px;
 	position: absolute;
 	left: 0px;

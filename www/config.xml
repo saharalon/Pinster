@@ -39,6 +39,10 @@
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
+    </feature>
+    <feature name="InAppBrowser" />
 
     <!--
         If you do not want any permissions to be added to your app, add the
