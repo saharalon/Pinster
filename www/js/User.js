@@ -351,7 +351,6 @@ PinsterApp.User = function() {
       randomNum = Math.floor((Math.random() * 3) + 1);
       var searchAddress = addresses[randomNum - 1].key;
 
-
       var events = Parse.Object.extend("Event");
       //set query for events objectr
       var query = new Parse.Query(events);
@@ -368,20 +367,22 @@ PinsterApp.User = function() {
         success: function(placesObjects) {
 
           // Randomly pick one event
-          randomNum = Math.floor((Math.random() * placesObjects.length) + 0);
+          randomNum = Math.floor((Math.random() * placesObjects.length) + 1);
           
-          var selectedEvent = placesObjects[randomNum]._serverData;
+          var selectedEvent = placesObjects[randomNum - 1]._serverData;
+          var eventId = placesObjects[randomNum].id;
           var address = new google.maps.LatLng(
             selectedEvent.location._latitude, selectedEvent.location._longitude);
 
           // Focus on the selected event
           PinsterApp.fields.mapInstance.setCenter(address);
-          PinsterApp.fields.mapInstance.setZoom(18);
+
+          obj.animateZoomIn(10);
 
           // Animate the selected event marker
           PinsterApp.fields.markers.forEach(function(marker, index) {
 
-            if (marker.title == selectedEvent.title)
+            if (marker.id == eventId)
             {
               if (marker.getAnimation() != null) {
                 marker.setAnimation(null);
@@ -389,8 +390,8 @@ PinsterApp.User = function() {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
                 setTimeout(function() {
                   marker.setAnimation(null);
-                  //google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
-                }, 3600);
+                  google.maps.event.trigger(PinsterApp.fields.eventsHashMap[eventId], 'click');
+                }, 3000);
               }  
             }
 
@@ -399,6 +400,18 @@ PinsterApp.User = function() {
       });
     }
 
+  };
+
+  obj.animateZoomIn = function(currentZoom)
+  {
+    PinsterApp.fields.mapInstance.setZoom(currentZoom);
+
+    if (currentZoom < 18)
+    {
+        setTimeout(function() {
+            obj.animateZoomIn(currentZoom + 2);
+        }, 400);
+    }
   };
 
   return obj;

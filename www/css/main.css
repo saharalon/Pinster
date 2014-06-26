@@ -105,8 +105,8 @@ html, body {
 
 .settingsBtn {
 	position: absolute;
-	bottom: 20px;
-	left: 10px;
+	top: -5px;
+	right: 66px;
 	z-index: 999;
 }
 
@@ -115,6 +115,18 @@ html, body {
 	bottom: 20px;
 	right: 30px;
 	z-index: 999;
+}
+
+.randomEventBtn {
+	position: absolute;
+	bottom: 20px;
+	left: 10px;
+	z-index: 999;
+}
+
+.diceicon {
+	width: 30px;
+	height: 30px;
 }
 
 .amb {
@@ -287,7 +299,7 @@ html, body {
 	background: rgba(139, 205, 231, 0.5);
 	padding-left: 8px;
 	padding-right: 8px;
-	border-radius: 3px;
+	border-radius: 2px;
 }
 
 #fourSquareBar {
@@ -338,12 +350,9 @@ html, body {
 	overflow: hidden;
 }
 
-#wazeBtn {
-	position: absolute;
-	width: 130px;
-	left: -46px;
-	top: 86%;
-	display: none;
+#takeMeThereBtn {
+	position: relative;
+	margin-top: 16px;
 }
 
 #searchResultsContainer {
@@ -376,7 +385,7 @@ html, body {
 }
 
 .eventResRow span {
-	width: 86%;
+	width: 93%;
 	height: 46px;
 	position: absolute;
 	left: 0px;

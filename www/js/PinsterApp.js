@@ -93,8 +93,6 @@ var PinsterApp = {
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
 
-      //that.fields.user.searchData.getSmartRandomEvent();
-
     },  // END of onDocumentReady()
 
     // Update DOM on a Received Event
@@ -141,6 +139,11 @@ var PinsterApp = {
         $("#reportModal").modal();
       });
 
+      $(".randomEventBtn").on("touchend", function(){
+        $(".fancyBtn").removeClass('fancyBtnDown');
+        that.fields.user.searchData.getSmartRandomEvent();
+      });
+      
       $(".settingsBtn").click(function(){
         PinsterApp.fields.currentWindow = "settings";
         $("#settingsModal").modal();
@@ -149,6 +152,10 @@ var PinsterApp = {
       $(".reportBtn").click(function(){
         PinsterApp.fields.currentWindow = "reportEvent";
         $("#reportModal").modal();
+      });
+
+      $(".randomEventBtn").click(function(){
+        that.fields.user.searchData.getSmartRandomEvent();
       });
 
       $('#settingsModal').on('hidden.bs.modal', function () {
@@ -205,10 +212,10 @@ var PinsterApp = {
 
       });
 
-      $('#wazeBtn').click(function() {
+      $('#takeMeThereBtn').click(function() {
 
         if (isPhone) {
-          window.open("waze://?q=" + $("#eventLocationStr").text() + "", '_system', 'location=yes');
+          calcRoute(PinsterApp.currentPosition);
         }
         else {
           navigator.geolocation.getCurrentPosition(
@@ -344,7 +351,6 @@ var PinsterApp = {
     closeEventModal : function() {
 
       PinsterApp.fields.currentWindow = "main";
-      $("#wazeBtn").hide();
       $("#eventModal").hide();
       $("#eventImg").attr("src","img/no-image.png");
       // Make sure the foursquare display interval is cleared
@@ -724,6 +730,7 @@ var PinsterApp = {
                 };
 
                 marker = new google.maps.Marker({
+                  id: item.id,
                   position: new google.maps.LatLng(latitude, longitude),
                   map: map,
                   icon: markerImage,
@@ -773,7 +780,7 @@ var PinsterApp = {
                   }
 
                   var geoLocation = new google.maps.LatLng(
-                    userEvent.location.latitude, userEvent.location.longitude);
+                    userEvent.location.latitude, userEvent.location.longitude)
                   
                   PinsterApp.showEventAddress(geoLocation);
                   
@@ -783,11 +790,6 @@ var PinsterApp = {
                                 
                   PinsterApp.fields.currentWindow = "event";
                   $("#eventModal").show();
-
-                  setTimeout(function() {
-                    $("#wazeBtn").fadeIn();
-                  }, 750);
-
                 }
                 })(marker, index));
               });
