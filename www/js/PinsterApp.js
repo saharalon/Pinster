@@ -553,6 +553,23 @@ var PinsterApp = {
 
     },
 
+    showEventAddress : function(position) {
+
+      // Geocoder converts coordinates to addresses
+      var geocoder = new google.maps.Geocoder();
+
+      // Convert the current position to actual address
+      geocoder.geocode({ "location": position }, function(results, status) {
+        
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+          $("#eventLocationStr").text(results[0].formatted_address);
+        }
+
+      });
+
+    },
+
     calcRoute : function(currentLocation) {
 
       var that = PinsterApp;
@@ -763,7 +780,10 @@ var PinsterApp = {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
 
-                  $("#eventLocationStr").text(userEvent.address);
+                  var geoLocation = new google.maps.LatLng(
+                    userEvent.location.latitude, userEvent.location.longitude)
+                  
+                  PinsterApp.showEventAddress(geoLocation);
                   
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(

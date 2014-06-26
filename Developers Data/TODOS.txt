@@ -1,4 +1,6 @@
 
+// TODO //
+
 2) Pins with matching pictures (only 3 .. add more)
 
 7) Random smart user event recommendation (Sahar [backend & UI])
@@ -8,8 +10,6 @@
 9) Rating system for users and events (* beta *)
 
 11) See which friends (from facebook) are close to an event (* beta *)
-
-14) event modal - wrong or no addresses (Ido)
 
 15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
 
@@ -23,6 +23,8 @@
 // COMPLETED //
 
 12) Search events by address and/or category (Server-side) (Ido) /* DONE */
+
+14) event modal - wrong or no addresses (Ido) /* DONE */
 
 13) delete the purple circle (Ido) /* DELETED WHERE ASKED */
 
