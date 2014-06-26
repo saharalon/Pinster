@@ -17,8 +17,6 @@
 
 17) toast for event report completion
 
-19) Complete “Category” Table at parse.com (Eran)
-
 
 // COMPLETED //
 
@@ -29,3 +27,5 @@
 13) delete the purple circle (Ido) /* DELETED WHERE ASKED */
 
 18) English / Hebrew rest of application (Ido) /* DONE */
+
+19) Complete “Category” Table at parse.com (Eran) /* DONE */
