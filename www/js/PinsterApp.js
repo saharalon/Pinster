@@ -29,21 +29,8 @@ var PinsterApp = {
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
       GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 8000 },
-      pinImgs : {
-        "All" : "allPin.png",
-        "Shopping" : "shoppingPin.png",
-        "Parties" : "partiesPin.png",
-        "Hazards" : "hazardsPin.png",
-        "Sports" : "sportsPin.png",
-        "undefined" : "defaultPin.png"
-      },
-      categories : [
-        "All",
-        "Shopping",
-        "Parties",
-        "Hazards",
-        "Sports"
-      ],
+      pinImgs : {},
+      categories : [],
     },
 
     initialize : function () {
@@ -92,11 +79,12 @@ var PinsterApp = {
       Parse.initialize("4ChsdpMV3dxl3PNBzWTi3wHX5dfpt9Ddnm1t31Db",
         "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
+      that.fields.utils = new that.Utils();
+      that.fields.utils.initCategories();
+
       that.fields.map = new that.GoogleMap();
       that.fields.geocoder = new google.maps.Geocoder();
       that.fields.map.initialize();
-
-      that.fields.utils = new that.Utils();
 
       that.registerEvents();
 

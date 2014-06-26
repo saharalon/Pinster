@@ -6,39 +6,72 @@ PinsterApp.Utils = function() {
   // Events
   //------------
 
+  obj.initCategories = function()
+  {
+    // Retreive events from the databas
+    var Category = Parse.Object.extend("Category");
+    var query = new Parse.Query(Category);
+
+    query.find({
+      
+      success: function(results) {
+
+        results.forEach(function(item, index) {
+
+          var category = item._serverData.category;
+          var imagePath = item._serverData.imagePath;
+
+          if (category != "undefined")
+            PinsterApp.CONSTANTS.categories.push(category);
+
+          PinsterApp.CONSTANTS.pinImgs[category] = imagePath;
+
+        });
+
+      },
+      error: function(object, error) {
+        // The object was not retrieved successfully.
+        // error is a Parse.Error with an error code and description.
+        PinsterApp.log("Failed to retreive categories from the database");
+      }
+
+    });
+
+  };
+
   obj.setAppLanguage = function (language)
   {
   	$("#quickSearch").attr("placeholder", obj.getText("quickSearch", language));
   	$("#takeMeThereBtn").text(obj.getText("takeMeThereBtn", language));
-	$("#hyperlapseBtn").text(obj.getText("hyperlapseBtn", language));
-	  
-	// Login
-	$("#loginHeadline").text(obj.getText("loginHeadline", language));
-	$("#pinUsername").attr("placeholder", obj.getText("pinUsername", language));
-	$("#pinPassword").attr("placeholder", obj.getText("pinPassword", language));
-	$("#loginBtnModal").text(obj.getText("loginBtnModal", language));
+  	$("#hyperlapseBtn").text(obj.getText("hyperlapseBtn", language));
+  	  
+  	// Login
+  	$("#loginHeadline").text(obj.getText("loginHeadline", language));
+  	$("#pinUsername").attr("placeholder", obj.getText("pinUsername", language));
+  	$("#pinPassword").attr("placeholder", obj.getText("pinPassword", language));
+  	$("#loginBtnModal").text(obj.getText("loginBtnModal", language));
 
-	// Settings
-	$("#settingsHedline").text(obj.getText("settingsHedline", language));
+  	// Settings
+  	$("#settingsHedline").text(obj.getText("settingsHedline", language));
 
-	if ($("#languageDropdownMenu").attr("placeholder") == undefined)
-		$("#languageDropdownMenu").attr("placeholder", obj.getText("languageDropdownMenu", language));
+  	if ($("#languageDropdownMenu").attr("placeholder") == undefined)
+  		$("#languageDropdownMenu").attr("placeholder", obj.getText("languageDropdownMenu", language));
 
-	if ($("#address").attr("placeholder") == undefined)
-		$("#address").attr("placeholder", obj.getText("address", language));
-	  
-	$("#settingsSaveBtn").text(obj.getText("settingsSaveBtn", language));
+  	if ($("#address").attr("placeholder") == undefined)
+  		$("#address").attr("placeholder", obj.getText("address", language));
+  	  
+  	$("#settingsSaveBtn").text(obj.getText("settingsSaveBtn", language));
 
-	// Report
-	$("#reportHeadline").text(obj.getText("reportHeadline", language));
-	$("#addressDiv").text(obj.getText("addressDiv", language));
-	$("#dropdownMenu2").text(obj.getText("dropdownMenu2", language));
-	$("#eventTitle").attr("placeholder", obj.getText("eventTitle", language));
-	$("#eventDescription").attr("placeholder", obj.getText("eventDescription", language));
-	$("#reportBtnModal").text(obj.getText("reportBtnModal", language));
+  	// Report
+  	$("#reportHeadline").text(obj.getText("reportHeadline", language));
+  	$("#addressDiv").text(obj.getText("addressDiv", language));
+  	$("#dropdownMenu2").text(obj.getText("dropdownMenu2", language));
+  	$("#eventTitle").attr("placeholder", obj.getText("eventTitle", language));
+  	$("#eventDescription").attr("placeholder", obj.getText("eventDescription", language));
+  	$("#reportBtnModal").text(obj.getText("reportBtnModal", language));
 
-	// Trigger the slider text change
-	PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
+  	// Trigger the slider text change
+  	PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
   };
 
   obj.getText = function (name, language)
