@@ -68,11 +68,18 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 		{
 			if (results.length > 0) 
             {
-            	// Randomly pick one event
-			  	randomNum = Math.floor((Math.random() * results.length - 1) + 0);
+            	// Sort events to get the event 
+            	// with the highest number of likes 
+			  	results.sort(function() {
+			  		if (a.likes < b.likes)
+				    	return -1;
+				  	if (a.likes > b.likes)
+				    	return 1;
+				  	return 0;
+			  	})
 
 				// Return the event object       
-                response.success(JSON.stringify(results[randomNum]));
+                response.success(JSON.stringify(results[0]));
             }
 		}
 	});
