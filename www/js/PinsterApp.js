@@ -212,16 +212,16 @@ var PinsterApp = {
 
       $('#reportBtnModal').click(function() {
 
-        if (PinsterApp.fields.user.isUserLoggedIn())
-        {
+        // if (PinsterApp.fields.user.isUserLoggedIn())
+        // {
           navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationSuccess, that.onCurrentLocationError,
               PinsterApp.CONSTANTS.GPS_SETTINGS);
-        }
-        else
-        {
-          PinsterApp.log("You need to be logged in order to report an event");
-        }
+        // }
+        // else
+        // {
+        //   PinsterApp.log("You need to be logged in order to report an event");
+        // }
 
       });
 

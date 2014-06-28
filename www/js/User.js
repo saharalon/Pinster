@@ -363,14 +363,15 @@ PinsterApp.User = function() {
                   marker.setAnimation(null);
                   google.maps.event.trigger(PinsterApp.fields.eventsHashMap[eventId], 'click');
                 }, 3000);
-              }  
+              }
             }
           });
         },
 
-        error: function(error) { }
+        error: function(error) {
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
+        }
       });
 
     }
