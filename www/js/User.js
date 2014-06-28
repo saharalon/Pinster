@@ -306,10 +306,16 @@ PinsterApp.User = function() {
 
     getSmartRandomEvent : function() {
 
-      var data = JSON.parse(localStorage.getItem("pinsterSearches"));
-      
+      var history = localStorage.getItem("pinsterSearches");
+
+      if (history == 'undefined')
+      {
+        console.log("getRecommendedEvent: Stopped - no search history");
+        return;
+      }      
+
       var params = {};
-      params["data"] = data;
+      params["data"] = JSON.parse(history);
 
       var deg = 0;
       PinsterApp.fields.rotateDice = setInterval(function() {
