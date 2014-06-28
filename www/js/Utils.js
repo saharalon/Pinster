@@ -6,7 +6,7 @@ PinsterApp.Utils = function() {
   // Events
   //------------
 
-  obj.initCategories = function()
+  obj.initCategories = function(callback)
   {
     // Retreive events from the databas
     var Category = Parse.Object.extend("Category");
@@ -26,6 +26,8 @@ PinsterApp.Utils = function() {
 
           PinsterApp.CONSTANTS.pinImgs[category] = imagePath;
 
+          callback();
+
         });
 
       },
@@ -33,6 +35,8 @@ PinsterApp.Utils = function() {
         // The object was not retrieved successfully.
         // error is a Parse.Error with an error code and description.
         PinsterApp.log("Failed to retreive categories from the database");
+
+        callback();
       }
 
     });

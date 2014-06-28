@@ -19,6 +19,7 @@ var PinsterApp = {
       currentPosition: {},
       dataImage: null,
       foursquareInterval: {},
+      currentEventId: "",
       currentSearchCategory : {},
       currentWindow : "main"
     },
@@ -80,11 +81,14 @@ var PinsterApp = {
         "HksWttYlv8V6K07OsrV3aeQMED3XOCTmO2iYvKqn");
 
       that.fields.utils = new that.Utils();
-      that.fields.utils.initCategories();
+      that.fields.utils.initCategories(function() {
+        
+        // Init the map only after the ategories are loaded
+        that.fields.map = new that.GoogleMap();
+        that.fields.geocoder = new google.maps.Geocoder();
+        that.fields.map.initialize();
 
-      that.fields.map = new that.GoogleMap();
-      that.fields.geocoder = new google.maps.Geocoder();
-      that.fields.map.initialize();
+      });
 
       that.registerEvents();
 
@@ -232,6 +236,27 @@ var PinsterApp = {
         }
       });
 
+      $('#likeBtn').click(function() {
+
+        var Event = Parse.Object.extend("Event");
+        var eventObj = new Event();
+        eventObj.id = PinsterApp.fields.currentEventId;
+
+        eventObj.increment("likes", 1);
+
+        // Save
+        eventObj.save(null, {
+          success: function(eventObj) {
+            // Saved successfully.
+            $("#numOfLikes").text(eventObj._serverData.likes);
+          },
+          error: function(eventObj, error) {
+            console.log("Error incrementing event likes");
+          }
+        });
+
+      });
+
       $('#hyperlapseBtn').click(function() {
 
         // that.closeEventModal();
@@ -360,6 +385,7 @@ var PinsterApp = {
 
       PinsterApp.fields.currentWindow = "main";
       $("#wazeBtn").hide();
+      $("#likeBtn #numOfLikes").hide();
       $("#eventModal").hide();
       $("#eventImg").attr("src","img/no-image.png");
       // Make sure the foursquare display interval is cleared
@@ -773,7 +799,9 @@ var PinsterApp = {
                 return function() {
 
                   var userEvent = results[index]._serverData;
+                  PinsterApp.fields.currentEventId = results[index].id; 
                   var hasDesc = true;
+
                   // Set event location as our destination
                   // in case the user will want to drive there
                   PinsterApp.destination = new google.maps.LatLng(
@@ -796,6 +824,8 @@ var PinsterApp = {
                   
                   if (userEvent.description == "") { hasDesc = false; }
 
+                  $("#numOfLikes").text(userEvent.likes);
+
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   
                   //foursquare tests
@@ -807,6 +837,8 @@ var PinsterApp = {
 
                   setTimeout(function() {
                     $("#wazeBtn").fadeIn();
+                    $("#likeBtn").fadeIn();
+                    $("#numOfLikes").fadeIn();
                   }, 750);
 
                 }
