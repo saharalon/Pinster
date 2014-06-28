@@ -385,7 +385,8 @@ var PinsterApp = {
 
       PinsterApp.fields.currentWindow = "main";
       $("#wazeBtn").hide();
-      $("#likeBtn #numOfLikes").hide();
+      $("#likeBtn").hide();
+      $("#numOfLikes").hide();
       $("#eventModal").hide();
       $("#eventImg").attr("src","img/no-image.png");
       // Make sure the foursquare display interval is cleared
