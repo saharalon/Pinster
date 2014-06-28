@@ -319,7 +319,7 @@ PinsterApp.User = function() {
 
       var deg = 0;
       PinsterApp.fields.rotateDice = setInterval(function() {
-        deg+=10;
+        deg += 10;
         $(".diceIcon").css("transform", "rotate(" + (deg) + "deg)");
       }, 50);
 
@@ -369,7 +369,8 @@ PinsterApp.User = function() {
         },
 
         error: function(error) { }
-
+          clearInterval(PinsterApp.fields.rotateDice);
+          $(".diceIcon").css("transform", "rotate(0deg)");
       });
 
     }

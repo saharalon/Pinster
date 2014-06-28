@@ -329,8 +329,8 @@ html, body {
 
 #eventModalClose .x {
 	position: absolute;
-	top: -17px;
-	right: 6px;
+	top: -16px;
+	left: 8px;
 }
 
 #fourSquareBar {
@@ -402,7 +402,7 @@ html, body {
 #numOfLikes { 
 	position: absolute;
 	right: 10px;
-	bottom: 5.7%;
+	bottom: 27px;
 	display: none;
 	font-size: 10px;
 	width: 17px;

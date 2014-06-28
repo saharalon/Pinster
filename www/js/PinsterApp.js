@@ -65,6 +65,11 @@ var PinsterApp = {
 
       //Android search key (magnifying glass) - search events
       document.addEventListener("searchbutton", that.searchEvents, false);
+
+      document.addEventListener("menubutton", function() {
+        PinsterApp.fields.currentWindow = "settings";
+        $("#settingsModal").modal();
+      }, false);
       
       document.addEventListener("offline", that.offlineSignalEvent, false);
 
@@ -134,20 +139,16 @@ var PinsterApp = {
       });
         
       $(".settingsBtn").on("touchend", function(){
-        $(".fancyBtn").removeClass('fancyBtnDown');
         PinsterApp.fields.currentWindow = "settings";
-        $("#settingsModal").modal();
       });
 
       $(".reportBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
         PinsterApp.fields.currentWindow = "reportEvent";
-        $("#reportModal").modal();
       });
 
       $(".randomEventBtn").on("touchend", function(){
         $(".fancyBtn").removeClass('fancyBtnDown');
-        that.fields.user.searchData.getSmartRandomEvent();
       });
 
       $(".settingsBtn").click(function(){
