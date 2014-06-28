@@ -70,6 +70,8 @@ PinsterApp.Utils = function() {
   	$("#eventDescription").attr("placeholder", obj.getText("eventDescription", language));
   	$("#reportBtnModal").text(obj.getText("reportBtnModal", language));
 
+    $("#searchTipText").text(obj.getText("searchTipText", language));
+
   	// Trigger the slider text change
   	PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
   };
@@ -80,6 +82,8 @@ PinsterApp.Utils = function() {
   	{
   		case "quickSearch":
   			return (language == "English") ? "Enter an address..." : "...הקלד כתובת לחיפוש";
+      case "searchTipText":
+        return (language == "English") ? "And or filter by category" : "ו / או סנן ע״פ קטגוריה";
   		case "takeMeThereBtn":
   			return (language == "English") ? "Take me there" : "קח אותי לשם";
   		case "hyperlapseBtn":
