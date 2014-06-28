@@ -324,6 +324,14 @@ PinsterApp.User = function() {
 
         success: function(results) {
           
+          if (results == undefined)
+          {
+            console.log("getRecommendedEvent: returned undefined result");
+            clearInterval(PinsterApp.fields.rotateDice);
+            $(".diceIcon").css("transform", "rotate(0deg)");
+            return;
+          }
+
           var selectedEvent = JSON.parse(results);
           var location = selectedEvent.location;
           var eventId = selectedEvent.objectId;

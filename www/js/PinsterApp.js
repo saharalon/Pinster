@@ -305,6 +305,14 @@ var PinsterApp = {
         that.closeEventModal();
       });
 
+      // ESC pressed
+      $(document).keyup(function(e) {
+        if (e.keyCode == 27 && PinsterApp.fields.currentWindow == "event")
+        {
+          that.closeEventModal(); 
+        }   
+      });
+
       // bing a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
 
