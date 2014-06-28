@@ -314,10 +314,10 @@ PinsterApp.User = function() {
         success: function(results) {
           
           var selectedEvent = JSON.parse(results);
-          var location = result._serverData;
-          var eventId = result.id;
+          var location = selectedEvent.location;
+          var eventId = selectedEvent.objectId;
 
-          var address = new google.maps.LatLng(location._latitude, location._longitude);
+          var address = new google.maps.LatLng(location.latitude, location.longitude);
 
           // Focus on the selected event
           PinsterApp.fields.mapInstance.setCenter(address);
