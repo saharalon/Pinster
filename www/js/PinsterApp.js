@@ -559,7 +559,7 @@ var PinsterApp = {
 
     },
 
-    showEventAddress : function(position) {
+    showEventAddress : function(position, hasDesc) {
 
       // Geocoder converts coordinates to addresses
       var geocoder = new google.maps.Geocoder();
@@ -570,6 +570,8 @@ var PinsterApp = {
         if (status == google.maps.GeocoderStatus.OK)
         {
           $("#eventLocationStr").text(results[0].formatted_address);
+          if (hasDesc) { $("#eventLocationStr").css('border-bottom', '1px solid rgb(69, 168, 247)'); }
+          else { $("#eventLocationStr").css('border', 'none'); }
         }
 
       });
@@ -770,6 +772,7 @@ var PinsterApp = {
                 return function() {
 
                   var userEvent = results[index]._serverData;
+                  var hasDesc = true;
                   // Set event location as our destination
                   // in case the user will want to drive there
                   PinsterApp.destination = new google.maps.LatLng(
@@ -790,7 +793,9 @@ var PinsterApp = {
                   var geoLocation = new google.maps.LatLng(
                     userEvent.location.latitude, userEvent.location.longitude);
                   
-                  PinsterApp.showEventAddress(geoLocation);
+                  if (userEvent.description == "") { hasDesc = false; }
+
+                  PinsterApp.showEventAddress(geoLocation, hasDesc);
                   
                   //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(

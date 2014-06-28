@@ -123,7 +123,7 @@ html, body {
 .reportBtn {
 	position: absolute;
 	bottom: 20px;
-	right: 30px;
+	right: 28px;
 	z-index: 999;
 }
 
@@ -267,11 +267,20 @@ html, body {
 }
 
 #eventImg {
-	height: 52%;
+	height: 62%;
 	width: 80%;
 	margin-top: 60px;
 	border-radius: 5px;
 	box-shadow: 2px 2px 25px #444;
+}
+
+#eventModal .eventDetails {
+	width: 76%;
+	max-height: 16%;
+	margin: 0 auto;
+	margin-top: 16px;
+	word-wrap: break-word;
+	text-overflow: ellipsis;
 }
 
 @-webkit-keyframes animation {

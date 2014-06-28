@@ -308,6 +308,14 @@ PinsterApp.User = function() {
       var params = {};
       params["data"] = data;
 
+      var deg = 0;
+      PinsterApp.fields.rotateDice = setInterval(function() {
+        deg+=10;
+        $(".diceIcon").css("transform", "rotate(" + (deg) + "deg)");
+      }, 50);
+
+      console.log("Async!");
+
       // Call cloud function
       Parse.Cloud.run('getRecommendedEvent', params, {
 
@@ -318,6 +326,9 @@ PinsterApp.User = function() {
           var eventId = selectedEvent.objectId;
 
           var address = new google.maps.LatLng(location.latitude, location.longitude);
+
+          clearInterval(PinsterApp.fields.rotateDice);
+          $(".diceIcon").css("transform", "rotate(0deg)");
 
           // Focus on the selected event
           PinsterApp.fields.mapInstance.setCenter(address);
