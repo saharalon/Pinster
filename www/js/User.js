@@ -250,7 +250,7 @@ PinsterApp.User = function() {
           radius: 1000
         }));
 
-        $("#languageDropdownMenu").html('עברית<span class="caret caretRight"></span>');
+        $("#languageDropdownMenu").html('עברית<img src="img/עברית.png" style="width: 20px;" /><span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
         $("#dropdownMenu1").html('All<span class="caret caretRight"></span>');
         $('#radiusSlider').val(1000);
@@ -264,7 +264,7 @@ PinsterApp.User = function() {
         that.category = tmpObj.category;
         that.radius = tmpObj.radius;
 
-        $("#languageDropdownMenu").html(that.language + '<span class="caret caretRight"></span>');
+        $("#languageDropdownMenu").html(that.language + "<img src='img/" + that.language + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
         $("#settingsModal #address").val(that.address);
         $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
         $('#radiusSlider').val(that.radius);
@@ -304,8 +304,15 @@ PinsterApp.User = function() {
     getSmartRandomEvent : function() {
 
       var data = JSON.parse(localStorage.getItem("pinsterSearches"));
-      var categories = new Array();
-      var addresses = new Array();
+      var categories = [];
+      var addresses = [];
+
+      // var deg = 0;
+      // var rotateDice = setInterval(function() {
+      //   deg++;
+      //   $(".diceIcon").css("transform", "rotate(" + (deg * 36) + "deg)");
+      //   if (deg * 36 == 360) { clearInterval(rotateDice); }
+      // }, 100);
 
       // Number each category and the times it has been searched
       data.eventsCategory.forEach(function(item, index) {
@@ -371,7 +378,7 @@ PinsterApp.User = function() {
           randomNum = Math.floor((Math.random() * placesObjects.length) + 1);
           
           var selectedEvent = placesObjects[randomNum - 1]._serverData;
-          var eventId = placesObjects[randomNum].id;
+          var eventId = placesObjects[randomNum - 1].id;
           var address = new google.maps.LatLng(
             selectedEvent.location._latitude, selectedEvent.location._longitude);
 

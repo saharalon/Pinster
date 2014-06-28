@@ -169,7 +169,10 @@ var PinsterApp = {
       });
 
       $("#settingsModal #languageDropdownMenu li a").click(function(){
-        $("#languageDropdownMenu").html($(this).text() + '<span class="caret caretRight"></span>');
+        var language = $(this).text();
+        if (language.match('עברית')) { language = 'עברית'; }
+        else if (language.match('English')) { language = 'English'; }
+        $("#languageDropdownMenu").html(language + "<img src='img/" + language + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
       });
 
       $("#settingsModal #categoryDropdownMenu li a").click(function(){
@@ -186,6 +189,8 @@ var PinsterApp = {
         var map = that.fields.map;
 
         var language = $("#languageDropdownMenu").text();
+        if (language.match('עברית')) { language = 'עברית'; }
+        else if (language.match('English')) { language = 'English'; }
         var category = $("#dropdownMenu1").text();
 
         that.fields.currentLanguage = language;
@@ -242,7 +247,7 @@ var PinsterApp = {
 
       $('#quickSearch').click(function(){
         if ($("#eventsResults").is(":visible")) { $("#eventsResults").hide(); }
-        PinsterApp.addSearchByCatElem();
+        if (!$("#searchByCatTooltip").is(":visible")) { PinsterApp.addSearchByCatElem(); }
       });
 
       //Enter key - search events

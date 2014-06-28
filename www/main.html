@@ -31,6 +31,8 @@
           <img id="spinnerImage" src="img/spinner.gif"/> 
         </div>
         
+        <span class="settingsBtn"><a href="javascript:void(0);"><i class="glyphicon glyphicon-cog"></i></a></span>
+
         <span id="searchBar">
           <img class='filterPin' src='img/allPin.png'>
           <input id="quickSearch" type="text" class="form-control" /><i id="quickSearchBtn" class="glyphicon glyphicon-search"></i>
@@ -46,9 +48,8 @@
           </div>
         </span>
 
-        <span class="settingsBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-th-list amb" ></i></a></span>
         <span class="reportBtn"><a class="fancyBtn" href="javascript:void(0);"><i class="glyphicon glyphicon-bullhorn amb"></i></a></span>
-        <span class="randomEventBtn"><a class="fancyBtn" href="javascript:void(0);"><img class="diceicon" src="img/dice.png" ></img></a></span>
+        <span class="randomEventBtn"><a class="fancyBtn dicePadding" href="javascript:void(0);"><img class="diceIcon" src="img/dice.png" /></a></span>
   
         <div class="TopLeft"></div>
         <div class="TopRight"></div>
@@ -68,7 +69,7 @@
                 </div>
                 <span id="eventModalClose">x</span>
                 <div id="fourSquareBar"><span class="fsq-content"></span></div>
-                <div class="text-center" style="height: 570px;">
+                <div class="text-center">
                     <img id="eventImg" src="img/no-image.png"/>
                     <div style="margin-top: 16px;">
                       <div id="eventLocationStr"><h4>Event address</h4></div>
@@ -126,14 +127,24 @@
                       <span class="caret caretRight"></span>
                     </button>
                     <ul class="dropdown-menu" id="languageDropdownMenu" role="menu" aria-labelledby="languageDropdownMenu" style="width: 100%">
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">עברית</a></li>
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">English</a></li>
+                      <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">
+                        &nbsp;&nbsp;&nbsp;עברית
+                        <img src="img/עברית.png" style="width: 20px;" />
+                        </a>
+                      </li>
+                      <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="#">
+                          English
+                          <img src="img/English.png" style="width: 20px;" />
+                        </a>
+                      </li>
                     </ul>
                   </div>
 
                   <input id="address" type="text" class="form-control" autofocus>
 
-                  <div class="dropdown">
+                  <!-- <div class="dropdown">
                     <button class="form-control dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
                       <span class="caret caretRight"></span>
                     </button>
@@ -151,7 +162,7 @@
                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Example2</a></li>
                     </ul>
                   </div>
-
+ -->
                   <br>
                   <input id="radiusSlider" type="range" placeholder="Radius" min="0" max="10000" step="100" 
                     oninput="PinsterApp.sliderOutputUpdate(value)">
