@@ -317,14 +317,20 @@ html, body {
 #eventModalClose {
 	cursor: pointer;
 	position: absolute;
-	top: 0px;
-	right: 19px;
+	top: 18px;
+	right: 4%;
 	font-size: 3em;
 	box-shadow: 0px 2px 8px rgba(139, 205, 231, 0.5);
 	background: rgba(139, 205, 231, 0.5);
-	padding-left: 8px;
-	padding-right: 8px;
 	border-radius: 3px;
+	height: 36px;
+	width: 36px;
+}
+
+#eventModalClose .x {
+	position: absolute;
+	top: -17px;
+	right: 6px;
 }
 
 #fourSquareBar {
@@ -387,7 +393,7 @@ html, body {
 #likeBtn {
 	position: absolute;
 	width: 130px;
-	right: -46px;
+	right: -52px;
 	bottom: 1%;
 	display: none;
 	cursor: pointer;
@@ -395,9 +401,13 @@ html, body {
 
 #numOfLikes { 
 	position: absolute;
-	right: 4px;
-	bottom: 7%;
+	right: 10px;
+	bottom: 5.7%;
 	display: none;
+	font-size: 10px;
+	width: 17px;
+	text-align: center;
+	color: rgb(65, 100, 240);
 }
 
 #searchResultsContainer {
