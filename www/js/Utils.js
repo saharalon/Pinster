@@ -26,9 +26,9 @@ PinsterApp.Utils = function() {
 
           PinsterApp.CONSTANTS.pinImgs[category] = imagePath;
 
-          callback();
-
         });
+
+        callback();
 
       },
       error: function(object, error) {

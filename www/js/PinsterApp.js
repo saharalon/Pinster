@@ -205,7 +205,7 @@ var PinsterApp = {
         user.settings.setRadius($('#radiusSlider').val());
 
         that.fields.utils.setAppLanguage($("#languageDropdownMenu").text());
-        map.filterMarkers(category.toLowerCase());
+        //map.filterMarkers(category.toLowerCase());
 
       });
 
@@ -759,11 +759,15 @@ var PinsterApp = {
                 var latitude = item._serverData.location._latitude;
                 var longitude = item._serverData.location._longitude;
                 // TODO: load from database
-                var eventImage = "img/no-image.png";
+                var path = "img/";
+                var image = PinsterApp.CONSTANTS.pinImgs[item._serverData.category];
+
+                if (image == undefined)
+                  image = "defaultPin.png"; 
 
                 // Image for the marker
                 var markerImage = {
-                    url: "img/" + PinsterApp.CONSTANTS.pinImgs[item._serverData.category]
+                    url: path + image
                 };
 
                 marker = new google.maps.Marker({
@@ -878,7 +882,7 @@ var PinsterApp = {
                 //loaded fully
                 console.log("Map loaded...");
                 // Filter pins by user last choosen category
-                PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
+                //PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
                 // navigator.splashscreen.hide();
           });
 
