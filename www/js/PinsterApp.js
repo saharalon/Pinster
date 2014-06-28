@@ -169,10 +169,11 @@ var PinsterApp = {
       });
 
       $("#settingsModal #languageDropdownMenu li a").click(function(){
-        var language = $(this).text();
-        if (language.match('עברית')) { language = 'עברית'; }
+        var language = $(this).text(),
+            languageText = "English";
+        if (language.match('עברית')) { languageText = "עברית"; language = 'Hebrew'; }
         else if (language.match('English')) { language = 'English'; }
-        $("#languageDropdownMenu").html(language + "<img src='img/" + language + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
+        $("#languageDropdownMenu").html(languageText + "<img src='img/" + language + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
       });
 
       $("#settingsModal #categoryDropdownMenu li a").click(function(){
