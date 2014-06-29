@@ -128,10 +128,7 @@ var PinsterApp = {
 
       // When clicking outside the events search results -> hide it
       $("body").click(function(e){
-        if (e.target.id != "quickSearch" && e.target.className != "eventResRow" && e.target.id != "eventModalClose" && e.target.id != "searchByCatTooltip") {
-          $("#eventsResults").hide();
-          $("#searchByCatTooltip").hide();
-        }
+        that.returnFromSearchToMain(e);
       });
 
       $(".fancyBtn").on("touchstart", function(){
@@ -390,6 +387,21 @@ var PinsterApp = {
 
     },
 
+    returnFromSearchToMain : function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.target.id != "quickSearch" &&
+          e.target.className != "eventResRow" &&
+          e.target.id != "eventModalClose" &&
+          e.target.className != "categoryRow" &&
+          e.target.className != "catGlass" &&
+          e.target.id != "searchByCatTooltip" &&
+          e.target.id != "searchTipText") {
+          $("#eventsResults").hide();
+          $("#searchByCatTooltip").hide();
+        }
+    },
+
     closeEventModal : function() {
 
       PinsterApp.fields.currentWindow = "main";
@@ -554,7 +566,7 @@ var PinsterApp = {
           var language = that.fields.currentLanguage;
           var msg = that.fields.utils.getText("no_results", language);
           $("#eventsResults").html('');
-          $("#eventsResults").append("<div class='eventResRow'>" + msg + "... (" + status + ")</div>");
+          $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
         }
       });

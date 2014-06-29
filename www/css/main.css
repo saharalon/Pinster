@@ -74,10 +74,10 @@ html, body {
 .settingsBtn .glyphicon {
 	font-size: 1.3em;
 	color: rgb(255, 132, 0);
-	border: 1px solid;
+	border: 1px solid rgb(185, 185, 185);
 	border-radius: 6px;
 	padding: 3px;
-	box-shadow: 0px 0px 2px #747474;
+	/*box-shadow: 0px 0px 2px #747474;*/
 	background-color: #FFF;
 }
 
@@ -422,7 +422,6 @@ html, body {
 #eventsResults {
 	display: none;
 	position: relative;
-	margin-top: 40px;
 	min-height: 40px;
     max-height: 320px;
 	overflow: auto;

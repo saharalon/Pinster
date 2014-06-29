@@ -87,18 +87,20 @@ PinsterApp.User = function() {
     query.find({
         success: function(placesObjects) {
 
-          var image;
+          var image, isFirst = "style='margin-top: 40px;'";
           console.log(placesObjects);
           
           $("#eventsResults").html('');
           $(".eventResRow").unbind();
 
-          placesObjects.forEach(function(item){
+          placesObjects.forEach(function(item, index){
 
             image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
             if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
 
-            $("#eventsResults").append("<div class='eventResRow' eventId='" + item.id + "' lat=" + item.attributes.location._latitude + 
+            if (index > 0) { isFirst = ""; }
+
+            $("#eventsResults").append("<div class='eventResRow' " + isFirst + " eventId='" + item.id + "' lat=" + item.attributes.location._latitude + 
               " long=" + item.attributes.location._longitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
           });
 
@@ -129,7 +131,7 @@ PinsterApp.User = function() {
             var language = PinsterApp.fields.currentLanguage;
             var msg = (language == "English") ? "No results were found" : "לא נמצאו תוצאות מתאימות";
             $("#eventsResults").html('');
-            $("#eventsResults").append("<div class='eventResRow'>" + msg + "...</div>");
+            $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
           }
 
           $("#eventsResults").show();
@@ -312,7 +314,8 @@ PinsterApp.User = function() {
       {
         console.log("getRecommendedEvent: Stopped - no search history");
         return;
-      }      
+        // @goldido : if there's no history - random some event.
+      }
 
       var params = {};
       params["data"] = JSON.parse(history);
@@ -322,8 +325,6 @@ PinsterApp.User = function() {
         deg += 10;
         $(".diceIcon").css("transform", "rotate(" + (deg) + "deg)");
       }, 50);
-
-      console.log("Async!");
 
       // Call cloud function
       Parse.Cloud.run('getRecommendedEvent', params, {
@@ -335,6 +336,7 @@ PinsterApp.User = function() {
             console.log("getRecommendedEvent: returned undefined result");
             clearInterval(PinsterApp.fields.rotateDice);
             $(".diceIcon").css("transform", "rotate(0deg)");
+            PinsterApp.fields.user.searchData.getSmartRandomEvent();
             return;
           }
 

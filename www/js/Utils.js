@@ -87,7 +87,7 @@ PinsterApp.Utils = function() {
   		case "quickSearch":
   			return (language == "English") ? "Enter an address..." : "...הקלד כתובת לחיפוש";
       case "searchTipText":
-        return (language == "English") ? "And or filter by category" : "ו / או סנן ע״פ קטגוריה";
+        return (language == "English") ? "And / or filter by category" : "ו / או סנן ע״פ קטגוריה";
   		case "takeMeThereBtn":
   			return (language == "English") ? "Take me there" : "קח אותי לשם";
   		case "hyperlapseBtn":
