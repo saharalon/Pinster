@@ -394,8 +394,6 @@ var PinsterApp = {
     },
 
     returnFromSearchToMain : function (e) {
-      e.preventDefault();
-      e.stopPropagation();
       if (e.target.id != "quickSearch" &&
           e.target.className != "eventResRow" &&
           e.target.id != "eventModalClose" &&
