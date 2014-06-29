@@ -13,6 +13,7 @@ PinsterApp.User = function() {
 
       eventObject.save({title:title, description:desc, location:location,
        address:address, category:category, imageURL:"", user:user}, {
+
         success:function(object)
         {
          // obj.postOnFacebook(title, desc, user);
@@ -24,24 +25,24 @@ PinsterApp.User = function() {
               {
                  object.set("imageURL",parseFile.url());
                  object.save();
-                 PinsterApp.log("image saved");
+                 PinsterApp.log("Reported successfully (!)");
                  PinsterApp.onDocumentReady();  // redraw map with new data
               },
 
               function(error)
               {
                   console.log(error);
-                  PinsterApp.log("error saving image");
+                  PinsterApp.log("We've had problems saving your image");
               });
           }
           else {
+            PinsterApp.log("Reported successfully (!)");
             PinsterApp.onDocumentReady(); // redraw map with new data
           }
 
         },
         error:function(object,error) {
-          console.log(error);
-          PinsterApp.log("Sorry, I couldn't save it.");
+          PinsterApp.log("We've had problems reporting your event, please Retry");
         }
       });
   };
@@ -58,7 +59,7 @@ PinsterApp.User = function() {
 
     // Remove circle on mouse click
     google.maps.event.addListener(PinsterApp.fields.searchArea, 'click', function(ev){
-      PinsterApp.fields.searchArea.setMap(null);            
+      PinsterApp.fields.searchArea.setMap(null);      
     });
 
     var events = Parse.Object.extend("Event");
