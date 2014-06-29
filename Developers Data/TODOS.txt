@@ -4,7 +4,7 @@
 
 2) Pins with matching pictures (only 3 .. add more)
 
-7) Random smart user event recommendation (Sahar [backend & UI])
+7) Random smart user event recommendation (90% done, needs minor fixes)
 
 8) Users login (via facebook) (Eran) 
 
@@ -12,11 +12,7 @@
 
 11) See which friends (from facebook) are close to an event (* beta *)
 
-15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
-
 16) Switch the Robot picture at the beginning
-
-17) toast for event report completion
 
 
 ///////////////
@@ -28,6 +24,12 @@
 14) event modal - wrong or no addresses (Ido) /* DONE */
 
 13) delete the purple circle (Ido) /* DELETED WHERE ASKED */
+
+15) event modal - design 2 bottom buttons and see why they aren’t working (Ido & Sahar)
+
+    [DONE]
+
+17) toast for event report completion (Done)
 
 18) English / Hebrew rest of application (Ido) /* DONE */
 
