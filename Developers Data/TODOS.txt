@@ -2,17 +2,33 @@
 // TODO //
 //////////
 
-2) Pins with matching pictures (only 3 .. add more)
+1) Pins with matching pictures (only 3 .. add more)
 
-7) Random smart user event recommendation (90% done, needs minor fixes)
+2) Random smart user event recommendation (90% done, needs minor fixes)
 
-8) Users login (via facebook) (Eran) 
+3) Users login (via facebook) (Eran) 
 
-9) Rating system for users and events (* beta *)
+4) Rating system for users and events (* beta *)
 
-11) See which friends (from facebook) are close to an event (* beta *)
+5) See which friends (from facebook) are close to an event (* beta *)
 
-16) Switch the Robot picture at the beginning
+6) Switch the Robot picture at the beginning
+
+7) 
+	7.1)	Remove an event : [each “remove” click -> makes ‘deleteReqs’++. each like 		click makes ‘deleteReqs’ = 0]
+
+	7.2)	Create an hourly job which it’s purpose is to check if ‘deleteReqs’ == 3
+		and then remove this event.
+	
+	7.3)	Create a job for each category which deletes all expired events.
+		(e.g: Sports expiration time is 3 hours - meaning there’s a 3 hourly job
+		 which removes all Sports events existing at least 3 hours)
+
+		(e.g: Hazards expiration time is 1 day - meaning there’s a 1 daily job
+		 which removes all Hazards events existing 1 day) etc. etc.
+	
+
+
 
 
 ///////////////
