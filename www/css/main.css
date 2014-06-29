@@ -283,6 +283,33 @@ html, body {
 	text-overflow: ellipsis;
 }
 
+#eventModal .eTimestamp {
+	position: relative;
+    font-size: 10px;
+    bottom: -3px;
+    background-color: #FBFBFB;
+    border-radius: 20px;
+    padding: 2px;
+    width: 151px;
+	margin: 0 auto;
+	margin-top: -9px;
+}
+
+#eventModal .eTimestamp .removeEventBtn {
+	font-size: 9px;
+    border: 1px solid rgb(250, 174, 174);
+    border-radius: 4px;
+    box-shadow: 0px 0px 3px;
+    padding-right: 2px;
+    padding-left: 2px;
+    cursor: pointer;
+}
+
+#eventModal .eTimestamp .glyphicon {
+	color: red;
+    margin-right: 2px;
+}
+
 @-webkit-keyframes animation {
 	from {
 		-webkit-transform: scale(0);

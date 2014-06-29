@@ -307,11 +307,17 @@ var PinsterApp = {
       $(document).keyup(function(e) {
         if (e.keyCode == 27 && PinsterApp.fields.currentWindow == "event")
         {
-          that.closeEventModal(); 
-        }   
+          that.closeEventModal();
+        }
       });
 
-      // bing a listener for categories picker
+      $(".removeEventBtn").click(function(){
+        that.log("We got your feedback, thanks...");
+        that.closeEventModal();
+        // TODO DB actions
+      });
+
+      // bind a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
 
     },  // END of registerEvents()
