@@ -556,6 +556,20 @@ html, body {
 	background: rgba(139, 205, 231, 0.5);
 }
 
+#searchByCatTooltip .glyphicon-chevron-up {
+	position: absolute;
+    top: 99px;
+	right: 5px;
+    font-size: 10px;
+}
+
+#searchByCatTooltip .glyphicon-chevron-down {
+	position: absolute;
+	top: 184px;
+	right: 6px;
+	font-size: 10px;
+}
+
 .triangleTop {
 	width: 0;
 	height: 0;
