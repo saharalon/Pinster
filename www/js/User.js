@@ -59,7 +59,7 @@ PinsterApp.User = function() {
 
     // Remove circle on mouse click
     google.maps.event.addListener(PinsterApp.fields.searchArea, 'click', function(ev){
-      PinsterApp.fields.searchArea.setMap(null);      
+      PinsterApp.fields.searchArea.setMap(null);
     });
 
     var events = Parse.Object.extend("Event");
@@ -135,6 +135,7 @@ PinsterApp.User = function() {
             $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
           }
 
+          clearInterval(PinsterApp.fields.aniMagnify);
           $("#eventsResults").show();
 
 

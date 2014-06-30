@@ -532,6 +532,10 @@ var PinsterApp = {
 
       var that = this;
 
+      PinsterApp.fields.aniMagnify = setInterval(function() {
+        $("#quickSearchBtn").fadeOut().fadeIn();
+      }, 400);
+
       that.fields.currentWindow = "eventsSearch";
       $("#searchByCatTooltip").hide();
 
@@ -549,7 +553,7 @@ var PinsterApp = {
       if (address == "")
       {
         that.fields.user.searchEvents(address, radius);
-        return
+        return;
       }
         
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)
@@ -569,6 +573,7 @@ var PinsterApp = {
         {
           var language = that.fields.currentLanguage;
           var msg = that.fields.utils.getText("no_results", language);
+          clearInterval(PinsterApp.fields.aniMagnify);
           $("#eventsResults").html('');
           $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
