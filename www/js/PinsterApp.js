@@ -211,6 +211,11 @@ var PinsterApp = {
 
         // if (PinsterApp.fields.user.isUserLoggedIn())
         // {
+          PinsterApp.fields.animateReport = setInterval(function() {
+            $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
+          }, 400);
+          $(".mayTakeAMin").show();
+
           navigator.geolocation.getCurrentPosition(
             that.onCurrentLocationSuccess, that.onCurrentLocationError,
               PinsterApp.CONSTANTS.GPS_SETTINGS);
@@ -422,6 +427,12 @@ var PinsterApp = {
 
     },
 
+    closeReportModal : function() {
+      clearInterval(PinsterApp.fields.animateReport);
+      $(".mayTakeAMin").hide();
+      $("#reportModal").modal('hide');
+    },
+
     closeSimulation : function () {
 
       var that = this;
@@ -522,6 +533,7 @@ var PinsterApp = {
     // Error Callback receives a PositionError object
     onCurrentLocationError : function(error) {
 
+      PinsterApp.closeReportModal();
       PinsterApp.log('code: '    + error.code    + '\n' +
             'message: ' + error.message + '\n');
     },
@@ -898,7 +910,7 @@ var PinsterApp = {
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);
-                  $(".stamp").text(PinsterApp.fields.utils.formatDate(createdAt));
+                  $(".stamp").text("Since: " + PinsterApp.fields.utils.formatDate(createdAt));
 
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   

@@ -72,9 +72,11 @@ PinsterApp.Utils = function() {
   	$("#dropdownMenu2").text(obj.getText("dropdownMenu2", language));
   	$("#eventTitle").attr("placeholder", obj.getText("eventTitle", language));
   	$("#eventDescription").attr("placeholder", obj.getText("eventDescription", language));
-  	$("#reportBtnModal").text(obj.getText("reportBtnModal", language));
+	$("#reportBtnModal").html(obj.getText("reportBtnModal", language) + "<i class='glyphicon glyphicon-bullhorn'></i>");
 
     $("#searchTipText").text(obj.getText("searchTipText", language));
+
+    $(".mayTakeAMin").text(obj.getText("mayTakeAMin", language));
 
   	// Trigger the slider text change
   	PinsterApp.sliderOutputUpdate($("#radiusSlider").val());
@@ -110,8 +112,6 @@ PinsterApp.Utils = function() {
   			return (language == "English") ? "Save" : "שמור";
   		case "reportHeadline":
   			return (language == "English") ? "Report an event" : "דווח אירוע";
-  		case "addressDiv":
-  			return (language == "English") ? "Address:" : ":דווח";
   		case "dropdownMenu2":
   			return (language == "English") ? "Please select a category" : "אנא בחר קטגוריה";
   		case "eventTitle":
@@ -132,6 +132,8 @@ PinsterApp.Utils = function() {
   			return (language == "English") ? " Meters" : " מטרים";
   		case "kilometers":
   			return (language == "English") ? " Kilometers" : " קילומטרים";
+      case "mayTakeAMin":
+        return (language == "English") ? "This may take a minute..." : "...דיווח האירוע עלול לקחת כמה רגעים";
 
   		default:
   			return ""; 
@@ -140,16 +142,16 @@ PinsterApp.Utils = function() {
 
   obj.formatDate = function(date) {
 
-    var day     = date.getDate();
-    var month   = date.getMonth() + 1; // Months are zero based
-    var year    = date.getFullYear();
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+        day    = date.getDate(),
+        month  = date.getMonth();
+    //  year    = date.getFullYear(),
 
-    var hours   = date.getHours();
-    var minutes = date.getMinutes();
-    var seconds = date.getSeconds();
+        hours   = date.getHours(),
+        minutes = date.getMinutes();
+    //  seconds = date.getSeconds();
 
-    return (day + "/" + month + "/" + year + " " +
-            hours + ":" + minutes + ":" + seconds);
+    return (months[month] + " " + day + ", " + hours + ":" + minutes);
 
   };
 

@@ -25,17 +25,19 @@ PinsterApp.User = function() {
               {
                  object.set("imageURL",parseFile.url());
                  object.save();
+                 PinsterApp.closeReportModal();
                  PinsterApp.log("Reported successfully (!)");
                  PinsterApp.onDocumentReady();  // redraw map with new data
               },
 
               function(error)
               {
-                  console.log(error);
+                  PinsterApp.closeReportModal();
                   PinsterApp.log("We've had problems saving your image");
               });
           }
           else {
+            PinsterApp.closeReportModal();
             PinsterApp.log("Reported successfully (!)");
             PinsterApp.onDocumentReady(); // redraw map with new data
           }

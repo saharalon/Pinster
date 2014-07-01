@@ -127,6 +127,13 @@ html, body {
 	z-index: 999;
 }
 
+#reportBtnModal .glyphicon-bullhorn {
+	position: absolute;
+	font-size: 22px;
+	top: 10px;
+	right: 8px;
+}
+
 .randomEventBtn {
 	position: absolute;
 	bottom: 20px;
@@ -290,7 +297,7 @@ html, body {
     background-color: #FBFBFB;
     border-radius: 20px;
     padding: 2px;
-    width: 161px;
+    width: 159px;
 	margin: 0 auto;
 	margin-top: -9px;
 }
@@ -596,4 +603,8 @@ html, body {
 	z-index: 1000;
 	left: 9px;
 	position: absolute;
+}
+
+.mayTakeAMin {
+	display: none;
 }
