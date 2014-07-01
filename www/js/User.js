@@ -12,7 +12,7 @@ PinsterApp.User = function() {
       var eventObject = new EventObject();
 
       eventObject.save({title:title, description:desc, location:location,
-       address:address, category:category, imageURL:"", user:user}, {
+       address:address, category:category, imageURL:"", user:user, likes:0, deleteReqs:0}, {
 
         success:function(object)
         {

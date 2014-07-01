@@ -247,6 +247,7 @@ var PinsterApp = {
           success: function(eventObj) {
             // Saved successfully.
             $("#numOfLikes").text(eventObj._serverData.likes);
+            PinsterApp.initEventDeleteReqs();
           },
           error: function(eventObj, error) {
             console.log("Error incrementing event likes");
@@ -313,8 +314,8 @@ var PinsterApp = {
 
       $(".removeEventBtn").click(function(){
         that.log("We got your feedback, thanks...");
+        that.incrementEventDeleteReqs();
         that.closeEventModal();
-        // TODO DB actions
       });
 
       // bind a listener for categories picker
@@ -614,6 +615,36 @@ var PinsterApp = {
       else {
         document.querySelector('#output').value = text + val / that.CONSTANTS.METERS + kilometersStr;
       }
+
+    },
+
+    incrementEventDeleteReqs : function() {
+
+      var Event = Parse.Object.extend("Event");
+      var eventObj = new Event();
+      eventObj.id = PinsterApp.fields.currentEventId;
+
+      eventObj.increment("deleteReqs", 1);
+
+      eventObj.save(null, {
+        success: function(eventObj) { },
+        error: function(eventObj, error) { console.log("Error: incrementEventDeleteReqs"); }
+      });
+
+    },
+
+    initEventDeleteReqs : function() {
+
+      var Event = Parse.Object.extend("Event");
+      var eventObj = new Event();
+      eventObj.id = PinsterApp.fields.currentEventId;
+
+      eventObj.set("deleteReqs", 0);
+
+      eventObj.save(null, {
+        success: function(eventObj) { },
+        error: function(eventObj, error) { console.log("Error: initEventDeleteReqs"); }
+      });
 
     },
 
