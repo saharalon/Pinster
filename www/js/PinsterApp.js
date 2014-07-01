@@ -29,7 +29,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
-      GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 8000 },
+      GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 20000 },
       pinImgs : {},
       categories : [],
     },
@@ -223,15 +223,7 @@ var PinsterApp = {
       });
 
       $('#wazeBtn').click(function() {
-
-        if (isPhone) {
           window.open("waze://?q=" + $("#eventLocationStr").text() + "", '_system', 'location=yes');
-        }
-        else {
-          navigator.geolocation.getCurrentPosition(
-            that.onCurrentLocationForRouteSuccess, that.onCurrentLocationError,
-              PinsterApp.CONSTANTS.GPS_SETTINGS);
-        }
       });
 
       $('#likeBtn').click(function() {
@@ -330,6 +322,10 @@ var PinsterApp = {
 
       // bind a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
+
+    //   google.maps.event.addListener(PinsterApp.fields.map.getStreetView(), "pano_changed", function(){
+    //     console.log("Sahar");
+    // });
 
     },  // END of registerEvents()
 
