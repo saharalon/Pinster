@@ -106,37 +106,46 @@ Parse.Cloud.job("eventDeletionJob", function(request, status)
     {
       results.forEach(function(eventObj, index) 
       {
-        if (eventObj.deleteReqs >= 3)
-        {
-          // Set event as deleted
-          eventObj.set("statusId", 99);
-        }
-        else if (eventObj.category == 'Sports')
-        {
-          var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
-          var diffHours = Math.ceil(timeDiff / (1000 * 3600 * 24 * 60));
+      	var isToDelete = false;
+      	var msg = "";
 
-          // Sports events expiration is 3 hours
-          if (diffHours >= 3)
-          {
-            // Set event as deleted
-            eventObj.set("statusId", 99);
-          }
-        }
-        else if (eventObj.category == 'Hazrads')
+        if (eventObj._serverData.deleteReqs >= 3)
         {
-          var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
-          var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        	isToDelete = true;
+        	msg = "3 or more deleteReqs";
+        }
+        else if (eventObj._serverData.category == 'Sports')
+        {
+         	var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
+          	var diffHours = Math.ceil(timeDiff / (1000 * 3600 * 24 * 60));
 
-          // Hazards events expiration is 1 day
-          if (diffDays >= 1)
-          {
-            // Set event as deleted
-            eventObj.set("statusId", 99);
-          }
+          	// Sports events expiration is 3 hours
+          	if (diffHours >= 3)
+          	{
+          		isToDelete = true;
+          		msg = "sports event timeout";
+          	}
+        }
+        else if (eventObj._serverData.category == 'Hazrads')
+        {
+	          var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
+	          var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+	          // Hazards events expiration is 1 day
+	          if (diffDays >= 1)
+	          {
+	          	isToDelete = true;
+	          	msg = "hazards event timeout";
+	          }
         }
 
-        eventObj.save();
+        if (isToDelete)
+        {
+        	// Set event as deleted
+            eventObj.set('statusId', 99);
+            eventObj.save();
+            console.log("event:" + eventObj.id + " reason: " + msg);
+        }
       });
 
       // Set the job's success status
