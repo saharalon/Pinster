@@ -323,10 +323,6 @@ var PinsterApp = {
       // bind a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
 
-    //   google.maps.event.addListener(PinsterApp.fields.map.getStreetView(), "pano_changed", function(){
-    //     console.log("Sahar");
-    // });
-
     },  // END of registerEvents()
 
     log : function (msg) {
