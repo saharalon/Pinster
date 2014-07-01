@@ -8,21 +8,6 @@
 
 6) Switch the Robot picture at the beginning
 
-7) 
-	7.1)	Remove an event : [each “remove” click -> makes ‘deleteReqs’++. each like
-			click makes ‘deleteReqs’ = 0]  /* DONE */
-
-	7.2)	Create an hourly job which it’s purpose is to check if ‘deleteReqs’ == 3
-		and then remove this event. /* LOGIC DONE, NEEDS DEPLOY */
-
-	7.3)	Create a job for each category which deletes all expired events.
-		(e.g: Sports expiration time is 3 hours - meaning there’s a 3 hourly job
-		 which removes all Sports events existing at least 3 hours)
-
-		(e.g: Hazards expiration time is 1 day - meaning there’s a 1 daily job
-		 which removes all Hazards events existing 1 day) etc. etc.
-
-
 
 ///////////////
 ///// BETA ////
@@ -54,3 +39,19 @@
 18) English / Hebrew rest of application (Ido) /* DONE */
 
 19) Complete “Category” Table at parse.com (Eran) /* DONE */
+
+7) 
+	7.1)	Remove an event : [each “remove” click -> makes ‘deleteReqs’++. each like
+			click makes ‘deleteReqs’ = 0]  /* DONE */
+
+	7.2)	Create an hourly job which it’s purpose is to check if ‘deleteReqs’ == 3
+		and then remove this event. /* LOGIC DONE, NEEDS DEPLOY */
+
+	7.3)	Create a job for each category which deletes all expired events.
+		(e.g: Sports expiration time is 3 hours - meaning there’s a 3 hourly job
+		 which removes all Sports events existing at least 3 hours)
+
+		(e.g: Hazards expiration time is 1 day - meaning there’s a 1 daily job
+		 which removes all Hazards events existing 1 day) etc. etc.
+
+	*** All functionalities implemented in one job - eventDeletionJob ***
