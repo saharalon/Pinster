@@ -318,6 +318,16 @@ var PinsterApp = {
         that.closeEventModal();
       });
 
+      $("#searchByCatTooltip .glyphicon-chevron-up").click(function(e){
+        e.stopPropagation();
+        $(".categories").scrollTop($(".categories").scrollTop() - 32);
+      });
+
+      $("#searchByCatTooltip .glyphicon-chevron-down").click(function(e){
+        e.stopPropagation();
+        $(".categories").scrollTop($(".categories").scrollTop() + 32);
+      });
+
       // bind a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
 
