@@ -15,10 +15,11 @@
 6) Switch the Robot picture at the beginning
 
 7) 
-	7.1)	Remove an event : [each “remove” click -> makes ‘deleteReqs’++. each like 		click makes ‘deleteReqs’ = 0]
+	7.1)	Remove an event : [each “remove” click -> makes ‘deleteReqs’++. each like
+			click makes ‘deleteReqs’ = 0]  /* DONE */
 
 	7.2)	Create an hourly job which it’s purpose is to check if ‘deleteReqs’ == 3
-		and then remove this event.
+		and then remove this event. /* LOGIC DONE, NEEDS DEPLOY */
 	
 	7.3)	Create a job for each category which deletes all expired events.
 		(e.g: Sports expiration time is 3 hours - meaning there’s a 3 hourly job
