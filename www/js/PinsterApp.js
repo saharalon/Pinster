@@ -844,6 +844,7 @@ var PinsterApp = {
 
                 marker = new google.maps.Marker({
                   id: item.id,
+                  createdAt: item.createdAt,
                   position: new google.maps.LatLng(latitude, longitude),
                   map: map,
                   icon: markerImage,
@@ -875,6 +876,7 @@ var PinsterApp = {
                 return function() {
 
                   var userEvent = results[index]._serverData;
+                  var createdAt = results[index].createdAt;
                   PinsterApp.fields.currentEventId = results[index].id; 
                   var hasDesc = true;
 
@@ -901,6 +903,7 @@ var PinsterApp = {
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);
+                  $(".stamp").text(PinsterApp.fields.utils.formatDate(createdAt));
 
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   

@@ -138,6 +138,21 @@ PinsterApp.Utils = function() {
   	}
   };  
 
+  obj.formatDate = function(date) {
+
+    var day     = date.getDate();
+    var month   = date.getMonth() + 1; // Months are zero based
+    var year    = date.getFullYear();
+
+    var hours   = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+
+    return (day + "/" + month + "/" + year + " " +
+            hours + ":" + minutes + ":" + seconds);
+
+  };
+
   return obj;
 
 };
