@@ -816,6 +816,9 @@ var PinsterApp = {
         // var time = new Date(currentTime.getTime());
         // query.greaterThanOrEqualTo('updatedAt', time);
 
+        // Don't load events with status id 99 (deleted)
+        query.notEqualTo('statusId', 99);
+
         query.find({
             success: function(results) {
               results.forEach(function(item, index) {

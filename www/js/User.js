@@ -11,8 +11,8 @@ PinsterApp.User = function() {
       var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
-      eventObject.save({title:title, description:desc, location:location,
-       address:address, category:category, imageURL:"", user:user, likes:0, deleteReqs:0}, {
+      eventObject.save({title:title, description:desc, location:location, address:address,
+        category:category, imageURL:"", user:user, likes:0, deleteReqs:0, statusId:0}, {
 
         success:function(object)
         {
@@ -81,6 +81,9 @@ PinsterApp.User = function() {
     // currentTime.setDate(currentTime.getDate() - 1);
     // var time = new Date(currentTime.getTime());
     // query.greaterThanOrEqualTo('updatedAt', time);
+
+    // Don't load events with status id 99 (deleted)
+    query.notEqualTo('statusId', 99);
     // Limit what could be a lot of points.
     query.limit(10);
     // Final list of objects
