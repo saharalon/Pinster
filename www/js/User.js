@@ -375,6 +375,7 @@ PinsterApp.User = function() {
         error: function(error) {
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
+          console.log(error);
         }
       });
 

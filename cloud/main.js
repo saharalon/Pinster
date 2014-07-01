@@ -70,13 +70,9 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
             {
             	// Sort events to get the event 
             	// with the highest number of likes 
-			  	results.sort(function() {
-			  		if (a.likes < b.likes)
-				    	return -1;
-				  	if (a.likes > b.likes)
-				    	return 1;
-				  	return 0;
-			  	})
+			  	results.sort(function(a, b) {
+            		return (b._serverData.likes - a._serverData.likes);
+          		});
 
 				// Return the event object       
                 response.success(JSON.stringify(results[0]));
