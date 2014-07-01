@@ -97,7 +97,8 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 Parse.Cloud.job("eventDeletionJob", function(request, status) 
 {
   // Query all events
-  var query = new Parse.Query(Parse.Event);
+  var Event = Parse.Object.extend("Event");
+  var query = new Parse.Query(Event);
 
   query.find(
   {
