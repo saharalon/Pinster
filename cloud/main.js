@@ -116,8 +116,8 @@ Parse.Cloud.job("eventDeletionJob", function(request, status)
         }
         else if (eventObj._serverData.category == 'Sports')
         {
-         	var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
-          	var diffHours = Math.ceil(timeDiff / (1000 * 3600 * 24 * 60));
+         	var timeDiff = Math.abs(new Date(eventObj.createdAt).getTime() - new Date().getTime());
+            var diffHours = Math.ceil(timeDiff / (1000 * 3600));
 
           	// Sports events expiration is 3 hours
           	if (diffHours >= 3)
@@ -126,17 +126,17 @@ Parse.Cloud.job("eventDeletionJob", function(request, status)
           		msg = "sports event timeout";
           	}
         }
-        else if (eventObj._serverData.category == 'Hazrads')
+        else if (eventObj._serverData.category == 'Hazards')
         {
-	          var timeDiff = Math.abs(eventObj.createdAt - new Date().getTime());
-	          var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+	        var timeDiff = Math.abs(new Date(eventObj.createdAt).getTime() - new Date().getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-	          // Hazards events expiration is 1 day
-	          if (diffDays >= 1)
-	          {
-	          	isToDelete = true;
-	          	msg = "hazards event timeout";
-	          }
+			// Hazards events expiration is 1 day
+			if (diffDays >= 1)
+			{
+				isToDelete = true;
+				msg = "hazards event timeout";
+			}
         }
 
         if (isToDelete)
@@ -144,7 +144,7 @@ Parse.Cloud.job("eventDeletionJob", function(request, status)
         	// Set event as deleted
             eventObj.set('statusId', 99);
             eventObj.save();
-            console.log("event:" + eventObj.id + " reason: " + msg);
+            console.log("event:" + eventObj.id + "deleted. reason: " + msg);
         }
       });
 
