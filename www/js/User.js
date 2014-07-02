@@ -17,6 +17,8 @@ PinsterApp.User = function() {
         success:function(object)
         {
          // obj.postOnFacebook(title, desc, user);
+          var language = PinsterApp.fields.currentLanguage;
+
           if (img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
@@ -26,25 +28,25 @@ PinsterApp.User = function() {
                  object.set("imageURL",parseFile.url());
                  object.save();
                  PinsterApp.closeReportModal();
-                 PinsterApp.log("Reported successfully (!)");
+                 PinsterApp.log(PinsterApp.fields.utils.getText("report_success", language));
                  PinsterApp.onDocumentReady();  // redraw map with new data
               },
 
               function(error)
               {
                   PinsterApp.closeReportModal();
-                  PinsterApp.log("We've had problems saving your image");
+                  PinsterApp.log(PinsterApp.fields.utils.getText("img_save_problem", language));
               });
           }
           else {
             PinsterApp.closeReportModal();
-            PinsterApp.log("Reported successfully (!)");
+            PinsterApp.log(PinsterApp.fields.utils.getText("report_success", language));
             PinsterApp.onDocumentReady(); // redraw map with new data
           }
 
         },
         error:function(object,error) {
-          PinsterApp.log("We've had problems reporting your event, please Retry");
+          PinsterApp.log(PinsterApp.fields.utils.getText("report_problem", PinsterApp.fields.currentLanguage));
         }
       });
   };

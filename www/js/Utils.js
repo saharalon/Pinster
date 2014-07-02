@@ -120,7 +120,15 @@ PinsterApp.Utils = function() {
   			return (language == "English") ? "Event description" : "תיאור האירוע";
   		case "reportBtnModal":
   			return (language == "English") ? "Report" : "דווח";
-  		case "fsq-content-search":
+      case "report_success":
+        return (language == "English") ? "Reported successfully (!)" : "(!) האירוע דווח בהצלחה";
+  		case "img_save_problem":
+        return (language == "English") ? "We've had problems saving your image" : "הצילום לא נשמר בהצלחה";
+      case "report_problem":
+        return (language == "English") ? "We've had problems reporting your event, please Retry" : "האירוע לא דווח, אנא נסה שנית";
+        case "gps_error":
+        return (language == "English") ? "Please turn GPS on, and try being in an open space" : "אנא הנדלק את ה GPS, והשתדל להיות תחת השמיים";
+      case "fsq-content-search":
   			return (language == "English") ? "Searching for comments..." : "מחפש תגובות...";
   		case "fsq-content-not-found":
   			return (language == "English") ? "No comments in this area" : "לא נמצאו תגובות לאיזור זה";

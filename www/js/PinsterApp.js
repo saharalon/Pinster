@@ -29,7 +29,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
-      GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 20000 },
+      GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 15000 },
       pinImgs : {},
       categories : [],
     },
@@ -424,6 +424,7 @@ var PinsterApp = {
 
     closeReportModal : function(isError) {
       clearInterval(PinsterApp.fields.animateReport);
+      $("#reportBtnModal .glyphicon-bullhorn").show();
       $(".mayTakeAMin").hide();
       if (!isError) {
         PinsterApp.fields.currentWindow = "main";
@@ -442,7 +443,7 @@ var PinsterApp = {
       
       var that = this;
 
-      if ($("#reportModal #dropdownMenu2").text().match("category")) {
+      if ($("#reportModal #dropdownMenu2").text().match(that.fields.utils.getText("dropdownMenu2", that.fields.currentLanguage))) {
         $("#reportModal #dropdownMenu2").css("border", "1px solid red");
         return;
       }
@@ -560,7 +561,7 @@ var PinsterApp = {
     onCurrentLocationError : function(error) {
 
       PinsterApp.closeReportModal(true);
-      PinsterApp.log(error.message);
+      PinsterApp.log(PinsterApp.fields.utils.getText("gps_error", PinsterApp.fields.currentLanguage));
     },
 
     offlineSignalEvent : function() {
