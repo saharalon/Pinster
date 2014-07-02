@@ -614,6 +614,7 @@ var PinsterApp = {
           var language = that.fields.currentLanguage;
           var msg = that.fields.utils.getText("no_results", language);
           clearInterval(PinsterApp.fields.aniMagnify);
+          $("#quickSearchBtn").show();
           $("#eventsResults").html('');
           $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "... (" + status + ")</div>");
           $("#eventsResults").show();
