@@ -21,7 +21,7 @@ var PinsterApp = {
       foursquareInterval: {},
       currentEventId: "",
       currentSearchCategory : {},
-      currentWindow : "main"
+      currentWindow : "main",
     },
 
     CONSTANTS : {
@@ -209,20 +209,15 @@ var PinsterApp = {
 
       $('#reportBtnModal').click(function() {
 
-        // if (PinsterApp.fields.user.isUserLoggedIn())
-        // {
-          PinsterApp.fields.animateReport = setInterval(function() {
-            $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
-          }, 400);
-          $(".mayTakeAMin").show();
+        var that = PinsterApp;
 
-          navigator.geolocation.getCurrentPosition(
-            that.onCurrentLocationSuccess, that.onCurrentLocationError,
-              PinsterApp.CONSTANTS.GPS_SETTINGS);
+        // if (that.fields.user.isUserLoggedIn())
+        // {
+              that.reportAnEvent();
         // }
         // else
         // {
-        //   PinsterApp.log("You need to be logged in order to report an event");
+        //   that.log("You need to be logged in order to report an event");
         // }
 
       });
@@ -427,10 +422,13 @@ var PinsterApp = {
 
     },
 
-    closeReportModal : function() {
+    closeReportModal : function(isError) {
       clearInterval(PinsterApp.fields.animateReport);
       $(".mayTakeAMin").hide();
-      $("#reportModal").modal('hide');
+      if (!isError) {
+        PinsterApp.fields.currentWindow = "main";
+        $("#reportModal").modal('hide');
+      }
     },
 
     closeSimulation : function () {
@@ -438,6 +436,34 @@ var PinsterApp = {
       var that = this;
       that.fields.currentWindow = "event";
       // @idogold : maybe some more code needed here to free memory or somthing
+    },
+
+    reportAnEvent : function() {
+      
+      var that = this;
+
+      if ($("#reportModal #dropdownMenu2").text().match("category")) {
+        $("#reportModal #dropdownMenu2").css("border", "1px solid red");
+        return;
+      }
+      if ($("#reportModal #eventTitle").val() == "") {
+        $("#reportModal #dropdownMenu2").css("border", "1px solid #ccc");
+        $("#reportModal #eventTitle").css("border", "1px solid red").focus();
+        return;
+      }
+
+      $("#reportModal #dropdownMenu2").css("border", "1px solid #ccc");
+      $("#reportModal #eventTitle").css("border", "1px solid #ccc");
+
+      that.fields.animateReport = setInterval(function() {
+        $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
+      }, 400);
+      $(".mayTakeAMin").show();
+
+      navigator.geolocation.getCurrentPosition(
+        that.onCurrentLocationSuccess, that.onCurrentLocationError,
+          that.CONSTANTS.GPS_SETTINGS);
+
     },
 
     handleBackbutton : function() {
@@ -533,9 +559,8 @@ var PinsterApp = {
     // Error Callback receives a PositionError object
     onCurrentLocationError : function(error) {
 
-      PinsterApp.closeReportModal();
-      PinsterApp.log('code: '    + error.code    + '\n' +
-            'message: ' + error.message + '\n');
+      PinsterApp.closeReportModal(true);
+      PinsterApp.log(error.message);
     },
 
     offlineSignalEvent : function() {

@@ -141,6 +141,7 @@ PinsterApp.User = function() {
           }
 
           clearInterval(PinsterApp.fields.aniMagnify);
+          $("#quickSearchBtn").show();
           $("#eventsResults").show();
 
 
