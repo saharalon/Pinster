@@ -616,7 +616,7 @@ var PinsterApp = {
           clearInterval(PinsterApp.fields.aniMagnify);
           $("#quickSearchBtn").show();
           $("#eventsResults").html('');
-          $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "... (" + status + ")</div>");
+          $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
           $("#eventsResults").show();
         }
       });
