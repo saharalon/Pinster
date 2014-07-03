@@ -22,10 +22,10 @@ PinsterApp.User = function() {
           if (img != null)
           {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
-            
+              
               parseFile.save().then(function()
-              {
-                 object.set("imageURL",parseFile.url());
+              { 
+                 object.set("imageFile",parseFile);               
                  object.save();
                  PinsterApp.closeReportModal();
                  PinsterApp.log(PinsterApp.fields.utils.getText("report_success", language));

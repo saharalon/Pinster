@@ -927,12 +927,19 @@ var PinsterApp = {
                   $("#eventModalLabel").text(userEvent.title);
                   $("#eventDesc").text(userEvent.description);
 
-                  if (userEvent.imageURL) {
-                    $("#eventImg").attr("src", userEvent.imageURL);
+                  //old save with col imageURL
+                  // if (userEvent.imageURL) {
+                  //   $("#eventImg").attr("src", userEvent.imageURL);
+                  // }
+
+                  //new save with col imageFile
+                  if (userEvent.imageFile) {
+                    var photo = userEvent.imageFile;
+                    $("#eventImg").attr("src", photo.url());
                   }
 
                   var geoLocation = new google.maps.LatLng(
-                    userEvent.location.latitude, userEvent.location.longitude);
+                  userEvent.location.latitude, userEvent.location.longitude);
                   
                   if (userEvent.description == "") { hasDesc = false; }
 
