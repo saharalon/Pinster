@@ -22,6 +22,7 @@ var PinsterApp = {
       currentEventId: "",
       currentSearchCategory : {},
       currentWindow : "main",
+      isUserLoggedIn : false,
     },
 
     CONSTANTS : {
@@ -47,18 +48,6 @@ var PinsterApp = {
       console.log("deviceReady");
       var that = PinsterApp;
       // that.receivedEvent('deviceready');
-
-     //  var fbLoginSuccess = function (userData) {
-     //     PinsterApp.log("UserInfo: " + JSON.stringify(userData));
-     //  };
-
-     // if (isPhone)
-     // {
-     //    facebookConnectPlugin.login(["basic_info"],
-     //        fbLoginSuccess,
-     //        function (error) { PinsterApp.log("" + error); }
-     //    );
-     //  }
 
       //Android back key
       document.addEventListener("backbutton", that.handleBackbutton, false);
@@ -101,6 +90,18 @@ var PinsterApp = {
       that.fields.user.settings.init();
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
+
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+
+      if ((tmpObj.username == "") && (tmpObj.id == ""))
+      {
+           $('#loginModal').modal();
+      }
+
+      else
+      {
+        that.fields.isUserLoggedIn = true;
+      }
 
       //that.fields.user.searchData.getSmartRandomEvent();
 
@@ -154,8 +155,27 @@ var PinsterApp = {
       });
 
       $(".reportBtn").click(function(){
-        PinsterApp.fields.currentWindow = "reportEvent";
-        $("#reportModal").modal();
+        PinsterApp.fields.currentWindow = "reportEvent";    
+
+         if (that.fields.isUserLoggedIn)
+         {          
+             $("#reportModal").modal();
+         }
+       
+         else
+         {
+             //that.log("You need to be logged in order to report an event");
+            // login modal pop up
+            $('#loginModal').modal();
+         }
+
+      });
+
+
+      $("#loginBtnModal").click(function() {
+           var username = $("#loginModal #pinUsername").val()
+           var password = $("#loginModal #pinPassword").val()
+           that.fields.isUserLoggedIn = that.fields.user.validateUserOnParse(username, password); 
       });
 
       $(".randomEventBtn").click(function(){
@@ -209,17 +229,8 @@ var PinsterApp = {
 
       $('#reportBtnModal').click(function() {
 
-        var that = PinsterApp;
-
-        // if (that.fields.user.isUserLoggedIn())
-        // {
-              that.reportAnEvent();
-        // }
-        // else
-        // {
-        //   that.log("You need to be logged in order to report an event");
-        // }
-
+          var that = PinsterApp;
+          that.reportAnEvent();
       });
 
       $('#wazeBtn').click(function() {
@@ -870,7 +881,7 @@ var PinsterApp = {
       {
         var marker;
 
-        // Retreive events from the databas
+        // Retreive events from the database
         var Event = Parse.Object.extend("Event");
         var query = new Parse.Query(Event);
 

@@ -159,42 +159,72 @@ PinsterApp.User = function() {
   // User states
   //------------
 
+  obj.userSignup = function(username, password)
+  {
+      var user = new Parse.User();
+      user.set("username", username);
+      user.set("password", password);
+
+      user.signUp(null, {
+        success: function(user) {
+             obj.addUserToLocalstorage(username, user.id);
+        },
+        error: function(user, error) {
+          // Show the error message somewhere and let the user try again.
+          console.log("Error: " + error.code + " " + error.message);
+
+          //if user is already on parse User class, do login action instead
+          if(error.code == 202)
+          {
+            obj.userLogin(username, password);
+          }
+        }
+      });     
+  };
 
   obj.userLogin = function(username, password)
   {
-    Parse.User.logIn(username, password, {
-    
-      success: function(user) {
-        // Do stuff after successful login.
-      },
-      error: function(user, error) {
-        // The login failed. Check error to see why.
-      }
-    });
+         Parse.User.logIn(username, password, {
+        
+          success: function(user)
+          {
+              console.log(user);
+              obj.addUserToLocalstorage(username, user.id);
+          },
+          error: function(user, error) {
+            
+
+             if(error.code == 101)
+             {
+                obj.userSignup(username, password);
+             }
+          }
+        });
   };
+
+  obj.validateUserOnParse = function(username, password)
+  {
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+
+      if ((tmpObj.username == "") && (tmpObj.id == ""))
+      {
+        obj.userSignup(username,password);
+      }
+
+      else
+      {
+        obj.userLogin(username,password);
+      }
+
+      return true;
+
+   };
+
 
   obj.userLogout = function(currentUser)
   {
     //need to check
     currentUser.logOut();
-  };
-
-  obj.postOnFacebook = function(title, desc, user)
-  {
-    FB.api('/me/feed',
-
-      'post', { message: title, /* More options 
-      here at : https://developers.facebook.com/docs/graph-api/reference/v1.0/user/feed */ },
-
-
-      function (response) {
-          if (response && !response.error) {
-           console.log("error");
-          }
-
-          else 
-            console.log(response);
-        });
   };
 
   obj.isUserLoggedIn = function()
@@ -212,6 +242,15 @@ PinsterApp.User = function() {
          return false;
       }
   };
+
+  obj.addUserToLocalstorage = function(username, id)
+  {
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+      tmpObj.username = username;
+      tmpObj.id = id;
+      localStorage.setItem("pinsterUsers", JSON.stringify(tmpObj));
+  };
+
   //------------
   // Settings
   //------------
@@ -254,6 +293,14 @@ PinsterApp.User = function() {
         }));
       }
 
+
+      if (!localStorage.pinsterUsers || localStorage.pinsterUsers == 'undefined') {
+        localStorage.setItem("pinsterUsers", JSON.stringify({
+          username: "",
+          id: "",
+        }));
+      }
+
       if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
         localStorage.setItem("pinsterSettings", JSON.stringify({
           language: "עברית",
@@ -261,6 +308,7 @@ PinsterApp.User = function() {
           category: "All",
           radius: 1000
         }));
+          
 
         $("#languageDropdownMenu").html('עברית<img src="img/Hebrew.png" style="width: 20px;" /><span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
@@ -268,6 +316,8 @@ PinsterApp.User = function() {
         $('#radiusSlider').val(1000);
         PinsterApp.sliderOutputUpdate(1000);
       }
+
+
       else {
         var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
         PinsterApp.fields.currentLanguage = tmpObj.language;
