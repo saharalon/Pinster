@@ -7,7 +7,6 @@ var PinsterApp = {
       eventsHashMap : {},
       user : {},
       utils : {},
-      map : {},
       mapInstance : {},
       searchArea : {},
       geocoder : {},
@@ -504,8 +503,9 @@ var PinsterApp = {
       else if (that.fields.currentWindow == "simulation") {
         that.closeSimulation(); // this function also changing currentWinow to = "event"
       }
-      else if (that.fields.currentWindow == "googleStreetView") {
-        // TODO
+      else if (that.fields.currentWindow == "streetView") {
+        that.fields.currentWindow = "main";
+        that.onDocumentReady();
       }
 
     },
@@ -897,7 +897,7 @@ var PinsterApp = {
                 var image = PinsterApp.CONSTANTS.pinImgs[item._serverData.category];
 
                 if (image == undefined)
-                  image = "defaultPin.png"; 
+                  image = "defaultPin.png";
 
                 // Image for the marker
                 var markerImage = {
@@ -912,7 +912,7 @@ var PinsterApp = {
                   icon: markerImage,
                   //shape: shape,
                   title: title,
-                  category: item._serverData.category 
+                  category: item._serverData.category
                   //zIndex: events[i][3]
                 });
 
@@ -1020,6 +1020,7 @@ var PinsterApp = {
           zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapTypeControl: false,
+          streetViewControl: true,
           panControl: false,
           zoomControl: false,
           styles: style
@@ -1034,6 +1035,14 @@ var PinsterApp = {
                 //PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
                 // navigator.splashscreen.hide();
           });
+
+        var thePanorama = map.getStreetView();
+        google.maps.event.addListener(thePanorama, 'visible_changed', function() {
+            if (thePanorama.getVisible()) {
+              console.log("streetview is on");
+              PinsterApp.fields.currentWindow = "streetView";
+            }
+        });
 
         map.setCenter(initalLocation);
 
