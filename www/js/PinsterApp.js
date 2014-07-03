@@ -975,7 +975,7 @@ var PinsterApp = {
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);
-                  $(".stamp").text("Since: " + PinsterApp.fields.utils.formatDate(createdAt));
+                  $(".stamp").text("By: KrugerStein67, in " + PinsterApp.fields.utils.formatDate(createdAt));
 
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   
