@@ -255,36 +255,47 @@ PinsterApp.User = function() {
       }
 
       if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
-        localStorage.setItem("pinsterSettings", JSON.stringify({
-          language: "עברית",
-          address: "",
-          category: "All",
-          radius: 1000
-        }));
-
-        $("#languageDropdownMenu").html('עברית<img src="img/Hebrew.png" style="width: 20px;" /><span class="caret caretRight"></span>');
-        $("#settingsModal #address").val("Favorite Address");
-        $("#dropdownMenu1").html('All<span class="caret caretRight"></span>');
-        $('#radiusSlider').val(1000);
-        PinsterApp.sliderOutputUpdate(1000);
+        that.setSettingsDefaults();
       }
-      else {
-        var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
-        PinsterApp.fields.currentLanguage = tmpObj.language;
-        that.language = tmpObj.language;
-        that.address = tmpObj.address;
-        that.category = tmpObj.category;
-        that.radius = tmpObj.radius;
+      else 
+      {
+        try {
+          var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
+          PinsterApp.fields.currentLanguage = tmpObj.language;
+          that.language = tmpObj.language;
+          that.address = tmpObj.address;
+          that.category = tmpObj.category;
+          that.radius = tmpObj.radius;
 
-        var languageImg = "English";
-        if (tmpObj.language == "עברית") { languageImg = "Hebrew"; }
+          var languageImg = "English";
+          if (tmpObj.language == "עברית") { languageImg = "Hebrew"; }
 
-        $("#languageDropdownMenu").html(that.language + "<img src='img/" + languageImg + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
-        $("#settingsModal #address").val(that.address);
-        $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
-        $('#radiusSlider').val(that.radius);
-        PinsterApp.sliderOutputUpdate(that.radius);
+          $("#languageDropdownMenu").html(that.language + "<img src='img/" + languageImg + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
+          $("#settingsModal #address").val(that.address);
+          $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
+          $('#radiusSlider').val(that.radius);
+          PinsterApp.sliderOutputUpdate(that.radius);
+        }
+        catch (err) {
+          that.setSettingsDefaults();
+        }
       }
+    },
+
+    setSettingsDefaults : function()
+    {
+      localStorage.setItem("pinsterSettings", JSON.stringify({
+        language: "עברית",
+        address: "",
+        category: "All",
+        radius: 1000
+      }));
+
+      $("#languageDropdownMenu").html('עברית<img src="img/Hebrew.png" style="width: 20px;" /><span class="caret caretRight"></span>');
+      $("#settingsModal #address").val("Favorite Address");
+      $("#dropdownMenu1").html('All<span class="caret caretRight"></span>');
+      $('#radiusSlider').val(1000);
+      PinsterApp.sliderOutputUpdate(1000);
     }
 
   };
