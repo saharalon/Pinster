@@ -691,9 +691,6 @@ var PinsterApp = {
 
     addressToGeopoint : function(address, callback) {
 
-      if (address == undefined || address == "")
-        return "";
-
       // Geocoder converts coordinates to addresses
       var geocoder = new google.maps.Geocoder();
 
