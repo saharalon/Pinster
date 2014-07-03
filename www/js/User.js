@@ -301,7 +301,8 @@ PinsterApp.User = function() {
         }));
       }
 
-      if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined') {
+      if (!localStorage.pinsterSettings || localStorage.pinsterSettings == 'undefined')
+       {
         localStorage.setItem("pinsterSettings", JSON.stringify({
           language: "עברית",
           address: "",
@@ -318,24 +319,26 @@ PinsterApp.User = function() {
       }
 
 
-      else {
-        var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
-        PinsterApp.fields.currentLanguage = tmpObj.language;
-        that.language = tmpObj.language;
-        that.address = tmpObj.address;
-        that.category = tmpObj.category;
-        that.radius = tmpObj.radius;
+      // else 
+      // {
+      //   var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
+      //   PinsterApp.fields.currentLanguage = tmpObj.language;
+      //   that.language = tmpObj.language;
+      //   that.address = tmpObj.address;
+      //   that.category = tmpObj.category;
+      //   that.radius = tmpObj.radius;
 
-        var languageImg = "English";
-        if (tmpObj.language == "עברית") { languageImg = "Hebrew"; }
+      //   var languageImg = "English";
+      //   if (tmpObj.language == "עברית") { languageImg = "Hebrew"; }
 
-        $("#languageDropdownMenu").html(that.language + "<img src='img/" + languageImg + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
-        $("#settingsModal #address").val(that.address);
-        $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
-        $('#radiusSlider').val(that.radius);
-        PinsterApp.sliderOutputUpdate(that.radius);
-        that.setSettingsDefaults();
-      }
+      //   $("#languageDropdownMenu").html(that.language + "<img src='img/" + languageImg + ".png' style='width: 20px; left: 6px; position: absolute; top: 9px;' /><span class='caret caretRight'></span>");
+      //   $("#settingsModal #address").val(that.address);
+      //   $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
+      //   $('#radiusSlider').val(that.radius);
+      //   PinsterApp.sliderOutputUpdate(that.radius);
+      //   that.setSettingsDefaults();
+      
+     
       else 
       {
         try {
