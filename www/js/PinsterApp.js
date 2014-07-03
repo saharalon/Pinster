@@ -689,6 +689,30 @@ var PinsterApp = {
 
     },
 
+    addressToGeopoint : function(address, callback) {
+
+      if (address == undefined || address == "")
+        return "";
+
+      // Geocoder converts coordinates to addresses
+      var geocoder = new google.maps.Geocoder();
+
+      // Convert the current position to actual address
+      geocoder.geocode({ "address": address }, function(results, status) {
+        
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+          callback(results[0].geometry.location);
+        }
+        else
+        {
+          callback(""); 
+        }
+
+      });
+
+    },
+
     showEventAddress : function(position, hasDesc) {
 
       // Geocoder converts coordinates to addresses
@@ -835,9 +859,14 @@ var PinsterApp = {
 
       var that = this;
         
-      this.initialize = function(){
-          PinsterApp.fields.mapInstance = showMap();
-          loadMarkers(PinsterApp.fields.mapInstance);
+      this.initialize = function()
+      {
+        var userAddress = PinsterApp.fields.user.settings.address;
+        // Try to center the map in the user preffered location
+        PinsterApp.addressToGeopoint(userAddress, function(location) {
+            PinsterApp.fields.mapInstance = showMap(location);
+            loadMarkers(PinsterApp.fields.mapInstance);
+        });
       };
       
       var loadMarkers = function(map)
@@ -973,12 +1002,15 @@ var PinsterApp = {
         });
       };
       
-      var showMap = function() {
+      var showMap = function(location) {
 
         directionsService = new google.maps.DirectionsService();
         directionsDisplay = new google.maps.DirectionsRenderer();
         infowindow = new google.maps.InfoWindow();
-        var initialLocation = new google.maps.LatLng(31.8759, 34.734948);
+        var initalLocation = new google.maps.LatLng(31.8759, 34.734948); 
+
+        if (location != "")
+          initalLocation = location; 
 
         var style = [ { "stylers": [ { "visibility": "simplified" } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#838080" } ] },{ "featureType": "administrative.province", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative.locality" },{ "featureType": "administrative.neighborhood", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative", "stylers": [ { "visibility": "on" } ] },{ "elementType": "labels.text.fill", "stylers": [ { "color": "#54b5da" } ] },{ "featureType": "water", "elementType": "geometry.fill", "stylers": [ { "color": "#c4e3ff" } ] },{ "featureType": "landscape.man_made", "stylers": [ { "color": "#ececef" }, { "saturation": 5 }, { "lightness": -4 } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#ff755c" } ] },{ "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#ffffff" } ] },{ "featureType": "landscape.natural.terrain", "elementType": "geometry.fill", "stylers": [ { "color": "#a0ccb5" }, { "visibility": "off" } ] },{ "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [ { "color": "#badfbb" }, { "visibility": "simplified" } ] },{ },{ "featureType": "landscape.natural.landcover", "elementType": "geometry", "stylers": [ { "color": "#f4f7f6" } ] },{ "featureType": "landscape.natural", "stylers": [ { "visibility": "simplified" }, { "color": "#f4f4f6" } ] },{ },{ "featureType": "road", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#8d8c8c" } ] },{ } ];
 
@@ -1001,7 +1033,7 @@ var PinsterApp = {
                 // navigator.splashscreen.hide();
           });
 
-        map.setCenter(initialLocation);
+        map.setCenter(initalLocation);
 
         directionsDisplay.setMap(map);
                 
