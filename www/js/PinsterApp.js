@@ -7,7 +7,6 @@ var PinsterApp = {
       eventsHashMap : {},
       user : {},
       utils : {},
-      map : {},
       mapInstance : {},
       searchArea : {},
       geocoder : {},
@@ -515,8 +514,9 @@ var PinsterApp = {
       else if (that.fields.currentWindow == "simulation") {
         that.closeSimulation(); // this function also changing currentWinow to = "event"
       }
-      else if (that.fields.currentWindow == "googleStreetView") {
-        // TODO
+      else if (that.fields.currentWindow == "streetView") {
+        that.fields.currentWindow = "main";
+        that.onDocumentReady();
       }
 
     },
@@ -710,11 +710,13 @@ var PinsterApp = {
         
         if (status == google.maps.GeocoderStatus.OK)
         {
-          callback(results[0].geometry.location);
+          if (typeof(callback) == 'function')
+            callback(results[0].geometry.location);
         }
         else
         {
-          callback(""); 
+          if (typeof(callback) == 'function')
+            callback(""); 
         }
 
       });
@@ -906,7 +908,7 @@ var PinsterApp = {
                 var image = PinsterApp.CONSTANTS.pinImgs[item._serverData.category];
 
                 if (image == undefined)
-                  image = "defaultPin.png"; 
+                  image = "defaultPin.png";
 
                 // Image for the marker
                 var markerImage = {
@@ -921,7 +923,7 @@ var PinsterApp = {
                   icon: markerImage,
                   //shape: shape,
                   title: title,
-                  category: item._serverData.category 
+                  category: item._serverData.category
                   //zIndex: events[i][3]
                 });
 
@@ -1026,9 +1028,10 @@ var PinsterApp = {
         var style = [ { "stylers": [ { "visibility": "simplified" } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#838080" } ] },{ "featureType": "administrative.province", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative.locality" },{ "featureType": "administrative.neighborhood", "stylers": [ { "visibility": "on" } ] },{ "featureType": "administrative", "stylers": [ { "visibility": "on" } ] },{ "elementType": "labels.text.fill", "stylers": [ { "color": "#54b5da" } ] },{ "featureType": "water", "elementType": "geometry.fill", "stylers": [ { "color": "#c4e3ff" } ] },{ "featureType": "landscape.man_made", "stylers": [ { "color": "#ececef" }, { "saturation": 5 }, { "lightness": -4 } ] },{ "featureType": "administrative.country", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#ff755c" } ] },{ "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#ffffff" } ] },{ "featureType": "landscape.natural.terrain", "elementType": "geometry.fill", "stylers": [ { "color": "#a0ccb5" }, { "visibility": "off" } ] },{ "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [ { "color": "#badfbb" }, { "visibility": "simplified" } ] },{ },{ "featureType": "landscape.natural.landcover", "elementType": "geometry", "stylers": [ { "color": "#f4f7f6" } ] },{ "featureType": "landscape.natural", "stylers": [ { "visibility": "simplified" }, { "color": "#f4f4f6" } ] },{ },{ "featureType": "road", "elementType": "labels.text.fill", "stylers": [ { "visibility": "on" }, { "color": "#8d8c8c" } ] },{ } ];
 
         var mapOptions = {
-          zoom: 12,
+          zoom: 14,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
           mapTypeControl: false,
+          streetViewControl: true,
           panControl: false,
           zoomControl: false,
           styles: style
@@ -1043,6 +1046,14 @@ var PinsterApp = {
                 //PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
                 // navigator.splashscreen.hide();
           });
+
+        var thePanorama = map.getStreetView();
+        google.maps.event.addListener(thePanorama, 'visible_changed', function() {
+            if (thePanorama.getVisible()) {
+              console.log("streetview is on");
+              PinsterApp.fields.currentWindow = "streetView";
+            }
+        });
 
         map.setCenter(initalLocation);
 
