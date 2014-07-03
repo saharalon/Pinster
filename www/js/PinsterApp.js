@@ -914,10 +914,12 @@ var PinsterApp = {
                   PinsterApp.fields.currentEventId = results[index].id; 
                   var hasDesc = true;
 
+                  var geoLocation = new google.maps.LatLng(
+                    userEvent.location.latitude, userEvent.location.longitude);
+
                   // Set event location as our destination
                   // in case the user will want to drive there
-                  PinsterApp.destination = new google.maps.LatLng(
-                    userEvent.location.latitude, userEvent.location.longitude);
+                  PinsterApp.destination = geoLocation;
 
                   // collect user searches
                   var tmpObj = JSON.parse(localStorage.getItem("pinsterSearches"));
@@ -930,10 +932,14 @@ var PinsterApp = {
                   if (userEvent.imageURL) {
                     $("#eventImg").attr("src", userEvent.imageURL);
                   }
+                  else
+                  {
+                    var steetViewImage = 'http://maps.googleapis.com/maps/api/streetview?size=1200x600&' +
+                      'location=' + geoLocation +'&heading=151.78&pitch=-0.76';
+                    // When no image is available, use an image from street view
+                    $("#eventImg").attr("src", steetViewImage);  
+                  }
 
-                  var geoLocation = new google.maps.LatLng(
-                    userEvent.location.latitude, userEvent.location.longitude);
-                  
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);

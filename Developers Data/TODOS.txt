@@ -55,3 +55,5 @@
 		 which removes all Hazards events existing 1 day) etc. etc.
 
 	*** All functionalities implemented in one job - eventDeletionJob ***
+
+20) Event without a picture will now get an image from google street view /* DONE */
