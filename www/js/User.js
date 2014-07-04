@@ -6,13 +6,13 @@ PinsterApp.User = function() {
   // Events
   //------------
 
-  obj.addEvent = function (location, title, desc, category, img, address, user)
+  obj.addEvent = function (location, title, desc, category, img, address, username)
   {
       var EventObject = Parse.Object.extend("Event");
       var eventObject = new EventObject();
 
       eventObject.save({title:title, description:desc, location:location, address:address,
-        category:category, imageURL:"", user:user, likes:0, deleteReqs:0, statusId:0}, {
+        category:category, imageURL:"", username:username, likes:0, deleteReqs:0, statusId:0}, {
 
         success:function(object)
         {
@@ -225,6 +225,12 @@ PinsterApp.User = function() {
   {
     //need to check
     currentUser.logOut();
+  };
+
+
+  obj.getCurrentUser = function()
+  {
+    return JSON.parse(localStorage.getItem("pinsterUsers"));
   };
 
   obj.isUserLoggedIn = function()

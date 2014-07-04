@@ -546,7 +546,7 @@ var PinsterApp = {
 
         PinsterApp.fields.user.addEvent(
             currentLocation, title, description, category,
-              PinsterApp.fields.dataImage, eventAddress, Parse.User.current());
+              PinsterApp.fields.dataImage, eventAddress, PinsterApp.fields.user.getCurrentUser().username);
       });
     },
 
@@ -985,7 +985,7 @@ var PinsterApp = {
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);
-                  $(".stamp").text("By: KrugerStein67, in " + PinsterApp.fields.utils.formatDate(createdAt));
+                  $(".stamp").text("By: " + userEvent.username +" , in " + PinsterApp.fields.utils.formatDate(createdAt));
 
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   
