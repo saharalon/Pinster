@@ -193,7 +193,7 @@ var PinsterApp = {
 
       $(".randomEventBtn").click(function(){
         PinsterApp.removeSearchArea();
-        that.fields.user.searchData.getSmartRandomEvent();
+        that.fields.user.searchData.getSmartRandomEvent(true);
       });
 
       $('#settingsModal').on('hidden.bs.modal', function () {
@@ -235,6 +235,7 @@ var PinsterApp = {
         user.settings.setAddress($("#settingsModal #address").val());
         user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
+        user.settings.setKeyWords($('#keyWords').val());
 
         that.fields.utils.setAppLanguage($("#languageDropdownMenu").text());
         //map.filterMarkers(category.toLowerCase());

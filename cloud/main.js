@@ -4,6 +4,10 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 	var addresses = new Array();
 
 	var data = request.params.data;
+	var keyWords;
+
+	if (request.params.keyWords != undefined)
+		keyWords = request.params.keyWords.split(/[\s,.]+/);
 
 	// Number each category and the times it has been searched
 	data.eventsCategory.forEach(function(item, index) {
@@ -65,6 +69,22 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 	// Don't load events with status id 99 (deleted)
     query.notEqualTo('statusId', 99);
 
+    // Add the user key words to the search
+    if (keyWords != undefined && keyWords instanceof Array && keyWords[0] != "")
+    {
+    	console.log("Adding keyWords to the search")
+    	var arrayOfQueries;
+
+    	keyWords.forEach(function(key) 
+    	{
+    		console.log(key);
+    		arrayOfQueries.push(query.contains("title", key));
+    		arrayOfQueries.push(query.contains("description", key));
+    	});
+
+    	Parse.Query.or.apply(Parse.Query, arrayOfQueries);
+    }
+
 	query.find
 	({
 		success: function(results)
@@ -84,7 +104,14 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 				// Return the event object       
                 response.success(JSON.stringify(results[randomNum]));
             }
-		}
+            else
+            {
+            	response.error();
+            }
+		},
+	    error: function(error) {
+	      response.error(error);
+	    }
 	});
 
 });

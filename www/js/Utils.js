@@ -64,6 +64,9 @@ PinsterApp.Utils = function() {
   	if ($("#address").attr("placeholder") == undefined)
   		$("#address").attr("placeholder", obj.getText("address", language));
   	  
+    if ($("#keyWords").attr("placeholder") == undefined)
+      $("#keyWords").attr("placeholder", obj.getText("keyWords", language));
+
   	$("#settingsSaveBtn").text(obj.getText("settingsSaveBtn", language));
 
   	// Report
@@ -142,6 +145,8 @@ PinsterApp.Utils = function() {
   			return (language == "English") ? " Kilometers" : " קילומטרים";
       case "mayTakeAMin":
         return (language == "English") ? "This may take a minute..." : "...דיווח האירוע עלול לקחת כמה רגעים";
+      case "keyWords":
+        return (language == "English") ? "Enter keywords that interest you" : "הכנס מילות מפתח המעניינות אותך";
 
   		default:
   			return ""; 

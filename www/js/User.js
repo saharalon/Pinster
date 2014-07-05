@@ -260,6 +260,7 @@ PinsterApp.User = function() {
     address: "",
     category: "",
     radius: 1000,
+    keyWords: "",
 
     setLanguage : function (language) {
       this.language = language;
@@ -278,6 +279,11 @@ PinsterApp.User = function() {
 
     setRadius : function (radius) {
       this.radius = radius;
+      localStorage.setItem("pinsterSettings", JSON.stringify(this));
+    },
+
+    setKeyWords : function (keyWords) {
+      this.keyWords = keyWords;
       localStorage.setItem("pinsterSettings", JSON.stringify(this));
     },
 
@@ -306,10 +312,10 @@ PinsterApp.User = function() {
           language: "עברית",
           address: "",
           category: "All",
-          radius: 1000
+          radius: 1000,
+          keyWords: ""
         }));
           
-
         $("#languageDropdownMenu").html('עברית<img src="img/Hebrew.png" style="width: 20px;" /><span class="caret caretRight"></span>');
         $("#settingsModal #address").val("Favorite Address");
         $("#dropdownMenu1").html('All<span class="caret caretRight"></span>');
@@ -347,6 +353,7 @@ PinsterApp.User = function() {
           that.address = tmpObj.address;
           that.category = tmpObj.category;
           that.radius = tmpObj.radius;
+          that.keyWords = tmpObj.keyWords
 
           var languageImg = "English";
           if (tmpObj.language == "עברית") { languageImg = "Hebrew"; }
@@ -355,6 +362,7 @@ PinsterApp.User = function() {
           $("#settingsModal #address").val(that.address);
           $("#dropdownMenu1").html(that.category + '<span class="caret caretRight"></span>');
           $('#radiusSlider').val(that.radius);
+          $('#keyWords').val(that.keyWords);
           PinsterApp.sliderOutputUpdate(that.radius);
         }
         catch (err) {
@@ -408,7 +416,7 @@ PinsterApp.User = function() {
 
     },
 
-    getSmartRandomEvent : function() {
+    getSmartRandomEvent : function(isUsingKeyWords) {
 
       var history = localStorage.getItem("pinsterSearches");
 
@@ -421,6 +429,9 @@ PinsterApp.User = function() {
 
       var params = {};
       params["data"] = JSON.parse(history);
+
+      if (isUsingKeyWords)
+        params["keyWords"] = $("#keyWords").text();
 
       var deg = 0;
       PinsterApp.fields.rotateDice = setInterval(function() {
@@ -438,7 +449,7 @@ PinsterApp.User = function() {
             console.log("getRecommendedEvent: returned undefined result");
             clearInterval(PinsterApp.fields.rotateDice);
             $(".diceIcon").css("transform", "rotate(0deg)");
-            PinsterApp.fields.user.searchData.getSmartRandomEvent();
+            PinsterApp.fields.user.searchData.getSmartRandomEvent(false);
             return;
           }
 
@@ -476,6 +487,7 @@ PinsterApp.User = function() {
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
           console.log(error);
+          PinsterApp.fields.user.searchData.getSmartRandomEvent(false);
         }
       });
 
