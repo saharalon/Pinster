@@ -19,7 +19,7 @@ var PinsterApp = {
       dataImage: null,
       foursquareInterval: {},
       currentEventId: "",
-      currentSearchCategory : "",
+      currentSearchCategory : "All",
       currentWindow : "main",
       isUserLoggedIn : false,
       isStreetViewMode : 0,
@@ -344,6 +344,10 @@ var PinsterApp = {
       $("#searchByCatTooltip .glyphicon-chevron-down").click(function(e){
         e.stopPropagation();
         $(".categories").scrollTop($(".categories").scrollTop() + 32);
+      });
+
+      $(".categoryRow").click(function(){
+        console.log("juntos");
       });
 
       // bind a listener for categories picker
