@@ -202,7 +202,7 @@ PinsterApp.User = function() {
 
              if(error.code == 101)
              {
-                 PinsterApp.log("Check your password and/or username, and try again");
+                 PinsterApp.log("Your password was incorrect, please try again");
              }
           }
         });

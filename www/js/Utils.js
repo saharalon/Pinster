@@ -98,7 +98,7 @@ PinsterApp.Utils = function() {
   		case "hyperlapseBtn":
   			return (language == "English") ? "Simulate" : "סימולציה";
   		case "loginHeadline": 
-  			return (language == "English") ? "Login/Signup" : "הרשם/התחבר";
+  			return (language == "English") ? "Login/Signup" : "התחבר/הרשם";
   		case "pinUsername":
   			return (language == "English") ? "Username" : "שם משתמש";
   		case "pinPassword":
