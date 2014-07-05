@@ -551,6 +551,7 @@ html, body {
 
 .categories .categoryRow {
 	height: 32px;
+	cursor: pointer;
 }
 
 #searchByCatTooltip .catGlass {

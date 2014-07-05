@@ -346,10 +346,6 @@ var PinsterApp = {
         $(".categories").scrollTop($(".categories").scrollTop() + 32);
       });
 
-      $(".categoryRow").click(function(){
-        console.log("juntos");
-      });
-
       // bind a listener for categories picker
       that.scrollStoppedListener(that.handleCatPicker);
 
@@ -379,8 +375,16 @@ var PinsterApp = {
       });
 
       elem.append("<div class='categoryRow'>&nbsp;</div>");
+
+      $(".categoryRow").click(function(){
+        PinsterApp.fields.currentSearchCategory = $(this).find("span").text();
+        var image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.fields.currentSearchCategory];
+        $("#searchBar .filterPin").attr('src', 'img/' + image);
+        $("#searchByCatTooltip").hide();
+      });
       
       $("#searchByCatTooltip").show();
+      $("#searchByCatTooltip .categories").scrollTop(that.CONSTANTS.categories.indexOf(that.fields.currentSearchCategory) * 32);
 
     },
 
