@@ -190,7 +190,7 @@ var PinsterApp = {
       $("#loginBtnModal").click(function() {
            var username = $("#loginModal #pinUsername").val();
            var password = $("#loginModal #pinPassword").val();
-           that.fields.user.validateUserOnParse(username, password);
+           that.fields.user.validateUserOnParse(username, password);      
       });
 
       $(".randomEventBtn").click(function(){

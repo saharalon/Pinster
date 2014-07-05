@@ -163,6 +163,7 @@ PinsterApp.User = function() {
         {
              obj.addUserToLocalstorage(username, user.id);
              PinsterApp.log("Signed Up!")
+             $("#reportModal").modal();
         },
         error: function(user, error) 
         {
@@ -171,7 +172,8 @@ PinsterApp.User = function() {
           if(error.code == 202)
           {
             //scenario of returning user, with same username
-            //do a login and check for password correctness
+            //do a login and check for password correctness...
+            //if password does not match throw 101 code, (see at userLogin function)
             obj.userLogin(username, password);
           }
 
@@ -192,6 +194,7 @@ PinsterApp.User = function() {
           {
               console.log(user);
               obj.addUserToLocalstorage(username, user.id);
+              $("#reportModal").modal();
           },
           error: function(user, error) {
              
