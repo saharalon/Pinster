@@ -91,16 +91,15 @@ var PinsterApp = {
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
 
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
 
-      if ((tmpObj.username == "") && (tmpObj.id == ""))
+      if (tmpObj != undefined)
       {
-           $('#loginModal').modal();
-      }
-
-      else
-      {
-        that.fields.isUserLoggedIn = true;
+        if(tmpObj.username !="" && tmpObj.id != "")
+        {
+           that.fields.isUserLoggedIn = true;
+           console.log(tmpObj.username + " is logged");
+        }
       }
 
       //that.fields.user.searchData.getSmartRandomEvent();
@@ -160,27 +159,30 @@ var PinsterApp = {
         
         var that = PinsterApp;
 
-        if (that.fields.isStreetViewMode == 0) {
+        if (that.fields.isStreetViewMode == 0)
+        {
 
           that.fields.currentWindow = "reportEvent";
           that.removeSearchArea();
-
-           if (that.fields.isUserLoggedIn)
-           {
-               $("#reportModal").modal();
-           }
-         
-           else
-           {
-               //that.log("You need to be logged in order to report an event");
-              // login modal pop up
-              $('#loginModal').modal();
-           }
         }
-        else {
+        
+        else
+        {
           that.fields.isStreetViewMode = 0;
           that.handleStreetViewMode();
         }
+
+        if (that.fields.isUserLoggedIn) 
+        {
+             $("#reportModal").modal();
+        }
+       
+       else
+       {
+           //that.log("You need to be logged in order to report an event");
+          // login modal pop up
+          $('#loginModal').modal();
+       }
 
       });
 
@@ -188,7 +190,7 @@ var PinsterApp = {
       $("#loginBtnModal").click(function() {
            var username = $("#loginModal #pinUsername").val();
            var password = $("#loginModal #pinPassword").val();
-           that.fields.isUserLoggedIn = that.fields.user.validateUserOnParse(username, password);
+           that.fields.user.validateUserOnParse(username, password);
       });
 
       $(".randomEventBtn").click(function(){

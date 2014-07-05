@@ -98,13 +98,13 @@ PinsterApp.Utils = function() {
   		case "hyperlapseBtn":
   			return (language == "English") ? "Simulate" : "סימולציה";
   		case "loginHeadline": 
-  			return (language == "English") ? "Login" : "התחבר";
+  			return (language == "English") ? "Login/Signup" : "הרשם/התחבר";
   		case "pinUsername":
   			return (language == "English") ? "Username" : "שם משתמש";
   		case "pinPassword":
   			return (language == "English") ? "Password" : "סיסמה";
   		case "loginBtnModal":
-  			return (language == "English") ? "Login" : "התחבר";
+  			return (language == "English") ? "Submit" : "כנס";
   		case "settingsHedline":
   			return (language == "English") ? "Settings" : "הגדרות";
   		case "languageDropdownMenu":

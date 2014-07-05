@@ -159,18 +159,27 @@ PinsterApp.User = function() {
       user.set("password", password);
 
       user.signUp(null, {
-        success: function(user) {
+        success: function(user) 
+        {
              obj.addUserToLocalstorage(username, user.id);
+             PinsterApp.log("Signed Up!")
         },
-        error: function(user, error) {
-          // Show the error message somewhere and let the user try again.
+        error: function(user, error) 
+        {
           console.log("Error: " + error.code + " " + error.message);
-
-          //if user is already on parse User class, do login action instead
+          
           if(error.code == 202)
           {
+            //scenario of returning user, with same username
+            //do a login and check for password correctness
             obj.userLogin(username, password);
           }
+
+          else
+          {
+            PinsterApp.log("Something went wrong, try again");
+          }
+          
         }
       });     
   };
@@ -185,11 +194,12 @@ PinsterApp.User = function() {
               obj.addUserToLocalstorage(username, user.id);
           },
           error: function(user, error) {
-            
+             
+             console.log("Error: " + error.code + " " + error.message);
 
              if(error.code == 101)
              {
-                obj.userSignup(username, password);
+                 PinsterApp.log("Check your password and/or username, and try again");
              }
           }
         });
@@ -197,57 +207,32 @@ PinsterApp.User = function() {
 
   obj.validateUserOnParse = function(username, password)
   {
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
 
       if ((tmpObj.username == "") && (tmpObj.id == ""))
       {
-        obj.userSignup(username,password);
+         obj.userSignup(username,password);
       }
 
       else
       {
-        obj.userLogin(username,password);
+         obj.userLogin(username,password);
       }
-
-      return true;
 
    };
 
-
-  obj.userLogout = function(currentUser)
-  {
-    //need to check
-    currentUser.logOut();
-  };
-
-
   obj.getCurrentUser = function()
   {
-    return JSON.parse(localStorage.getItem("pinsterUsers"));
-  };
-
-  obj.isUserLoggedIn = function()
-  {
-      var currentUser = Parse.User.current();
-     
-      if (currentUser != null) 
-      {
-        console.log(currentUser);
-        return true;
-      }
-       else
-      {
-         console.log("Not logged");
-         return false;
-      }
+    return JSON.parse(localStorage.getItem("pinsterUser"));
   };
 
   obj.addUserToLocalstorage = function(username, id)
   {
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUsers"));
+      PinsterApp.fields.isUserLoggedIn = true;
+      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
       tmpObj.username = username;
       tmpObj.id = id;
-      localStorage.setItem("pinsterUsers", JSON.stringify(tmpObj));
+      localStorage.setItem("pinsterUser", JSON.stringify(tmpObj));
   };
 
   //------------
@@ -299,8 +284,8 @@ PinsterApp.User = function() {
       }
 
 
-      if (!localStorage.pinsterUsers || localStorage.pinsterUsers == 'undefined') {
-        localStorage.setItem("pinsterUsers", JSON.stringify({
+      if (!localStorage.pinsterUser || localStorage.pinsterUser == 'undefined') {
+        localStorage.setItem("pinsterUser", JSON.stringify({
           username: "",
           id: "",
         }));
