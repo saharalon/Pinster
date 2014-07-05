@@ -73,7 +73,7 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
     if (keyWords != undefined && keyWords instanceof Array && keyWords[0] != "")
     {
     	console.log("Adding keyWords to the search")
-    	var arrayOfQueries;
+    	var arrayOfQueries = [];
 
     	keyWords.forEach(function(key) 
     	{

@@ -431,7 +431,7 @@ PinsterApp.User = function() {
       params["data"] = JSON.parse(history);
 
       if (isUsingKeyWords)
-        params["keyWords"] = $("#keyWords").text();
+        params["keyWords"] = $("#keyWords").val();
 
       var deg = 0;
       PinsterApp.fields.rotateDice = setInterval(function() {
