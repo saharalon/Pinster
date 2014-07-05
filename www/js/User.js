@@ -74,7 +74,7 @@ PinsterApp.User = function() {
     if (address != "")
       query.withinKilometers("location", address, radius);
     
-    var searchCategory = PinsterApp.currentSearchCategory;
+    var searchCategory = PinsterApp.fields.currentSearchCategory;
     // Add category parameter
     if (searchCategory != undefined && searchCategory != "All")
       query.equalTo("category", searchCategory);

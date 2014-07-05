@@ -19,7 +19,7 @@ var PinsterApp = {
       dataImage: null,
       foursquareInterval: {},
       currentEventId: "",
-      currentSearchCategory : {},
+      currentSearchCategory : "",
       currentWindow : "main",
       isUserLoggedIn : false,
       isStreetViewMode : 0,
@@ -412,8 +412,8 @@ var PinsterApp = {
       clearTimeout($(".categories").data('scrollTimeout'));
         $(".categories").unbind();
         $(".categories").animate({scrollTop: scrollTo}, 250, 'swing', function(){});
-        PinsterApp.currentSearchCategory = PinsterApp.CONSTANTS.categories[(scrollTo / rowHeight)];
-        image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.currentSearchCategory];
+        PinsterApp.fields.currentSearchCategory = PinsterApp.CONSTANTS.categories[(scrollTo / rowHeight)];
+        image = PinsterApp.CONSTANTS.pinImgs[PinsterApp.fields.currentSearchCategory];
         $("#searchBar .filterPin").attr('src', 'img/' + image);
         // console.log("category no. " + (scrollTo / rowHeight) + " was selected.");
         setTimeout(function(){
@@ -892,10 +892,10 @@ var PinsterApp = {
       PinsterApp.fields.searchArea = new google.maps.Circle({
         center:new google.maps.LatLng(address._latitude, address._longitude),
         radius: (radius < 1000) ? radius * 1000 : radius,
-        strokeColor:"#0000FF",
+        strokeColor:"rgb(69, 168, 247)",
         strokeOpacity:0.8,
         strokeWeight:2,
-        fillColor:"#0000FF",
+        fillColor:"rgba(139, 205, 231, 0.5)",
         fillOpacity:0.4
       });
 
