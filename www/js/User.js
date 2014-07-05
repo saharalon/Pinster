@@ -159,13 +159,13 @@ PinsterApp.User = function() {
       user.set("password", password);
 
       user.signUp(null, {
-        success: function(user) 
+        success: function(user)
         {
              obj.addUserToLocalstorage(username, user.id);
-             PinsterApp.log("Signed Up!")
+             PinsterApp.log("You are signed up (!)");
              $("#reportModal").modal();
         },
-        error: function(user, error) 
+        error: function(user, error)
         {
           console.log("Error: " + error.code + " " + error.message);
           
@@ -183,7 +183,7 @@ PinsterApp.User = function() {
           }
           
         }
-      });     
+      });
   };
 
   obj.userLogin = function(username, password)
