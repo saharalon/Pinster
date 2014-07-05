@@ -163,6 +163,7 @@ var PinsterApp = {
         if (that.fields.isStreetViewMode == 0) {
 
           that.fields.currentWindow = "reportEvent";
+          that.removeSearchArea();
 
            if (that.fields.isUserLoggedIn)
            {
@@ -180,7 +181,6 @@ var PinsterApp = {
           that.fields.isStreetViewMode = 0;
           that.handleStreetViewMode();
         }
-        
 
       });
 
@@ -192,6 +192,7 @@ var PinsterApp = {
       });
 
       $(".randomEventBtn").click(function(){
+        PinsterApp.removeSearchArea();
         that.fields.user.searchData.getSmartRandomEvent();
       });
 
@@ -637,11 +638,10 @@ var PinsterApp = {
       tmpObj.addresses.push(address);
       localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
 
-      // No address given, search by category
+      // No address given, get the user address from settings
       if (address == "")
       {
-        that.fields.user.searchEvents(address, radius);
-        return;
+        address = PinsterApp.fields.user.settings.address;
       }
         
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)

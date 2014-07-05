@@ -79,13 +79,6 @@ PinsterApp.User = function() {
     if (searchCategory != undefined && searchCategory != "All")
       query.equalTo("category", searchCategory);
 
-    // var currentTime = new Date();
-    // // Subtract one day from today's time to search
-    // // only events that had been updated at the last 24 hours
-    // currentTime.setDate(currentTime.getDate() - 1);
-    // var time = new Date(currentTime.getTime());
-    // query.greaterThanOrEqualTo('updatedAt', time);
-
     // Don't load events with status id 99 (deleted)
     query.notEqualTo('statusId', 99);
     // Limit what could be a lot of points.

@@ -62,6 +62,9 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 	if (searchCategory != undefined && searchCategory != "All")
 	query.equalTo("category", searchCategory);
 
+	// Don't load events with status id 99 (deleted)
+    query.notEqualTo('statusId', 99);
+
 	query.find
 	({
 		success: function(results)
