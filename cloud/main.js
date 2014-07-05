@@ -53,50 +53,42 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 	randomNum = Math.floor((Math.random() * 3) + 1);
 	var searchAddress = addresses[randomNum - 1].key;
 
-
 	var events = Parse.Object.extend("Event");
 	//set query for events objectr
-	var query = new Parse.Query(events);
+	var mainQuery = new Parse.Query(events);
+
+	// Add the user key words to the search
+	if (keyWords != undefined && keyWords instanceof Array && keyWords[0] != "")
+	{
+		console.log("Adding keyWords to the search");
+
+		var queryTitle = new Parse.Query(events); 
+		var queryDescription = new Parse.Query(events);
+
+		queryTitle.startsWith("title", keyWords[0]);
+		queryDescription.startsWith("description", keyWords[0]);
+		mainQuery = Parse.Query.or(queryTitle, queryDescription);
+	}
 
 	//check the events within the specify point to search from
 	if (searchAddress != "")
-	query.withinKilometers("location", searchAddress, 10000);
+		mainQuery.withinKilometers("location", searchAddress, 10000);
 
 	// Add category parameter
 	if (searchCategory != undefined && searchCategory != "All")
-	query.equalTo("category", searchCategory);
+		mainQuery.equalTo("category", "Outdoors");
 
 	// Don't load events with status id 99 (deleted)
-    query.notEqualTo('statusId', 99);
+	mainQuery.notEqualTo('statusId', 99);
+	// Sort by number of likes
+	mainQuery.descending("likes");
 
-    // Add the user key words to the search
-    if (keyWords != undefined && keyWords instanceof Array && keyWords[0] != "")
-    {
-    	console.log("Adding keyWords to the search")
-    	var arrayOfQueries = [];
-
-    	keyWords.forEach(function(key) 
-    	{
-    		console.log(key);
-    		arrayOfQueries.push(query.contains("title", key));
-    		arrayOfQueries.push(query.contains("description", key));
-    	});
-
-    	Parse.Query.or.apply(Parse.Query, arrayOfQueries);
-    }
-
-	query.find
+	mainQuery.find
 	({
 		success: function(results)
 		{
 			if (results.length > 0) 
             {
-            	// Sort events to get the event 
-            	// with the highest number of likes 
-			  	results.sort(function(a, b) {
-            		return (b._serverData.likes - a._serverData.likes);
-          		});
-
 			  	// Get a random number from top of 
 			  	// the array to half it's length
 			  	randomNum = Math.floor((Math.random() * Math.ceil((results.length - 1) / 2)) + 0);
@@ -106,11 +98,13 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
             }
             else
             {
+            	console.log("Found 0 events");
             	response.error();
             }
 		},
 	    error: function(error) {
-	      response.error(error);
+	    	console.log(error);
+	      	response.error(error);
 	    }
 	});
 

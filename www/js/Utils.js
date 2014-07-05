@@ -146,7 +146,7 @@ PinsterApp.Utils = function() {
       case "mayTakeAMin":
         return (language == "English") ? "This may take a minute..." : "...דיווח האירוע עלול לקחת כמה רגעים";
       case "keyWords":
-        return (language == "English") ? "Enter keywords that interest you" : "הכנס מילות מפתח המעניינות אותך";
+        return (language == "English") ? "Enter a keyword that interest you" : "הכנס מילת מפתח המעניינת אותך";
 
   		default:
   			return ""; 
