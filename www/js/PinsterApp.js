@@ -601,11 +601,10 @@ var PinsterApp = {
       tmpObj.addresses.push(address);
       localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
 
-      // No address given, search by category
+      // No address given, get the user address from settings
       if (address == "")
       {
-        that.fields.user.searchEvents(address, radius);
-        return;
+        address = PinsterApp.fields.user.settings.address;
       }
         
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)
