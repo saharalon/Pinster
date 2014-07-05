@@ -22,6 +22,7 @@ var PinsterApp = {
       currentSearchCategory : {},
       currentWindow : "main",
       isUserLoggedIn : false,
+      isStreetViewMode : 0,
     },
 
     CONSTANTS : {
@@ -154,27 +155,40 @@ var PinsterApp = {
       });
 
       $(".reportBtn").click(function(){
-        PinsterApp.fields.currentWindow = "reportEvent";    
 
-         if (that.fields.isUserLoggedIn)
-         {          
-             $("#reportModal").modal();
-         }
-       
-         else
-         {
-             //that.log("You need to be logged in order to report an event");
-            // login modal pop up
-            $('#loginModal').modal();
-         }
+        // reportBtn plays 2 roles, 1 - reporting an event, 2 - on googleStreetView mode, as a 'return to app' button
+        
+        var that = PinsterApp;
+
+        if (that.fields.isStreetViewMode == 0) {
+
+          that.fields.currentWindow = "reportEvent";
+
+           if (that.fields.isUserLoggedIn)
+           {
+               $("#reportModal").modal();
+           }
+         
+           else
+           {
+               //that.log("You need to be logged in order to report an event");
+              // login modal pop up
+              $('#loginModal').modal();
+           }
+        }
+        else {
+          that.fields.isStreetViewMode = 0;
+          that.handleStreetViewMode();
+        }
+        
 
       });
 
 
       $("#loginBtnModal").click(function() {
-           var username = $("#loginModal #pinUsername").val()
-           var password = $("#loginModal #pinPassword").val()
-           that.fields.isUserLoggedIn = that.fields.user.validateUserOnParse(username, password); 
+           var username = $("#loginModal #pinUsername").val();
+           var password = $("#loginModal #pinPassword").val();
+           that.fields.isUserLoggedIn = that.fields.user.validateUserOnParse(username, password);
       });
 
       $(".randomEventBtn").click(function(){
@@ -449,6 +463,28 @@ var PinsterApp = {
       // @idogold : maybe some more code needed here to free memory or somthing
     },
 
+    handleStreetViewMode : function () {
+      
+      var that = this;
+
+      // isStreetViewMode ~ can be more the 1, because each click on St. View triggers the visible_change event
+      if (that.fields.isStreetViewMode == 1) {
+        PinsterApp.fields.currentWindow = "streetView";
+        $("#searchBar").hide();
+        $(".settingsBtn").hide();
+        $(".randomEventBtn").hide();
+        $(".reportBtn .glyphicon").removeClass("glyphicon-bullhorn").addClass("glyphicon-share-alt").css("transform", "rotate(190deg)");
+      }
+      else if (that.fields.isStreetViewMode == 0) {
+        PinsterApp.fields.currentWindow = "main";
+        that.onDocumentReady();
+        $("#searchBar").show();
+        $(".settingsBtn").show();
+        $(".randomEventBtn").show();
+        $(".reportBtn .glyphicon").removeClass("glyphicon-share-alt").addClass("glyphicon-bullhorn").css("transform", "rotate(0deg)");
+      }
+    },
+
     reportAnEvent : function() {
       
       var that = this;
@@ -515,8 +551,8 @@ var PinsterApp = {
         that.closeSimulation(); // this function also changing currentWinow to = "event"
       }
       else if (that.fields.currentWindow == "streetView") {
-        that.fields.currentWindow = "main";
-        that.onDocumentReady();
+        that.fields.isStreetViewMode = 0;
+        that.handleStreetViewMode();
       }
 
     },
@@ -1050,8 +1086,8 @@ var PinsterApp = {
         var thePanorama = map.getStreetView();
         google.maps.event.addListener(thePanorama, 'visible_changed', function() {
             if (thePanorama.getVisible()) {
-              console.log("streetview is on");
-              PinsterApp.fields.currentWindow = "streetView";
+              PinsterApp.fields.isStreetViewMode++;
+              PinsterApp.handleStreetViewMode();
             }
         });
 
