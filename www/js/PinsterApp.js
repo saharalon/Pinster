@@ -154,19 +154,20 @@ var PinsterApp = {
       });
 
       $(".reportBtn").click(function(){
+        
         PinsterApp.fields.currentWindow = "reportEvent";    
+        PinsterApp.removeSearchArea();
 
-         if (that.fields.isUserLoggedIn)
-         {          
-             $("#reportModal").modal();
-         }
-       
-         else
-         {
-             //that.log("You need to be logged in order to report an event");
-            // login modal pop up
-            $('#loginModal').modal();
-         }
+        if (that.fields.isUserLoggedIn)
+        {          
+          $("#reportModal").modal();
+        }
+        else
+        {
+          //that.log("You need to be logged in order to report an event");
+          // login modal pop up
+          $('#loginModal').modal();
+        }
 
       });
 
@@ -178,6 +179,7 @@ var PinsterApp = {
       });
 
       $(".randomEventBtn").click(function(){
+        PinsterApp.removeSearchArea();
         that.fields.user.searchData.getSmartRandomEvent();
       });
 
