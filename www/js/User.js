@@ -465,7 +465,7 @@ PinsterApp.User = function() {
                 setTimeout(function() {
                   marker.setAnimation(null);
                   google.maps.event.trigger(PinsterApp.fields.eventsHashMap[eventId], 'click');
-                }, 3000);
+                }, 2000);
               }
             }
           });
