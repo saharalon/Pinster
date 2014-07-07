@@ -210,7 +210,7 @@ PinsterApp.User = function() {
 
   obj.validateUserOnParse = function(username, password)
   {
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
+      var tmpObj = obj.getPinsterUser();
 
       if ((tmpObj.username == "") && (tmpObj.id == ""))
       {
@@ -224,7 +224,7 @@ PinsterApp.User = function() {
 
    };
 
-  obj.getCurrentUser = function()
+  obj.getPinsterUser = function()
   {
     return JSON.parse(localStorage.getItem("pinsterUser"));
   };
@@ -232,12 +232,37 @@ PinsterApp.User = function() {
   obj.addUserToLocalstorage = function(username, id)
   {
       PinsterApp.fields.isUserLoggedIn = true;
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
+      var tmpObj = obj.getPinsterUser();
       tmpObj.username = username;
       tmpObj.id = id;
       localStorage.setItem("pinsterUser", JSON.stringify(tmpObj));
   };
 
+  obj.checkUserOnStartup = function()
+  {
+    var tmpObj = obj.getPinsterUser();
+
+      if (tmpObj != undefined)
+      {
+        if(tmpObj.username !="" && tmpObj.id != "")
+        {
+            var query = new Parse.Query(Parse.User);
+            query.equalTo('objectId', tmpObj.id);  
+            query.find({
+              success: function(user)
+              {
+                  PinsterApp.fields.isUserLoggedIn = true;
+                  console.log(tmpObj.username + " is logged");
+              },
+
+              error : function(error)
+              {
+                console.log(error);
+              }
+            });        
+        }
+   }
+ };
   //------------
   // Settings
   //------------

@@ -90,18 +90,8 @@ var PinsterApp = {
       that.fields.user.settings.init();
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
-
-      var tmpObj = JSON.parse(localStorage.getItem("pinsterUser"));
-
-      if (tmpObj != undefined)
-      {
-        if(tmpObj.username !="" && tmpObj.id != "")
-        {
-           that.fields.isUserLoggedIn = true;
-           console.log(tmpObj.username + " is logged");
-        }
-      }
-
+      
+      that.fields.user.checkUserOnStartup();
       //that.fields.user.searchData.getSmartRandomEvent();
 
     },  // END of onDocumentReady()
@@ -594,7 +584,7 @@ var PinsterApp = {
 
         PinsterApp.fields.user.addEvent(
             currentLocation, title, description, category,
-              PinsterApp.fields.dataImage, eventAddress, PinsterApp.fields.user.getCurrentUser().username);
+              PinsterApp.fields.dataImage, eventAddress, PinsterApp.fields.user.getPinsterUser().username);
       });
     },
 
@@ -1036,7 +1026,6 @@ var PinsterApp = {
 
                   PinsterApp.showEventAddress(geoLocation, hasDesc);
                   
-                  //foursquare tests
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
                                 
@@ -1229,7 +1218,7 @@ var PinsterApp = {
                       {
                         k = 0;
                       }
-                    }, 3000);
+                    }, 4000);
                 }
                 else {
                   $(".fsq-content").html("<h4>" + utils.getText("fsq-content-not-found", language) + "</h4>");

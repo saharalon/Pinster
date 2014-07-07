@@ -350,6 +350,17 @@ html, body {
 	}
 }
 
+/*remove google logo from map */
+a[href^="http://maps.google.com/maps"]{display:none !important}
+
+.gmnoprint a, .gmnoprint span {
+    display:none;
+}
+.gmnoprint div {
+    background:none !important;
+}
+/**/
+
 #eventModalClose {
 	cursor: pointer;
 	position: absolute;
