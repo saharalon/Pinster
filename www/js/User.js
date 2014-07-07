@@ -357,7 +357,7 @@ PinsterApp.User = function() {
       //   that.setSettingsDefaults();
       
      
-      else 
+      else
       {
         try {
           var tmpObj = JSON.parse(localStorage.getItem("pinsterSettings"));
