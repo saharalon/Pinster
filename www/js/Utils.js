@@ -72,7 +72,7 @@ PinsterApp.Utils = function() {
   	// Report
   	$("#reportHeadline").text(obj.getText("reportHeadline", language));
   	$("#addressDiv").text(obj.getText("addressDiv", language));
-  	$("#dropdownMenu2").text(obj.getText("dropdownMenu2", language));
+  	$("#dropdownMenu2").html(obj.getText("dropdownMenu2", language) + "<span class='caret caretRight'></span>");
   	$("#eventTitle").attr("placeholder", obj.getText("eventTitle", language));
   	$("#eventDescription").attr("placeholder", obj.getText("eventDescription", language));
 	$("#reportBtnModal").html(obj.getText("reportBtnModal", language) + "<i class='glyphicon glyphicon-bullhorn'></i>");

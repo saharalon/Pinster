@@ -516,7 +516,7 @@ var PinsterApp = {
 
       that.fields.animateReport = setInterval(function() {
         $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
-      }, 400);
+      }, 1000);
       $(".mayTakeAMin").show();
 
       navigator.geolocation.getCurrentPosition(
