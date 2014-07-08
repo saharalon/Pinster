@@ -446,6 +446,8 @@ PinsterApp.User = function() {
       if (isUsingKeyWords)
         params["keyWords"] = $("#keyWords").val();
 
+      PinsterApp.fields.isFetchingRandomEvent = true;
+
       var deg = 0;
       PinsterApp.fields.rotateDice = setInterval(function() {
         deg += 10;
@@ -460,6 +462,7 @@ PinsterApp.User = function() {
           if (results == undefined)
           {
             console.log("getRecommendedEvent: returned undefined result");
+            PinsterApp.fields.isFetchingRandomEvent = false;
             clearInterval(PinsterApp.fields.rotateDice);
             $(".diceIcon").css("transform", "rotate(0deg)");
             PinsterApp.fields.user.searchData.getSmartRandomEvent(false);
@@ -472,6 +475,7 @@ PinsterApp.User = function() {
 
           var address = new google.maps.LatLng(location.latitude, location.longitude);
 
+          PinsterApp.fields.isFetchingRandomEvent = false;
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
 
@@ -497,6 +501,7 @@ PinsterApp.User = function() {
         },
 
         error: function(error) {
+          PinsterApp.fields.isFetchingRandomEvent = false;
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
           console.log(error);

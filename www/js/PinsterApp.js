@@ -23,6 +23,8 @@ var PinsterApp = {
       currentWindow : "main",
       isUserLoggedIn : false,
       isStreetViewMode : 0,
+      isReporting : false,
+      isFetchingRandomEvent : false
     },
 
     CONSTANTS : {
@@ -184,8 +186,10 @@ var PinsterApp = {
       });
 
       $(".randomEventBtn").click(function(){
-        PinsterApp.removeSearchArea();
-        that.fields.user.searchData.getSmartRandomEvent(true);
+        if (!PinsterApp.fields.isFetchingRandomEvent) {
+          PinsterApp.removeSearchArea();
+          that.fields.user.searchData.getSmartRandomEvent(true);
+        }
       });
 
       $('#settingsModal').on('hidden.bs.modal', function () {
@@ -449,6 +453,7 @@ var PinsterApp = {
     },
 
     closeReportModal : function(isError) {
+      PinsterApp.fields.isReporting = false;
       clearInterval(PinsterApp.fields.animateReport);
       $("#reportBtnModal .glyphicon-bullhorn").show();
       $(".mayTakeAMin").hide();
@@ -491,27 +496,32 @@ var PinsterApp = {
       
       var that = this;
 
-      if ($("#reportModal #dropdownMenu2").text().match(that.fields.utils.getText("dropdownMenu2", that.fields.currentLanguage))) {
-        $("#reportModal #dropdownMenu2").css("border", "1px solid red");
-        return;
-      }
-      if ($("#reportModal #eventTitle").val() == "") {
+      if (!that.fields.isReporting) {
+
+        if ($("#reportModal #dropdownMenu2").text().match(that.fields.utils.getText("dropdownMenu2", that.fields.currentLanguage))) {
+          $("#reportModal #dropdownMenu2").css("border", "1px solid red");
+          return;
+        }
+        if ($("#reportModal #eventTitle").val() == "") {
+          $("#reportModal #dropdownMenu2").css("border", "1px solid #ccc");
+          $("#reportModal #eventTitle").css("border", "1px solid red").focus();
+          return;
+        }
+
         $("#reportModal #dropdownMenu2").css("border", "1px solid #ccc");
-        $("#reportModal #eventTitle").css("border", "1px solid red").focus();
-        return;
-      }
+        $("#reportModal #eventTitle").css("border", "1px solid #ccc");
 
-      $("#reportModal #dropdownMenu2").css("border", "1px solid #ccc");
-      $("#reportModal #eventTitle").css("border", "1px solid #ccc");
+        that.fields.isReporting = true;
 
-      that.fields.animateReport = setInterval(function() {
-        $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
-      }, 1000);
-      $(".mayTakeAMin").show();
+        that.fields.animateReport = setInterval(function() {
+          $("#reportBtnModal .glyphicon-bullhorn").fadeOut().fadeIn();
+        }, 1000);
+        $(".mayTakeAMin").show();
 
-      navigator.geolocation.getCurrentPosition(
-        that.onCurrentLocationSuccess, that.onCurrentLocationError,
-          that.CONSTANTS.GPS_SETTINGS);
+        navigator.geolocation.getCurrentPosition(
+          that.onCurrentLocationSuccess, that.onCurrentLocationError,
+            that.CONSTANTS.GPS_SETTINGS);
+    }
 
     },
 
