@@ -255,7 +255,7 @@ var PinsterApp = {
         eventObj.save(null, {
           success: function(eventObj) {
             // Saved successfully.
-            $("#numOfLikes").text(eventObj._serverData.likes);
+            $("#numOfLikes").text(eventObj._serverData.likes);          
             PinsterApp.initEventDeleteReqs();
           },
           error: function(eventObj, error) {
