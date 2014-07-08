@@ -91,8 +91,7 @@ var PinsterApp = {
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
       
-      // that.fields.user.checkUserOnStartup();
-      //that.fields.user.searchData.getSmartRandomEvent();
+      that.fields.user.checkUserOnStartup();
 
     },  // END of onDocumentReady()
 
