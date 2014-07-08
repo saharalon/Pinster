@@ -11,6 +11,10 @@
 4) Try to see if we can put our own “No-photo for event” when there isn’t a photo
    available from google street 
 
+5) Remove keywords for now …
+
+6) Fix Job code .. not working
+
 ///////////////
 ///// BETA ////
 ///////////////
