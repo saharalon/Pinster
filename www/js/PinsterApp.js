@@ -161,7 +161,7 @@ var PinsterApp = {
           that.handleStreetViewMode();
         }
 
-        if (that.fields.isUserLoggedIn) 
+        if (that.fields.isUserLoggedIn)
         {
              $("#reportModal").modal();
         }
@@ -170,6 +170,7 @@ var PinsterApp = {
        {
            //that.log("You need to be logged in order to report an event");
           // login modal pop up
+          PinsterApp.fields.currentWindow = "login";
           $('#loginModal').modal();
        }
 
@@ -179,7 +180,7 @@ var PinsterApp = {
       $("#loginBtnModal").click(function() {
            var username = $("#loginModal #pinUsername").val();
            var password = $("#loginModal #pinPassword").val();
-           that.fields.user.validateUserOnParse(username, password);      
+           that.fields.user.validateUserOnParse(username, password);
       });
 
       $(".randomEventBtn").click(function(){
@@ -554,6 +555,10 @@ var PinsterApp = {
       else if (that.fields.currentWindow == "streetView") {
         that.fields.isStreetViewMode = 0;
         that.handleStreetViewMode();
+      }
+      else if (that.fields.currentWindow == "login") {
+        that.fields.currentWindow = "main";
+        $('#loginModal').modal('hide');
       }
 
     },

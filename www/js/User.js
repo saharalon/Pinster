@@ -247,7 +247,7 @@ PinsterApp.User = function() {
         if(tmpObj.username !="" && tmpObj.id != "")
         {
             var query = new Parse.Query(Parse.User);
-            query.equalTo('objectId', tmpObj.id);  
+            query.equalTo('objectId', tmpObj.id);
             query.find({
               success: function(user)
               {
