@@ -24,8 +24,8 @@ PinsterApp.User = function() {
              var parseFile = new Parse.File(object.id + ".jpg", { base64:img }, "image/jpeg");
               
               parseFile.save().then(function()
-              { 
-                 object.set("imageFile",parseFile);               
+              {
+                 object.set("imageFile",parseFile);
                  object.save();
                  PinsterApp.closeReportModal();
                  PinsterApp.log(PinsterApp.fields.utils.getText("report_success", language));
@@ -82,7 +82,7 @@ PinsterApp.User = function() {
     // Don't load events with status id 99 (deleted)
     query.notEqualTo('statusId', 99);
     // Limit what could be a lot of points.
-    query.limit(10);
+    // query.limit(100);
     // Final list of objects
 
     query.find({

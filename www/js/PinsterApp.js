@@ -77,7 +77,7 @@ var PinsterApp = {
       that.fields.utils = new that.Utils();
       that.fields.utils.initCategories(function() {
         
-        // Init the map only after the ategories are loaded
+        // Init the map only after the categories are loaded
         that.fields.map = new that.GoogleMap();
         that.fields.geocoder = new google.maps.Geocoder();
         that.fields.map.initialize();
@@ -91,7 +91,7 @@ var PinsterApp = {
 
       that.fields.utils.setAppLanguage(that.fields.currentLanguage);
       
-      that.fields.user.checkUserOnStartup();
+      // that.fields.user.checkUserOnStartup();
       //that.fields.user.searchData.getSmartRandomEvent();
 
     },  // END of onDocumentReady()
@@ -624,7 +624,7 @@ var PinsterApp = {
 
       PinsterApp.fields.aniMagnify = setInterval(function() {
         $("#quickSearchBtn").fadeOut().fadeIn();
-      }, 400);
+      }, 500);
 
       that.fields.currentWindow = "eventsSearch";
       $("#searchByCatTooltip").hide();
@@ -1082,6 +1082,7 @@ var PinsterApp = {
           google.maps.event.addListenerOnce(map, 'idle', function(){
                 //loaded fully
                 console.log("Map loaded...");
+                if (isPhone) { navigator.splashscreen.hide(); }
                 // Filter pins by user last choosen category
                 //PinsterApp.fields.map.filterMarkers($("#dropdownMenu1").text().toLowerCase());
                 // navigator.splashscreen.hide();
