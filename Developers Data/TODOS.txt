@@ -2,14 +2,14 @@
 // TODO //
 //////////
 
-2) Random smart user event recommendation (90% done, needs minor fixes)
+1) Random smart user event recommendation (90% done, needs minor fixes)
 
-3) Users login (Eran) 
+2) Switch the Robot picture at the beginning
 
-6) Switch the Robot picture at the beginning
+3) Translate Categories to hebrew as well (tricky…)
 
-ERAN) 1. wrong pass - endless reqs, 2.hide modal at beginning, 3. check == undefined, 4. errors - toast for user, 5. rename to pinsterUser(s), 6. rename the modal title to Login / Signup and rename the big blue button to "Submit"
-
+4) Try to see if we can put our own “No-photo for event” when there isn’t a photo
+   available from google street 
 
 ///////////////
 ///// BETA ////
@@ -59,3 +59,5 @@ ERAN) 1. wrong pass - endless reqs, 2.hide modal at beginning, 3. check == undef
 	*** All functionalities implemented in one job - eventDeletionJob ***
 
 20) Event without a picture will now get an image from google street view /* DONE */
+
+3) Users login (Eran) * DONE *
