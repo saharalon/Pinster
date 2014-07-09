@@ -57,19 +57,6 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 	//set query for events objectr
 	var mainQuery = new Parse.Query(events);
 
-	// Add the user key words to the search
-	if (keyWords != undefined && keyWords instanceof Array && keyWords[0] != "")
-	{
-		console.log("Adding keyWords to the search");
-
-		var queryTitle = new Parse.Query(events); 
-		var queryDescription = new Parse.Query(events);
-
-		queryTitle.startsWith("title", keyWords[0]);
-		queryDescription.startsWith("description", keyWords[0]);
-		mainQuery = Parse.Query.or(queryTitle, queryDescription);
-	}
-
 	//check the events within the specify point to search from
 	if (searchAddress != "")
 		mainQuery.withinKilometers("location", searchAddress, 10000);
@@ -120,66 +107,66 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 // Should be set to run hourly
 Parse.Cloud.job("eventDeletionJob", function(request, status) 
 {
-  // Query all events
-  var Event = Parse.Object.extend("Event");
-  var query = new Parse.Query(Event);
+	// Query all events
+	var Event = Parse.Object.extend("Event");
+	var query = new Parse.Query(Event);
 
-  query.find(
-  {
-    success: function(results) 
-    {
-      results.forEach(function(eventObj, index) 
-      {
-      	var isToDelete = false;
-      	var msg = "";
+	query.find(
+	{
+	success: function(results) 
+	{
+	  results.forEach(function(eventObj, index) 
+	  {
+	  	var isToDelete = false;
+	  	var msg = "";
 
-        if (eventObj._serverData.deleteReqs >= 3)
-        {
-        	isToDelete = true;
-        	msg = "3 or more deleteReqs";
-        }
-        else if (eventObj._serverData.category == 'Sports')
-        {
-         	var timeDiff = Math.abs(new Date(eventObj.createdAt).getTime() - new Date().getTime());
-            var diffHours = Math.ceil(timeDiff / (1000 * 3600));
+	    if (eventObj._serverData.deleteReqs >= 3)
+	    {
+	    	isToDelete = true;
+	    	msg = "Event: " + eventObj._serverData.title + " had 3 or more delete reqs";
+	    }
+	    else if (eventObj._serverData.category == 'Sports')
+	    {
+	     	var timeDiff = Math.abs(new Date() - new Date(eventObj.createdAt));
+	        var diffHours = Math.round((timeDiff % 86400000) / 3600000);
 
-          	// Sports events expiration is 3 hours
-          	if (diffHours >= 3)
-          	{
-          		isToDelete = true;
-          		msg = "sports event timeout";
-          	}
-        }
-        else if (eventObj._serverData.category == 'Hazards')
-        {
-	        var timeDiff = Math.abs(new Date(eventObj.createdAt).getTime() - new Date().getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+	      	// Sports events expiration is 3 hours
+	      	if (diffHours >= 3)
+	      	{
+	      		isToDelete = true;
+	      		msg = "Sports event: " + eventObj._serverData.title + " expired";
+	      	}
+	    }
+	    else if (eventObj._serverData.category == 'Hazards')
+	    {
+	        var timeDiff = Math.abs(new Date() - new Date(eventObj.createdAt));
+	        var diffDays = Math.ceil(timeDiff / 86400000);
 
 			// Hazards events expiration is 1 day
 			if (diffDays >= 1)
 			{
 				isToDelete = true;
-				msg = "hazards event timeout";
+				msg = "Hazards event: " + eventObj._serverData.title + " expired";
 			}
-        }
+	    }
 
-        if (isToDelete)
-        {
-        	// Set event as deleted
-            eventObj.set('statusId', 99);
-            eventObj.save();
-            console.log("event:" + eventObj.id + "deleted. reason: " + msg);
-        }
-      });
+	    if (isToDelete)
+	    {
+	    	// Set event as deleted
+	        eventObj.set('statusId', 99);
+	        eventObj.save();
+	        console.log("event:" + eventObj.id + "deleted. reason: " + msg);
+	    }
+	  });
 
-      // Set the job's success status
-      status.success("eventDeletionJob completed successfully.");
-    },
-    error: function(object, error) 
-    {
-      // Set the job's error status
-      status.error("Uh oh, something went wrong in: eventDeletionJob.");
-    } 
-  });
+	  // Set the job's success status
+	  status.success("eventDeletionJob completed successfully.");
+	},
+	error: function(object, error) 
+	{
+	  // Set the job's error status
+	  status.error("Uh oh, something went wrong in: eventDeletionJob.");
+	} 
+	});
 });
 

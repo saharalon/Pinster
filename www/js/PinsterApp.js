@@ -24,7 +24,8 @@ var PinsterApp = {
       isUserLoggedIn : false,
       isStreetViewMode : 0,
       isReporting : false,
-      isFetchingRandomEvent : false
+      isFetchingRandomEvent : false,
+      randomEventCounter: 0
     },
 
     CONSTANTS : {
@@ -32,6 +33,7 @@ var PinsterApp = {
       METERS : 1000,
       CLIENT_ID_foursquare : "XWLOQFQSYT5KYGPKYHJS4GGMAAZI51IPQ2WSIRUAA5PTSPFB",
       CLIENT_SECRET_foursquare : "HXRLKL1U422VH5JZGLMN2UHHZIRDWH44P0CMDXN2OQK0FK1Z",
+      MAX_RANDOM_EVENTS : 5,
       GPS_SETTINGS : { enableHighAccuracy: true, maximumAge:3000, timeout: 15000 },
       pinImgs : {},
       categories : [],
@@ -188,7 +190,8 @@ var PinsterApp = {
       $(".randomEventBtn").click(function(){
         if (!PinsterApp.fields.isFetchingRandomEvent) {
           PinsterApp.removeSearchArea();
-          that.fields.user.searchData.getSmartRandomEvent(true);
+          PinsterApp.fields.randomEventCounter++;
+          PinsterApp.fields.user.searchData.getSmartRandomEvent();
         }
       });
 
@@ -231,7 +234,7 @@ var PinsterApp = {
         user.settings.setAddress($("#settingsModal #address").val());
         user.settings.setCategory(category);
         user.settings.setRadius($('#radiusSlider').val());
-        user.settings.setKeyWords($('#keyWords').val());
+        //user.settings.setKeyWords($('#keyWords').val());
 
         that.fields.utils.setAppLanguage($("#languageDropdownMenu").text());
         //map.filterMarkers(category.toLowerCase());
@@ -253,20 +256,22 @@ var PinsterApp = {
         var Event = Parse.Object.extend("Event");
         var eventObj = new Event();
         eventObj.id = PinsterApp.fields.currentEventId;
-
+        var currentLikes = parseInt($("#numOfLikes").text());
         eventObj.increment("likes", 1);
 
         // Save
         eventObj.save(null, {
           success: function(eventObj) {
-            // Saved successfully.
-            $("#numOfLikes").text(eventObj._serverData.likes);          
+            // Saved successfully.         
             PinsterApp.initEventDeleteReqs();
           },
           error: function(eventObj, error) {
             console.log("Error incrementing event likes");
+            $("#numOfLikes").text(currentLikes);            
           }
         });
+
+        $("#numOfLikes").text(currentLikes + 1); 
 
       });
 
@@ -294,6 +299,7 @@ var PinsterApp = {
         
         if ( event.which == 13 ) {
           event.preventDefault();
+          PinsterApp.fields.randomEventCounter = 0;
           PinsterApp.searchEvents();
         }
       });
@@ -654,10 +660,7 @@ var PinsterApp = {
       localStorage.setItem("pinsterSearches", JSON.stringify(tmpObj));
 
       // No address given, get the user address from settings
-      if (address == "")
-      {
-        address = PinsterApp.fields.user.settings.address;
-      }
+      if (address == "") { address = PinsterApp.fields.user.settings.address; }
         
       that.fields.geocoder.geocode( { 'address': address }, function(results, status)
       {
@@ -669,18 +672,13 @@ var PinsterApp = {
             var soughtAddressLongitude = results[0].geometry.location.lng();
             var geoPoint = that.convertToGeoPointObject(soughtAddressLatitude, soughtAddressLongitude);
             //get events object from parse
-            that.fields.user.searchEvents(geoPoint,radius);
+            that.fields.user.searchEvents(geoPoint, radius);
         }
         //address is not valid - TODO visualize an alert to user
         else
         {
-          var language = that.fields.currentLanguage;
-          var msg = that.fields.utils.getText("no_results", language);
-          clearInterval(PinsterApp.fields.aniMagnify);
-          $("#quickSearchBtn").show();
-          $("#eventsResults").html('');
-          $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
-          $("#eventsResults").show();
+          // search locally if the address typed matches some key words in events
+          that.fields.user.searchLocalEvents(address);
         }
       });
 
@@ -916,6 +914,18 @@ var PinsterApp = {
       PinsterApp.fields.searchArea.setMap(PinsterApp.fields.mapInstance);
     },
 
+    openEventModal : function()
+    {
+      PinsterApp.fields.currentWindow = "event";
+      $("#eventModal").show();
+
+      setTimeout(function() {
+        $("#wazeBtn").fadeIn();
+        $("#likeBtn").fadeIn();
+        $("#numOfLikes").fadeIn();
+      }, 750);
+    },
+
     GoogleMap : function() {
 
       var that = this;
@@ -952,6 +962,7 @@ var PinsterApp = {
             success: function(results) {
               results.forEach(function(item, index) {
                 var title = item._serverData.title;
+                var description = item._serverData.description;
                 var latitude = item._serverData.location._latitude;
                 var longitude = item._serverData.location._longitude;
                 // TODO: load from database
@@ -974,6 +985,7 @@ var PinsterApp = {
                   icon: markerImage,
                   //shape: shape,
                   title: title,
+                  description: description,
                   category: item._serverData.category
                   //zIndex: events[i][3]
                 });
@@ -1019,20 +1031,6 @@ var PinsterApp = {
                   $("#eventModalLabel").text(userEvent.title);
                   $("#eventDesc").text(userEvent.description);
 
-                  //new save with col imageFile
-                  if (userEvent.imageFile) {
-                    var photo = userEvent.imageFile;
-                    $("#eventImg").attr("src", photo.url());
-                  }
-                  
-                  else
-                  {
-                    var steetViewImage = 'http://maps.googleapis.com/maps/api/streetview?size=1200x600&' +
-                      'location=' + geoLocation +'&heading=151.78&pitch=-0.76';
-                    // When no image is available, use an image from street view
-                    $("#eventImg").attr("src", steetViewImage);  
-                  }
-
                   if (userEvent.description == "") { hasDesc = false; }
 
                   $("#numOfLikes").text(userEvent.likes);
@@ -1042,16 +1040,30 @@ var PinsterApp = {
                   
                   PinsterApp.foursquare.getFoursquareNearPlaces(
                     userEvent.location.latitude, userEvent.location.longitude);
-                                
-                  PinsterApp.fields.currentWindow = "event";
-                  $("#eventModal").show();
 
-                  setTimeout(function() {
-                    $("#wazeBtn").fadeIn();
-                    $("#likeBtn").fadeIn();
-                    $("#numOfLikes").fadeIn();
-                  }, 750);
+                  //new save with col imageFile
+                  if (userEvent.imageFile) {
+                    var photo = userEvent.imageFile;
+                    $("#eventImg").attr("src", photo.url());
+                  }
+                  else
+                  {
+                    // When no image is available, use an image from google street view
+                    var sv = new google.maps.StreetViewService();
+                    sv.getPanoramaByLocation(geoLocation, 100, function(data, status) 
+                    {
+                      if (status == google.maps.StreetViewStatus.OK) 
+                      {
+                        var steetViewImage = 'http://maps.googleapis.com/maps/api/streetview?size=1200x600&' +
+                        'location=' + geoLocation +'&heading=151.78&pitch=-0.76';
+                        $("#eventImg").attr("src", steetViewImage); 
+                      } 
+                      else 
+                        $("#eventImg").attr("src","img/no-image.png");
+                    });
+                  }
 
+                  PinsterApp.openEventModal();
                 }
                 })(marker, index));
               });

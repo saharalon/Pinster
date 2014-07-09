@@ -2,18 +2,9 @@
 // TODO //
 //////////
 
-1) Random smart user event recommendation (90% done, needs minor fixes)
-
 2) Switch the Robot picture at the beginning
 
 3) Translate Categories to hebrew as well (tricky…)
-
-4) Try to see if we can put our own “No-photo for event” when there isn’t a photo
-   available from google street 
-
-5) Remove keywords for now …
-
-6) Fix Job code .. not working
 
 ///////////////
 ///// BETA ////
@@ -27,6 +18,22 @@
 ///////////////
 // COMPLETED //
 ///////////////
+
+6) Fix Job code .. not  /* DONE - need to varify that works */
+
+*) while searching, search locally for the keyword in the search bar,
+   if address not found return an event that matches the keyword /* DONE */
+
+*) After 5 smart random tries, search random /* DONE */
+
+*) Likes increment on UI /* DONE */
+
+1) Random smart user event recommendation (90% done, needs minor fixes) /* DONE */
+
+4) Try to see if we can put our own “No-photo for event” when there isn’t a photo
+   available from google street /* DONE */
+
+5) Remove keywords for now … /* DONE */
 
 1) Pins with matching pictures (only 3 .. add more)
 

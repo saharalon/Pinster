@@ -55,12 +55,11 @@ PinsterApp.User = function() {
 
   obj.searchEvents = function (address, radius)
   {
+    var results = [];
     // Remove previous search area
     PinsterApp.removeSearchArea();
-
     // Show a circle as the search area
     PinsterApp.showSearchArea(address, radius);
-
     // Remove circle on mouse click
     google.maps.event.addListener(PinsterApp.fields.searchArea, 'click', function(ev){
       PinsterApp.fields.searchArea.setMap(null);
@@ -86,67 +85,109 @@ PinsterApp.User = function() {
     // Final list of objects
 
     query.find({
-        success: function(placesObjects) {
+      success: function(placesObjects) 
+      {
+        if (placesObjects.length > 0)
+          obj.showSearchResults(placesObjects, false);
+        else
+          obj.showNoResults();
 
-          var image, isFirst = "style='margin-top: 40px;'";
-          console.log(placesObjects);
-          
-          $("#eventsResults").html('');
-          $(".eventResRow").unbind();
-
-          placesObjects.forEach(function(item, index){
-
-            image = PinsterApp.CONSTANTS.pinImgs[item.attributes.category];
-            if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
-
-            if (index > 0) { isFirst = ""; }
-
-            $("#eventsResults").append("<div class='eventResRow' " + isFirst + " eventId='" + item.id + "' lat=" + item.attributes.location._latitude + 
-              " long=" + item.attributes.location._longitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + item.attributes.title + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
-          });
-
-          if (placesObjects.length != 0) {
-            
-            $(".eventResRow").click(function() {
-              PinsterApp.removeSearchArea();
-              PinsterApp.fields.currentWindow = "main";
-              google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
-            });
-
-            $(".eventResRowPin").click(function(e) {
-
-              e.preventDefault();
-              e.stopPropagation();
-
-              var lat = $(this).parent().attr("lat");
-              var lon = $(this).parent().attr("long");
-
-              $("#eventsResults").hide();
-
-              PinsterApp.fields.mapInstance.setCenter(new google.maps.LatLng(lat, lon));
-              PinsterApp.fields.mapInstance.setZoom(18);
-            });
-            
-          }
-          else {
-            var language = PinsterApp.fields.currentLanguage;
-            var msg = (language == "English") ? "No results were found" : "לא נמצאו תוצאות מתאימות";
-            $("#eventsResults").html('');
-            $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
-          }
-
-          clearInterval(PinsterApp.fields.aniMagnify);
-          $("#quickSearchBtn").show();
-          $("#eventsResults").show();
-
-
-          /*if (this.isUserLoggedIn()) {
-            searchData.addSearchData(address, searchCategory);
-          }*/
-        }
-      });
+        clearInterval(PinsterApp.fields.aniMagnify);
+        $("#quickSearchBtn").show();
+        $("#eventsResults").show();
+      },
+      error: function(error)
+      {
+        console.log("SearchEvents: Failed to retreive events");
+      }
+    });
   };
 
+  obj.searchLocalEvents = function(key)
+  {
+    if (key != "") {
+      var results = [];
+      PinsterApp.fields.markers.forEach(function(marker, index) {
+        // Event title or description contains the keyword 
+        if (marker.title.indexOf(key) > -1 || 
+            marker.description.indexOf(key) > -1)
+        {
+          results.push(marker);
+        }
+      });
+
+      if (results.length > 0) {
+        obj.showSearchResults(results, true);
+      }
+      else {
+        obj.showNoResults();
+      }
+    }
+    else {
+      obj.showNoResults();
+    }
+
+    clearInterval(PinsterApp.fields.aniMagnify);
+    $("#quickSearchBtn").show();
+    $("#eventsResults").show();
+
+  }
+
+  obj.showSearchResults = function(placesObjects, isLocalSearch)
+  {
+    var image, isFirst = "style='margin-top: 40px;'";
+    console.log(placesObjects);
+    
+    $("#eventsResults").html('');
+    $(".eventResRow").unbind();
+
+    placesObjects.forEach(function(item, index){
+
+      var eventId = item.id;
+      var eventTitle = (isLocalSearch) ? item.title : item.attributes.title;
+      var eventsCategory = (isLocalSearch) ? item.category : item.attributes.category;
+      var eventLongitude = (isLocalSearch) ? item.position.B : item.attributes.location._longitude;
+      var eventLatitude = (isLocalSearch) ? item.position.k : item.attributes.location._latitude;
+
+
+      image = PinsterApp.CONSTANTS.pinImgs[eventsCategory];
+      if (image == undefined) { image = PinsterApp.CONSTANTS.pinImgs["undefined"]; }
+
+      if (index > 0) { isFirst = ""; }
+
+      $("#eventsResults").append("<div class='eventResRow' " + isFirst + " eventId='" + eventId + "' lat=" + eventLatitude + 
+        " long=" + eventLongitude + "><span><i class='glyphicon glyphicon-chevron-right'></i>" + eventTitle + "</span><img class='eventResRowPin' src='img/" + image + "' /></div>");
+    });
+
+    $(".eventResRow").click(function() {
+      PinsterApp.removeSearchArea();
+      PinsterApp.fields.currentWindow = "main";
+      google.maps.event.trigger(PinsterApp.fields.eventsHashMap[$(this).attr("eventId")], 'click');
+    });
+
+    $(".eventResRowPin").click(function(e) {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      var lat = $(this).parent().attr("lat");
+      var lon = $(this).parent().attr("long");
+
+      $("#eventsResults").hide();
+
+      PinsterApp.fields.mapInstance.setCenter(new google.maps.LatLng(lat, lon));
+      PinsterApp.fields.mapInstance.setZoom(18);
+    });
+      
+  };
+
+  obj.showNoResults = function()
+  {
+    var language = PinsterApp.fields.currentLanguage;
+    var msg = PinsterApp.fields.utils.getText("no_results", language);
+    $("#eventsResults").html('');
+    $("#eventsResults").append("<div class='eventResRow' style='margin-top: 40px;'>" + msg + "...</div>");
+  }
 
   //------------
   // User states
@@ -429,22 +470,20 @@ PinsterApp.User = function() {
 
     },
 
-    getSmartRandomEvent : function(isUsingKeyWords) {
+    getSmartRandomEvent : function() {
 
       var history = localStorage.getItem("pinsterSearches");
 
-      if (history == 'undefined')
+      if (history == 'undefined' || 
+          PinsterApp.fields.randomEventCounter > PinsterApp.CONSTANTS.MAX_RANDOM_EVENTS)
       {
-        console.log("getRecommendedEvent: Stopped - no search history");
+        console.log("getRecommendedEvent: No search history or exceeded max random tries");
+        obj.getRandomEvent();
         return;
-        // @goldido : if there's no history - random some event.
       }
 
       var params = {};
       params["data"] = JSON.parse(history);
-
-      if (isUsingKeyWords)
-        params["keyWords"] = $("#keyWords").val();
 
       PinsterApp.fields.isFetchingRandomEvent = true;
 
@@ -458,46 +497,18 @@ PinsterApp.User = function() {
       Parse.Cloud.run('getRecommendedEvent', params, {
 
         success: function(results) {
-          
+
           if (results == undefined)
           {
             console.log("getRecommendedEvent: returned undefined result");
             PinsterApp.fields.isFetchingRandomEvent = false;
             clearInterval(PinsterApp.fields.rotateDice);
             $(".diceIcon").css("transform", "rotate(0deg)");
-            PinsterApp.fields.user.searchData.getSmartRandomEvent(false);
+            PinsterApp.fields.user.searchData.getSmartRandomEvent();
             return;
           }
 
-          var selectedEvent = JSON.parse(results);
-          var location = selectedEvent.location;
-          var eventId = selectedEvent.objectId;
-
-          var address = new google.maps.LatLng(location.latitude, location.longitude);
-
-          PinsterApp.fields.isFetchingRandomEvent = false;
-          clearInterval(PinsterApp.fields.rotateDice);
-          $(".diceIcon").css("transform", "rotate(0deg)");
-
-          // Focus on the selected event
-          PinsterApp.fields.mapInstance.setCenter(address);
-          
-          // Animate the selected event marker
-          PinsterApp.fields.markers.forEach(function(marker, index) {
-
-            if (marker.id == eventId)
-            {
-              if (marker.getAnimation() != null) {
-                marker.setAnimation(null);
-              } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-                setTimeout(function() {
-                  marker.setAnimation(null);
-                  google.maps.event.trigger(PinsterApp.fields.eventsHashMap[eventId], 'click');
-                }, 2000);
-              }
-            }
-          });
+          obj.showEvent(JSON.parse(results).objectId);
         },
 
         error: function(error) {
@@ -505,13 +516,49 @@ PinsterApp.User = function() {
           clearInterval(PinsterApp.fields.rotateDice);
           $(".diceIcon").css("transform", "rotate(0deg)");
           console.log(error);
-          PinsterApp.fields.user.searchData.getSmartRandomEvent(false);
+          PinsterApp.fields.user.searchData.getSmartRandomEvent();
         }
       });
 
     }
 
   // End of SearchData
+  };
+
+  obj.getRandomEvent = function() {
+
+    PinsterApp.fields.randomEventCounter--;
+    var randomNum = Math.floor((Math.random() * PinsterApp.fields.markers.length - 1) + 0);
+    obj.showEvent(PinsterApp.fields.markers[randomNum].id);
+
+  };
+
+  obj.showEvent = function(eventId) {
+
+    PinsterApp.fields.isFetchingRandomEvent = false;
+    clearInterval(PinsterApp.fields.rotateDice);
+    $(".diceIcon").css("transform", "rotate(0deg)");
+    
+    // Animate the selected event marker
+    PinsterApp.fields.markers.forEach(function(marker, index) {
+
+      if (marker.id == eventId)
+      {
+        // Focus on the selected event
+        PinsterApp.fields.mapInstance.setCenter(marker.position);
+
+        if (marker.getAnimation() != null) {
+          marker.setAnimation(null);
+        } else {
+          marker.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout(function() {
+            marker.setAnimation(null);
+            google.maps.event.trigger(PinsterApp.fields.eventsHashMap[eventId], 'click');
+          }, 2000);
+        }
+      }
+    });
+
   };
 
   obj.animateZoomIn = function(currentZoom)

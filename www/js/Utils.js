@@ -104,7 +104,7 @@ PinsterApp.Utils = function() {
   		case "pinPassword":
   			return (language == "English") ? "Password" : "סיסמה";
   		case "loginBtnModal":
-  			return (language == "English") ? "Submit" : "כנס";
+  			return (language == "English") ? "Submit" : "התחבר";
   		case "settingsHedline":
   			return (language == "English") ? "Settings" : "הגדרות";
   		case "languageDropdownMenu":
