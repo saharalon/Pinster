@@ -68,8 +68,16 @@
     <preference name="android-minSdkVersion"      value="7" />              <!-- android: MIN SDK version supported on the target device. MAX version is blank by default. -->
     <preference name="android-installLocation"    value="auto" />           <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+    </feature>
+
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    </feature>
+    
     <preference name="SplashScreen" value="splash" />
-    <preference name="SplashScreenDelay" value="5000" />
+    <preference name="SplashScreenDelay" value="30000" />
 
     <!-- Plugins can also be added here. -->
     <!--
@@ -117,6 +125,7 @@
     <gap:plugin name="org.apache.cordova.network-information" version="0.2.7" />
     <gap:plugin name="org.apache.cordova.device" version="0.2.8" />
     <gap:plugin name="nl.x-services.plugins.toast" version="2.0" />
+    <gap:plugin name="org.apache.cordova.splashscreen" version="0.2.7" />
     <!--
         Define access to external domains.
 
