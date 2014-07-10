@@ -1,13 +1,10 @@
 Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 
-	var categories = new Array();
-	var addresses = new Array();
+	var categories = [];
+	var addresses = [];
 
 	var data = request.params.data;
-	var keyWords;
 
-	if (request.params.keyWords != undefined)
-		keyWords = request.params.keyWords.split(/[\s,.]+/);
 
 	// Number each category and the times it has been searched
 	data.eventsCategory.forEach(function(item, index) {
@@ -63,7 +60,7 @@ Parse.Cloud.define("getRecommendedEvent", function(request, response) {
 
 	// Add category parameter
 	if (searchCategory != undefined && searchCategory != "All")
-		mainQuery.equalTo("category", "Outdoors");
+		mainQuery.equalTo("category", searchCategory);
 
 	// Don't load events with status id 99 (deleted)
 	mainQuery.notEqualTo('statusId', 99);
